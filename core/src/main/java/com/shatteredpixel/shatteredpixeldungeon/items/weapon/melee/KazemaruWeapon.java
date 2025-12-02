@@ -103,6 +103,7 @@ public class KazemaruWeapon extends MeleeWeapon {
             HP = HT = 1;
 
             spriteClass = KazemaruSprite.class;
+            actPriority = MOB_PRIO + 1;
 
             flying = true;
             state = HUNTING;

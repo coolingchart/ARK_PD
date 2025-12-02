@@ -19,9 +19,12 @@ public class IsharmlaSeabornTail extends Mob {
 
         defenseSkill = 25;
 
+        actPriority = MOB_PRIO-1;
+
         properties.add(Property.SEA);
         properties.add(Property.BOSS);
         properties.add(Property.IMMOVABLE);
+        properties.add(Property.STATIC);
 
         state = HUNTING;
     }
@@ -86,13 +89,12 @@ public class IsharmlaSeabornTail extends Mob {
             isDead = true;
             Buff.affect(this, Doom.class);
             Dungeon.mulaCount++;
-
+            IsharmlaSeabornHead.triggerAnger();
         }
     }
 
     @Override
     public void die(Object cause) { }
-
 
     private static final String IS_DEAD_TAIL   = "isDeadTail";
 

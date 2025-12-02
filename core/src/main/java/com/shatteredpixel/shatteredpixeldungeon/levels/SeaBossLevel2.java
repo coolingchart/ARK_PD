@@ -73,9 +73,9 @@ public class SeaBossLevel2 extends Level {
             W, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, W,
             W, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, W,
             W, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, W,
-            W, T/*169*/, T, T, T, T, T, T, T, T, T/*178*/, T, T, T, T, T, T, T, T, T,/*187*/ W,
-            W, T, T, T, T, T, T, T, T, T, T, T, T/*199*/, T, T, T, T, T, T, T, W,
-            W, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, W,
+            W, T/*169*/, T, T, T, T, T, T, T, T, T/*178*/, T, T, T, T, T, T, T, T, T/*187*/, W,
+            W, T/*190*/, T, T, T, T, T, T, T, T, T/*199*/, T, T, T, T, T, T, T, T, T/*208*/, W,
+            W, T/*211*/, T, T, T, T, T, T, T, T, T/*220*/, T, T, T, T, T, T, T, T, T/*229*/, W,
             W, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, W,
             W, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, W,
             W, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, W,
@@ -84,7 +84,7 @@ public class SeaBossLevel2 extends Level {
             W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W,
             W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W,
             W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W,
-            W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W,
+            W, W, W, W, W, W, W, W, W, e, e, e, W, W, W, W, W, W, W, W, W,
             W, W, W, W, W, W, W, W, W, e, e, e, W, W, W, W, W, W, W, W, W,
             W, W, W, W, W, W, W, W, W, e, e, e, W, W, W, W, W, W, W, W, W,
             W, W, W, W, W, W, W, W, W, e, E, e, W, W, W, W, W, W, W, W, W,
@@ -146,10 +146,9 @@ public class SeaBossLevel2 extends Level {
 
         super.occupyCell( ch );
 
-
         if (ch.pos != map[entrance] && map[exit] == Terrain.EXIT) {
             Isharmla boss = new Isharmla();
-            boss.pos = 178;
+            boss.pos = 199;
             GameScene.add( boss );
             seal();
         }

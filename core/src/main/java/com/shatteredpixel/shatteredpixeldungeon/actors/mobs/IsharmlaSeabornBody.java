@@ -19,6 +19,8 @@ public class IsharmlaSeabornBody extends Mob {
 
         defenseSkill = 25;
 
+        actPriority = MOB_PRIO-1;
+
         properties.add(Property.SEA);
         properties.add(Property.BOSS);
         properties.add(Property.IMMOVABLE);
@@ -50,12 +52,16 @@ public class IsharmlaSeabornBody extends Mob {
         sprite.turnTo(pos, 999999);
         rooted = true;
 
-        if (isDead) return super.act();
+        if (isDead) {
+            return super.act();
+        }
 
-        if (cooldown > 0) cooldown--;
-        else {
+        if (cooldown > 0) {
+            cooldown--;
+        } else {
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
-                if (mob instanceof IsharmlaSeabornHead || mob instanceof IsharmlaSeabornBody || mob instanceof IsharmlaSeabornTail)
+                if ((mob instanceof IsharmlaSeabornHead || mob instanceof IsharmlaSeabornBody || mob instanceof IsharmlaSeabornTail)
+                        && mob.buff(Doom.class) == null)
                     Buff.affect(mob, Barrier.class).setShield(80);
             }
             if (Dungeon.isChallenged(Challenges.DECISIVE_BATTLE)) cooldown = 5;
@@ -76,6 +82,7 @@ public class IsharmlaSeabornBody extends Mob {
             isDead = true;
             Buff.affect(this, Doom.class);
             Dungeon.mulaCount++;
+            IsharmlaSeabornHead.triggerAnger();
         }
     }
 
@@ -83,20 +90,20 @@ public class IsharmlaSeabornBody extends Mob {
     @Override
     public void die(Object cause) { }
 
-    private static final String IS_DEAD_MID   = "isDeadMid";
+    private static final String IS_DEAD_BODY = "isDeadBody";
 
     @Override
     public void storeInBundle( Bundle bundle ) {
         super.storeInBundle( bundle );
-        bundle.put( IS_DEAD_MID, isDead);
+        bundle.put(IS_DEAD_BODY, isDead);
     }
 
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
 
-        isDead = bundle.getBoolean(IS_DEAD_MID);
+        isDead = bundle.getBoolean(IS_DEAD_BODY);
     }
-    }
+}
 
 
 
