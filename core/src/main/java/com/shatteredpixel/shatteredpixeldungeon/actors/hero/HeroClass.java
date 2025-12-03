@@ -167,12 +167,6 @@ import com.watabou.utils.DeviceCompat;
             new StaffOfCorrupting().identify().collect();
 
             new KazemaruWeapon().identify().collect();
-
-            hero.lvl = 40;
-            hero.STR = 20;
-            hero.HP = 250;
-            hero.HT = 250;
-
         }
 
 		Dungeon.LimitedDrops.FOOD_BAG.drop();
