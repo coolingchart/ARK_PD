@@ -134,7 +134,7 @@ public class IsharmlaSeabornHead extends Mob {
 
             Ballistica b = new Ballistica(pos, targetPos, Ballistica.WONT_STOP);
             //shoot beams
-            sprite.parent.add(new Beam.DeathRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
+            sprite.parent.add(new Beam.WaterRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
             for (int p : b.path) {
                 Char ch = Actor.findChar(p);
                 if (ch != null && (ch.alignment != alignment || ch instanceof Bee)) {

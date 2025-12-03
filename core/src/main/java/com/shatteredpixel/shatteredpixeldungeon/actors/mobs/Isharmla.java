@@ -145,7 +145,7 @@ public class Isharmla extends Mob {
 
         if (shieldCooldown <= 0) {
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
-                if (mob.isAlive() && !(mob instanceof Isharmla) && mob.alignment == Alignment.ENEMY) {
+                if (mob.isAlive() && (mob instanceof SummonRunner || mob instanceof SummonLeef || mob instanceof SummonOcto)) {
                     Buff.affect(mob, Barrier.class).setShield(shieldAmount);
                 }
             }

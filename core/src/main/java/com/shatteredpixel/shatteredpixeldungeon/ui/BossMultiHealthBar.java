@@ -117,7 +117,7 @@ public class BossMultiHealthBar extends Component {
                     max += boss.HT;
                 }
 
-				hp.scale.x = Math.max( 0, (health-shield)/max);
+                hp.scale.x = Math.max( 0, (health-shield)/max);
 				shieldedHP.scale.x = health/max;
 				rawShielding.scale.x = shield/max;
 
