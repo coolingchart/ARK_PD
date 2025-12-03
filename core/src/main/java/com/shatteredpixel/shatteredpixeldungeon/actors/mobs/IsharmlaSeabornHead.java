@@ -69,7 +69,7 @@ public class IsharmlaSeabornHead extends Mob {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange(30, 60);
+        return Random.NormalIntRange(40, 70);
     }
 
     @Override

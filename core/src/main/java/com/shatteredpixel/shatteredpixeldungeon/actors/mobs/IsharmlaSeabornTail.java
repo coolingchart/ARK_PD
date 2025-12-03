@@ -44,7 +44,7 @@ public class IsharmlaSeabornTail extends Mob {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange(20, 35);
+        return Random.NormalIntRange(25, 45);
     }
 
     @Override
