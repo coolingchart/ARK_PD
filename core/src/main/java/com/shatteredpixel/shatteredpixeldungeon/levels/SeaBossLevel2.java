@@ -150,6 +150,11 @@ public class SeaBossLevel2 extends Level {
             Isharmla boss = new Isharmla();
             boss.pos = 199;
             GameScene.add( boss );
+
+            set( boss.pos, Terrain.WELL );
+            GameScene.updateMap( entrance );
+            Dungeon.observe();
+
             seal();
         }
     }

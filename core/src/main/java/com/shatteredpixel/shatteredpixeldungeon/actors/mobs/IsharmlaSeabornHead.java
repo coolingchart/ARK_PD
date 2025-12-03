@@ -9,18 +9,14 @@ import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NervousImpairment;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.EarthParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.WaterParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
@@ -33,19 +29,18 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.SurfaceScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Mula_1Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BossMultiHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-//패턴 : 1) 발판 파괴 레이저, 6/4턴 쿨; 2) 물리공격; 3) 파도 특수패턴
+//패턴 : 1) 발판 파괴 미법공격 레이저; 2) 근거리 물리공격; 3) 파도 특수패턴
 public class IsharmlaSeabornHead extends Mob {
     {
         spriteClass = Mula_1Sprite.class;
@@ -60,8 +55,7 @@ public class IsharmlaSeabornHead extends Mob {
         properties.add(Property.BOSS);
         properties.add(Property.IMMOVABLE);
 
-        state = HUNTING;
-
+        state = new Hunting();
     }
 
     // 모든 믈라 파츠가 파괴되면 사망
@@ -83,23 +77,35 @@ public class IsharmlaSeabornHead extends Mob {
         return 50;
     }
 
+    @Override
+    public void notice() {
+        BossMultiHealthBar.assignBoss(this);
+    }
 
     @Override
     public int defenseSkill(Char enemy) {
         if (isDead) return INFINITE_EVASION;
+
+        // 캐릭터가 물 밖이라면 데미지를 입지 않습니다
+        if (enemy instanceof Hero && Dungeon.level.map[enemy.pos] == Terrain.EMPTY) {
+            return INFINITE_EVASION;
+        }
+
         else return 20;
     }
 
-    // 사거리 6
+    // 사거리 2
     @Override
     protected boolean canAttack(Char enemy) {
-        return !isDead && this.fieldOfView[enemy.pos] && Dungeon.level.distance(this.pos, enemy.pos) <= 6;
+        return !isDead && this.fieldOfView[enemy.pos] && Dungeon.level.distance(this.pos, enemy.pos) <= 2;
     }
 
     @Override
     protected boolean act() {
+
         sprite.turnTo(pos, 999999);
         rooted = true;
+
         if (isDead) {
             if (Dungeon.mulaCount == 3) {
                 Badges.validateVictory();
@@ -116,6 +122,7 @@ public class IsharmlaSeabornHead extends Mob {
                 Dungeon.deleteGame(GamesInProgress.curSlot, true);
                 Game.switchScene(SurfaceScene.class);
             }
+            alerted = false;
             return super.act();
         }
 
@@ -184,11 +191,6 @@ public class IsharmlaSeabornHead extends Mob {
     }
 
     @Override
-    protected float attackDelay() {
-        return super.attackDelay();
-    }
-
-    @Override
     public void damage(int dmg, Object src) {
 
         if (isDead) return;
@@ -199,13 +201,13 @@ public class IsharmlaSeabornHead extends Mob {
         }
 
         // 믈라의 머리는 파괴되지 않은 부위 하나당 33/50%의 피해저항을 얻습니다
-        int resistance = Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) ? 33 : 50;
-        dmg = (int) (dmg * (1 - (resistance * (2 - Dungeon.mulaCount))));
+        float resistance = Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) ? 0.50f : 0.33f;
+        dmg = (int) (dmg * (1.0 - (resistance * (2 - Dungeon.mulaCount))));
 
         int hpThreshold = HT / 2;
         super.damage(dmg, src);
 
-        if (HP < hpThreshold) {
+        if (HP < hpThreshold && !isHeadEnraged) {
             HP = hpThreshold;
             isHeadEnraged = true;
             IsharmlaSeabornHead.triggerAnger();
@@ -444,6 +446,23 @@ public class IsharmlaSeabornHead extends Mob {
             @Override
             public String tileDesc() {
                 return Messages.get(this, "desc");
+            }
+        }
+    }
+
+    protected class Hunting implements AiState {
+
+        @Override
+        public boolean act( boolean enemyInFOV, boolean justAlerted ) {
+            enemySeen = enemyInFOV;
+            if (enemyInFOV && !isCharmedBy( enemy ) && canAttack( enemy )) {
+
+                target = enemy.pos;
+                return doAttack( enemy );
+
+            } else {
+                spend( TICK );
+                return true;
             }
         }
     }
