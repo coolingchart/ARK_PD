@@ -44,6 +44,8 @@ public enum Icons {
 	AUDIO,
 	TALENT,
 	SKIN,
+    COPY,
+    PASTE,
 
 	//ingame UI icons
 	SKULL,
@@ -162,6 +164,11 @@ public enum Icons {
 			case SKIN:
 				icon.frame( icon.texture.uvRect( 128, 0, 143, 13 ) );
 				break;
+            case COPY:
+                icon.frame( icon.texture.uvRect( 144, 0, 158, 15 ) );
+            case PASTE:
+                icon.frame( icon.texture.uvRect( 159, 0, 173, 15 ) );
+
 		case CLOSE:
 			icon.frame( icon.texture.uvRect( 0, 16, 11, 27 ) );
 			break;
