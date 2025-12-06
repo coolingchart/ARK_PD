@@ -23,11 +23,11 @@ public class TiacauhBrave extends Mob {
     {
         spriteClass = Tiacauh_BraveSprite.class;
 
-        HP = HT = 165;
+        HP = HT = 145;
         defenseSkill = 18;
 
         EXP = 20;
-        maxLvl = 37;
+        maxLvl = 35;
 
         loot = Generator.Category.SCROLL;
         lootChance = 0.4f;

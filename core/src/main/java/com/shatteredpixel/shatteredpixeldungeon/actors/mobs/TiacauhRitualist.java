@@ -24,11 +24,11 @@ public class TiacauhRitualist extends Mob{
     {
         spriteClass = TiacauhRitualistSprite.class;
 
-        HP = HT = 115;
+        HP = HT = 95;
         defenseSkill = 23;
 
         EXP = 17;
-        maxLvl = 36;
+        maxLvl = 34;
 
         loot = Generator.Category.STONE;
         lootChance = 0.5f;

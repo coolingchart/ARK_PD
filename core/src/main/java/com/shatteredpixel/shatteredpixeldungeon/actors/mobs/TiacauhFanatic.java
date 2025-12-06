@@ -17,11 +17,11 @@ public class TiacauhFanatic extends Mob {
     {
         spriteClass = Tiacauh_fanaticSprite.class;
 
-        HP = HT = 75;
+        HP = HT = 55;
         defenseSkill = 40;
 
         EXP = 14;
-        maxLvl = 29;
+        maxLvl = 27;
 
         loot = Gold.class;
         lootChance = 0.35f;

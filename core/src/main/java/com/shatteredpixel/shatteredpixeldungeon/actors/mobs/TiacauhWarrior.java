@@ -16,11 +16,11 @@ public class TiacauhWarrior extends Mob {
     {
         spriteClass = Tiacauh_warriorSprite.class;
 
-        HP = HT = 110;
+        HP = HT =80;
         defenseSkill = 18;
 
         EXP = 14;
-        maxLvl = 29;
+        maxLvl = 27;
 
         loot = new MysteryMeat();
         lootChance = 0.137f;

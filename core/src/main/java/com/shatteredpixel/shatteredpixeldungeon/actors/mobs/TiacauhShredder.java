@@ -17,11 +17,11 @@ public class TiacauhShredder extends Mob {
     {
         spriteClass = Tiacauh_ShredderSprite.class;
 
-        HP = HT = 180;
+        HP = HT = 150;
         defenseSkill = 24;
 
         EXP = 15;
-        maxLvl = 35;
+        maxLvl = 33;
 
         loot = Generator.Category.SKL_T2;
         lootChance = 0.24f;

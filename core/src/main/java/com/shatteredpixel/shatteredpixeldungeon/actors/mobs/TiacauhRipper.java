@@ -13,11 +13,11 @@ public class TiacauhRipper extends Mob {
     {
         spriteClass = Tiacauh_RipperSprite.class;
 
-        HP = HT = 85;
+        HP = HT = 65;
         defenseSkill = 45;
 
         EXP = 16;
-        maxLvl = 34;
+        maxLvl = 32;
 
         immunities.add(Silence.class);
     }

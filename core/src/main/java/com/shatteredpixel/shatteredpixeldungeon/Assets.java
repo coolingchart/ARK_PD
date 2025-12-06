@@ -47,6 +47,7 @@ public class Assets {
 		public static final String TILSE_IBERIA	= "environment/tiles_iberia.png";
 		public static final String TILSE_IBERIA2	= "environment/tiles_iberia2.png";
 		public static final String TILSE_SARGON	= "environment/tiles_sargon.png";
+        public static final String TILSE_SARGON2	= "environment/tiles_sargon2.png";
 
 		public static final String WATER_SEWERS	= "environment/water0.png";
 		public static final String WATER_PRISON	= "environment/water1.png";

@@ -25,11 +25,11 @@ public class TiacauhAddict extends Mob {
         spriteClass = Tiacauh_DrugsSprite.class;
         baseSpeed = 2f;
 
-        HP = HT = 120;
+        HP = HT = 100;
         defenseSkill = 24;
 
         EXP = 14;
-        maxLvl = 32;
+        maxLvl = 30;
 
         loot = Generator.Category.SKL_RND;
         lootChance = 0.1f;
