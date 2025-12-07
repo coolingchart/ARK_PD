@@ -26,10 +26,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ceylon;
@@ -69,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.NewCityBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewHallsBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewPrisonBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SeaBossLevel1;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SeaBossLevel2;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SeaLevel_part1;
@@ -181,7 +184,16 @@ public class Dungeon {
 	public static QuickSlot quickslot = new QuickSlot();
 	
 	public static int depth;
+    //determines path the hero is on. Current uses:
+    // 0 is the default path
+    // 1 is for quest sub-floors
+    public static int branch;
+
+    //keeps track of what levels the game should try to load instead of creating fresh
+    public static ArrayList<Integer> generatedLevels = new ArrayList<>();
+
 	public static int gold;
+    public static int energy;
 	public static int guardquest;
 	public static int acequest;
 	public static int cautusquset;
@@ -220,32 +232,48 @@ public class Dungeon {
 	public static HashSet<Integer> chapters;
 
 	public static SparseArray<ArrayList<Item>> droppedItems;
-	public static SparseArray<ArrayList<Item>> portedItems;
 
-	public static int version;
-	public static long seed;
-	
+    //first variable is only assigned when game is started, second is updated every time game is saved
+    public static int initialVersion;
+    public static int version;
+
+    public static String customSeedText = "";
+    public static long seed;
+    public static long lastPlayed;
+
+    //we initialize the seed separately so that things like interlevelscene can access it early
+    public static void initSeed() {
+        if (!SPDSettings.customSeed().isEmpty()){
+            customSeedText = SPDSettings.customSeed();
+            seed = DungeonSeed.convertFromText(customSeedText);
+        } else {
+            customSeedText = "";
+            seed = DungeonSeed.randomSeed();
+        }
+    }
+
 	public static void init() {
 
-		version = Game.versionCode;
+        initialVersion = version = Game.versionCode;
 		challenges = SPDSettings.challenges();
 		mobsToChampion = -1;
 
-		seed = DungeonSeed.randomSeed();
-
 		Actor.clear();
 		Actor.resetNextID();
-		
-		Random.pushGenerator( seed );
 
-			Scroll.initLabels();
-			Potion.initColors();
-			Ring.initGems();
+        //offset seed slightly to avoid output patterns
+        Random.pushGenerator( seed+1 );
 
-			SpecialRoom.initForRun();
-			SecretRoom.initForRun();
+        Scroll.initLabels();
+        Potion.initColors();
+        Ring.initGems();
 
-		Random.resetGenerators();
+        SpecialRoom.initForRun();
+        SecretRoom.initForRun();
+
+        Generator.fullReset();
+
+        Random.resetGenerators();
 		
 		Statistics.reset();
 		Notes.reset();
@@ -293,7 +321,6 @@ public class Dungeon {
 		QuestCatPoint = Random.Int(2);
 
 		droppedItems = new SparseArray<>();
-		portedItems = new SparseArray<>();
 
 		LimitedDrops.reset();
 		
@@ -374,20 +401,6 @@ public class Dungeon {
 			level = new NewCityBossLevel();
 			break;
 		case 21:
-			//logic for old city boss levels, need to spawn a shop on floor 21
-			try {
-				Bundle bundle = FileUtils.bundleFromFile(GamesInProgress.depthFile(GamesInProgress.curSlot, 20));
-				Class cls = bundle.getBundle(LEVEL).getClass("__className");
-				if (cls == NewCityBossLevel.class) {
-					level = new HallsLevel();
-				} else {
-					level = new LastShopLevel();
-				}
-			} catch (Exception e) {
-				TomorrowRogueNight.reportException(e);
-				level = new HallsLevel();
-			}
-			break;
 		case 22:
 		case 23:
 		case 24:
@@ -462,9 +475,12 @@ public class Dungeon {
 	}
 
 	public static long seedForDepth(int depth){
+        int lookAhead = depth;
+        lookAhead += 50*branch; // Assumes depth is always 1 ~ 50, and branch is always 0 or higher
+
 		Random.pushGenerator( seed );
 
-			for (int i = 0; i < depth; i ++) {
+			for (int i = 0; i < lookAhead; i ++) {
 				Random.Long(); //we don't care about these values, just need to go through them
 			}
 			long result = Random.Long();
@@ -484,9 +500,29 @@ public class Dungeon {
 	public static boolean bossLevel( int depth ) {
 		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25 || depth == 35 || depth == 40;
 	}
+
+    // TODO: re-enable for ascension
+    //value used for scaling of damage values and other effects.
+    //is usually the dungeon depth, but can be set to 26 when ascending
+//    public static int scalingDepth(){
+//        if (Dungeon.hero != null && Dungeon.hero.buff(AscensionChallenge.class) != null){
+//            return 26;
+//        } else {
+//            return depth;
+//        }
+//    }
+//
+//    public static boolean interfloorTeleportAllowed(){
+//        if (Dungeon.level.locked
+//                || Dungeon.level instanceof MiningLevel
+//                || (Dungeon.hero != null && Dungeon.hero.belongings.getItem(Amulet.class) != null)){
+//            return false;
+//        }
+//        return true;
+//    }
 	
 	public static void switchLevel( final Level level, int pos ) {
-		
+
 		if (pos == -2){
 			pos = level.exit;
 		} else if (pos < 0 || pos >= level.length() || (!level.passable[pos] && !level.avoid[pos])){
@@ -504,7 +540,7 @@ public class Dungeon {
 		hero.pos = pos;
 		
 		for(Mob m : level.mobs){
-			if (m.pos == hero.pos){
+            if (m.pos == hero.pos && !Char.hasProp(m, Char.Property.IMMOVABLE)){
 				//displace mob
 				for(int i : PathFinder.NEIGHBOURS8){
 					if (Actor.findChar(m.pos+i) == null && level.passable[m.pos + i]){
@@ -557,7 +593,7 @@ public class Dungeon {
 		else return false;
 
 	}
-	
+
 	public static boolean souNeeded() {
 		int souLeftThisSet;
 		//3 SOU each floor set, 1.5 (rounded) on forbidden runes challenge
@@ -575,7 +611,7 @@ public class Dungeon {
 		}
 		return false;
 	}
-	
+
 	public static boolean asNeeded() {
 		//1 AS each floor set
 		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 5));
@@ -585,14 +621,20 @@ public class Dungeon {
 		//chance is floors left / scrolls left
 		return Random.Int(5 - floorThisSet) < asLeftThisSet;
 	}
-	
+
+    private static final String INIT_VER	= "init_ver";
 	private static final String VERSION		= "version";
 	private static final String SEED		= "seed";
+    private static final String CUSTOM_SEED	= "custom_seed";
+    private static final String LAST_PLAYED = "last_played";
 	private static final String CHALLENGES	= "challenges";
 	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
 	private static final String HERO		= "hero";
+    private static final String DEPTH		= "depth";
+    private static final String BRANCH		= "branch";
+    private static final String GENERATED_LEVELS    = "generated_levels";
 	private static final String GOLD		= "gold";
-	private static final String DEPTH		= "depth";
+    private static final String ENERGY		= "energy";
 	private static final String DROPPED     = "dropped%d";
 	private static final String PORTED      = "ported%d";
 	private static final String LEVEL		= "level";
@@ -600,6 +642,7 @@ public class Dungeon {
 	private static final String CHAPTERS	= "chapters";
 	private static final String QUESTS		= "quests";
 	private static final String BADGES		= "badges";
+    // 명픽던 추가
 	private static final String GUARD_Q		= "guardquest";
 	private static final String ACE_Q		= "acequest";
 	private static final String cautus		= "cautusquset";
@@ -635,14 +678,22 @@ public class Dungeon {
 	public static void saveGame(int save ) {
 		try {
 			Bundle bundle = new Bundle();
-			version = Game.versionCode;
-			bundle.put( VERSION, version );
+
+            bundle.put( INIT_VER, initialVersion );
+            bundle.put( VERSION, version = Game.versionCode );
 			bundle.put( SEED, seed );
+            bundle.put( CUSTOM_SEED, customSeedText );
+            bundle.put( LAST_PLAYED, lastPlayed = Game.realTime);
 			bundle.put( CHALLENGES, challenges );
 			bundle.put( MOBS_TO_CHAMPION, mobsToChampion );
 			bundle.put( HERO, hero );
-			bundle.put( GOLD, gold );
-			bundle.put( DEPTH, depth );
+            bundle.put( DEPTH, depth );
+            bundle.put( BRANCH, branch );
+
+            bundle.put( GOLD, gold );
+            bundle.put( ENERGY, energy );
+
+            // 명픽던 추가
 			bundle.put( cautus, cautusquset);
 			bundle.put( GUARD_Q, guardquest);
 			bundle.put( ACE_Q, acequest);
@@ -676,13 +727,8 @@ public class Dungeon {
 			bundle.put (BUY_TRANS, buyTransbox);
 			bundle.put (BUY_RING, buyRingbox);
 
-
 			for (int d : droppedItems.keyArray()) {
 				bundle.put(Messages.format(DROPPED, d), droppedItems.get(d));
-			}
-			
-			for (int p : portedItems.keyArray()){
-				bundle.put(Messages.format(PORTED, p), portedItems.get(p));
 			}
 
 			quickslot.storePlaceholders( bundle );
@@ -713,6 +759,12 @@ public class Dungeon {
 			Statistics.storeInBundle( bundle );
 			Notes.storeInBundle( bundle );
 			Generator.storeInBundle( bundle );
+
+            int[] bundleArr = new int[generatedLevels.size()];
+            for (int i = 0; i < generatedLevels.size(); i++){
+                bundleArr[i] = generatedLevels.get(i);
+            }
+            bundle.put( GENERATED_LEVELS, bundleArr);
 			
 			Scroll.save( bundle );
 			Potion.save( bundle );
@@ -735,19 +787,19 @@ public class Dungeon {
 	public static void saveLevel( int save ) throws IOException {
 		Bundle bundle = new Bundle();
 		bundle.put( LEVEL, level );
-		
-		FileUtils.bundleToFile(GamesInProgress.depthFile( save, depth), bundle);
+
+        FileUtils.bundleToFile(GamesInProgress.depthFile( save, depth, branch ), bundle);
 	}
 	
 	public static void saveAll() throws IOException {
 		if (hero != null && hero.isAlive()) {
 			
 			Actor.fixTime();
+            updateLevelExplored();
 			saveGame( GamesInProgress.curSlot );
 			saveLevel( GamesInProgress.curSlot );
 
 			GamesInProgress.set( GamesInProgress.curSlot, depth, challenges, hero );
-
 		}
 	}
 	
@@ -759,10 +811,14 @@ public class Dungeon {
 		
 		Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.gameFile( save ) );
 
-		version = bundle.getInt( VERSION );
+        initialVersion = bundle.getInt( INIT_VER );
+        version = bundle.getInt( VERSION );
 
 		seed = bundle.contains( SEED ) ? bundle.getLong( SEED ) : DungeonSeed.randomSeed();
+        customSeedText = bundle.getString( CUSTOM_SEED );
 
+        Actor.clear();
+        Actor.restoreNextID( bundle );
 		Actor.restoreNextID( bundle );
 
 		quickslot.reset();
@@ -811,6 +867,32 @@ public class Dungeon {
 			
 			SpecialRoom.restoreRoomsFromBundle(bundle);
 			SecretRoom.restoreRoomsFromBundle(bundle);
+
+            generatedLevels.clear();
+            if (bundle.contains(GENERATED_LEVELS)){
+                for (int i : bundle.getIntArray(GENERATED_LEVELS)) {
+                    generatedLevels.add(i);
+                }
+            } else {
+                for (int i = 1; i <= Statistics.deepestFloor; i++) {
+                    generatedLevels.add(i);
+                }
+            }
+
+            droppedItems = new SparseArray<>();
+            for (int i=1; i <= 26; i++) {
+
+                //dropped items
+                ArrayList<Item> items = new ArrayList<>();
+                if (bundle.contains(Messages.format( DROPPED, i )))
+                    for (Bundlable b : bundle.getCollection( Messages.format( DROPPED, i ) ) ) {
+                        items.add( (Item)b );
+                    }
+                if (!items.isEmpty()) {
+                    droppedItems.put( i, items );
+                }
+
+            }
 		}
 		
 		Bundle badges = bundle.getBundle(BADGES);
@@ -824,9 +906,12 @@ public class Dungeon {
 		
 		hero = null;
 		hero = (Hero)bundle.get( HERO );
-		
+
+        depth = bundle.getInt( DEPTH );
+        branch = bundle.getInt( BRANCH );
+
 		gold = bundle.getInt( GOLD );
-		depth = bundle.getInt( DEPTH );
+        energy = bundle.getInt( ENERGY );
 
 		guardquest = bundle.getInt(GUARD_Q);
 		acequest = bundle.getInt(ACE_Q);
@@ -867,39 +952,14 @@ public class Dungeon {
 		
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );
-
-		droppedItems = new SparseArray<>();
-		portedItems = new SparseArray<>();
-		for (int i=1; i <= 26; i++) {
-			
-			//dropped items
-			ArrayList<Item> items = new ArrayList<>();
-			if (bundle.contains(Messages.format( DROPPED, i )))
-				for (Bundlable b : bundle.getCollection( Messages.format( DROPPED, i ) ) ) {
-					items.add( (Item)b );
-				}
-			if (!items.isEmpty()) {
-				droppedItems.put( i, items );
-			}
-			
-			//ported items
-			items = new ArrayList<>();
-			if (bundle.contains(Messages.format( PORTED, i )))
-				for (Bundlable b : bundle.getCollection( Messages.format( PORTED, i ) ) ) {
-					items.add( (Item)b );
-				}
-			if (!items.isEmpty()) {
-				portedItems.put( i, items );
-			}
-		}
 	}
 	
 	public static Level loadLevel( int save ) throws IOException {
 		
 		Dungeon.level = null;
 		Actor.clear();
-		
-		Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.depthFile( save, depth)) ;
+
+        Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.depthFile( save, depth, branch ));
 		
 		Level level = (Level)bundle.get( LEVEL );
 		
@@ -911,27 +971,37 @@ public class Dungeon {
 	}
 	
 	public static void deleteGame( int save, boolean deleteLevels ) {
-		
-		FileUtils.deleteFile(GamesInProgress.gameFile(save));
-		
-		if (deleteLevels) {
-			FileUtils.deleteDir(GamesInProgress.gameFolder(save));
-		}
-		
-		GamesInProgress.delete( save );
+
+        if (deleteLevels) {
+            String folder = GamesInProgress.gameFolder(save);
+            for (String file : FileUtils.filesInDir(folder)){
+                if (file.contains("depth")){
+                    FileUtils.deleteFile(folder + "/" + file);
+                }
+            }
+        }
+
+        FileUtils.overwriteFile(GamesInProgress.gameFile(save), 1);
+
+        GamesInProgress.delete( save );
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
 		info.depth = bundle.getInt( DEPTH );
-		info.version = bundle.getInt( VERSION );
-		info.challenges = bundle.getInt( CHALLENGES );
-		Hero.preview( info, bundle.getBundle( HERO ) );
+        info.version = bundle.getInt( VERSION );
+        info.challenges = bundle.getInt( CHALLENGES );
+        info.seed = bundle.getLong( SEED );
+        info.customSeed = bundle.getString( CUSTOM_SEED );
+        info.lastPlayed = bundle.getLong( LAST_PLAYED );
+
+        Hero.preview( info, bundle.getBundle( HERO ) );
 		Statistics.preview( info, bundle );
 	}
 	
 	public static void fail( Class cause ) {
 		if (hero.belongings.getItem( Ankh.class ) == null) {
-			Rankings.INSTANCE.submit( false, cause );
+            updateLevelExplored();
+            Rankings.INSTANCE.submit( false, cause );
 		}
 	}
 	
@@ -942,11 +1012,26 @@ public class Dungeon {
 		Rankings.INSTANCE.submit( true, cause );
 	}
 
-	public static void observe(){
-		int dist = 8 + 2*Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
-		observe( dist+1 );
-	}
-	
+    public static void updateLevelExplored(){
+        if (branch == 0 && level instanceof RegularLevel && !Dungeon.bossLevel()){
+            return;
+            // Implementation TBD
+            //Statistics.floorsExplored.put( depth, level.levelExplorePercent(depth));
+        }
+    }
+
+    //default to recomputing based on max hero vision, in case vision just shrank/grew
+    public static void observe(){
+        int dist = Math.max(Dungeon.hero.viewDistance, 8);
+        dist *= 1f + 0.25f*Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
+
+        if (Dungeon.hero.buff(MagicalSight.class) != null){
+            dist = Math.max( dist, MagicalSight.DISTANCE );
+        }
+
+        observe( dist+1 );
+    }
+
 	public static void observe( int dist ) {
 
 		if (level == null) {
@@ -973,7 +1058,12 @@ public class Dungeon {
 			BArray.or( level.visited, level.heroFOV, pos, width, level.visited );
 			pos+=level.width();
 		}
-	
+
+        //always visit adjacent tiles, even if they aren't seen
+        for (int i : PathFinder.NEIGHBOURS9){
+            level.visited[hero.pos+i] = true;
+        }
+
 		GameScene.updateFog(l, t, width, height);
 		
 		if (hero.buff(MindVision.class) != null){

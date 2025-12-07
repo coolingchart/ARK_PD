@@ -326,11 +326,6 @@ public abstract class Level implements Bundlable {
 	public void restoreFromBundle( Bundle bundle ) {
 
 		version = bundle.getInt( VERSION );
-		
-		//saves from before v0.7.5e are not supported
-		if (version < TomorrowRogueNight.v0_7_5e){
-			throw new RuntimeException("old save");
-		}
 
 		setSize( bundle.getInt(WIDTH), bundle.getInt(HEIGHT));
 		
@@ -341,7 +336,7 @@ public abstract class Level implements Bundlable {
 		traps = new SparseArray<>();
         platforms = new SparseArray<>();
         seaTerrors = new SparseArray<>();
-		customTiles = new HashSet<>();
+        customTiles = new HashSet<>();
 		customWalls = new HashSet<>();
 		
 		map		= bundle.getIntArray( MAP );

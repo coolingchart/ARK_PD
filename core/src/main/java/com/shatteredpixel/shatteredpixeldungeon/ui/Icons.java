@@ -161,13 +161,15 @@ public enum Icons {
 		case EXIT:
 			icon.frame( icon.texture.uvRect( 113, 0, 127, 14 ) );
 			break;
-			case SKIN:
-				icon.frame( icon.texture.uvRect( 128, 0, 143, 13 ) );
-				break;
-            case COPY:
-                icon.frame( icon.texture.uvRect( 144, 0, 158, 15 ) );
-            case PASTE:
-                icon.frame( icon.texture.uvRect( 159, 0, 173, 15 ) );
+        case SKIN:
+            icon.frame( icon.texture.uvRect( 128, 0, 143, 13 ) );
+            break;
+        case COPY:
+            icon.frame( icon.texture.uvRect( 144, 0, 158, 15 ) );
+            break;
+        case PASTE:
+            icon.frame( icon.texture.uvRect( 159, 0, 173, 15 ) );
+            break;
 
 		case CLOSE:
 			icon.frame( icon.texture.uvRect( 0, 16, 11, 27 ) );

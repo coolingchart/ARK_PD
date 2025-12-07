@@ -44,7 +44,7 @@ import java.util.Locale;
 
 public class WelcomeScene extends PixelScene {
 
-	private static final int LATEST_UPDATE = TomorrowRogueNight.v0_1_2b;
+	private static final int LATEST_UPDATE = TomorrowRogueNight.v0_5_0_b5;
 
 	@Override
 	public void create() {

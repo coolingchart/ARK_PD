@@ -1558,7 +1558,7 @@ public class Badges {
 
 	private static void displayBadge( Badge badge ) {
 		
-		if (badge == null) {
+		if (badge == null || !Dungeon.customSeedText.isEmpty()) {
 			return;
 		}
 		
