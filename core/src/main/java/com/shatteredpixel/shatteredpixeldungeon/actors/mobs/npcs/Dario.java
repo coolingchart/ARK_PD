@@ -229,6 +229,13 @@ public class Dario extends NPC {
         }
     }
 
+    public void flee() {
+        GLog.p(Messages.get(this, "success")); // 접촉시 고마워 대사 출력
+
+        destroy();
+        sprite.die();
+    }
+
     public static class Quest {
         private static boolean given;
         private static boolean prepared;
