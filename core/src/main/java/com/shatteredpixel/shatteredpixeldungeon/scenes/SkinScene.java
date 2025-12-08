@@ -25,11 +25,6 @@ public class SkinScene extends PixelScene {
 public void create() {
     super.create();
 
-    if (Statistics.ver0_3_2firstrun == false) {
-        Badges.allskindestroy();
-        Statistics.ver0_3_2firstrun = true;
-    }
-
     Music.INSTANCE.play( Assets.Music.THEME, true );
 
     uiCamera.visible = false;
