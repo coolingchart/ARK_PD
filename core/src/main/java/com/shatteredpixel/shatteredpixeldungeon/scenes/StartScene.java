@@ -184,10 +184,10 @@ public class StartScene extends PixelScene {
 			bg = Chrome.get(Chrome.Type.GEM);
 			add(bg);
 
-            name = PixelScene.renderTextBlock(9);
+            name = PixelScene.renderTextBlock(7);
             add(name);
 
-            lastPlayed = PixelScene.renderTextBlock(6);
+            lastPlayed = PixelScene.renderTextBlock(5);
             add(lastPlayed);
 		}
 		
@@ -251,7 +251,7 @@ public class StartScene extends PixelScene {
                     lastPlayed.text(Messages.get(StartScene.class, "months_ago", diff / (30L * 24 * 60 * 60_000)));
                 }
 
-				depth.text(Integer.toString(info.depth));
+                depth.text(Integer.toString(info.depth));
 				depth.measure();
 				
 				level.text(Integer.toString(info.level));
@@ -317,7 +317,7 @@ public class StartScene extends PixelScene {
 				depth.x = steps.x + (steps.width() - depth.width()) / 2f + 1;
 				depth.y = steps.y + (steps.height() - depth.height()) / 2f + 1;
 				align(depth);
-				
+
 			} else {
 				name.setPos(
 						x + (width - name.width())/2f,
