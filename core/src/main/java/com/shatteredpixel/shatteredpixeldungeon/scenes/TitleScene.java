@@ -271,7 +271,7 @@ public class TitleScene extends PixelScene {
 				@Override
 				protected void onSelect(int index) {
 					if (index == 0) {
-						String link = "https://mizq4482.tistory.com/";
+						String link = "https://arca.live/b/arknights/80626930";
 						DeviceCompat.openURI(link);
 					} else if (index == 1) {
 						ChangesScene.changesSelected = 0;

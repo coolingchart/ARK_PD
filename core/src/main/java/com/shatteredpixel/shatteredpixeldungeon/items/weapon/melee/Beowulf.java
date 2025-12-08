@@ -55,7 +55,7 @@ public class Beowulf extends MeleeWeapon {
 
         int sppos = Dungeon.level.distance(attacker.pos, defender.pos);
         if (sppos < 3) {
-            return super.proc(attacker, defender, damage / 2);
+            return super.proc(attacker, defender, damage / 4);
         }
 
         return super.proc(attacker, defender, damage);
