@@ -25,7 +25,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gunaccessories.Accessories
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.IsekaiItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Thunderbolt;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.UpMagazine;
@@ -55,9 +57,9 @@ public class GunWeapon extends MeleeWeapon {
     protected int bulletMax = 25;
     protected boolean specialFire = false; // 특수 사격 여부
     protected boolean gamza = false; // 썬더볼트 장착 여부
-    protected float FIRE_ACC_MULT = 1f;
     protected float FIRE_DELAY_MULT = 1f;
-    protected float FIRE_DAMAGE_MULT = 1f;
+    protected int MIN_RANGE = 1;
+    protected int MAX_RANGE = 4;
 
     protected float RELOAD_DELAY = 3f;
 
@@ -68,10 +70,36 @@ public class GunWeapon extends MeleeWeapon {
     }
 
     public int fireMin() {
-        return (int) ((tier + bulletTier + level()) * FIRE_DAMAGE_MULT);
+        return (int) (tier + bulletTier + level())
+                + RingOfSharpshooting.levelDamageBonus(Dungeon.hero);
     }
+
     public int fireMax() {
-        return (int) ((tier * 3 + bulletTier * 4 + level() * 2) * FIRE_DAMAGE_MULT);
+        return (int) 4
+                + tier * 3
+                + bulletTier * 2
+                + level() * 2
+                + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) * 2;
+    }
+
+    public int getDistance(int from, int to) {
+        return Dungeon.level.distance(from, to);
+    }
+
+    public int getMaxRange() {
+        boolean projecting = hasEnchant(Projecting.class, Dungeon.hero);
+
+        return projecting ? MAX_RANGE + 1 : MAX_RANGE;
+    }
+
+    public int getMinRange() {
+        return MIN_RANGE;
+    }
+
+    public float getFireAcc(int from, int to) {
+        int distance = getDistance(from, to);
+
+        return getMaxRange() >= distance && distance >= getMinRange() ? 1f : 0.5f;
     }
 
     public int fireDamageRoll() {
@@ -275,7 +303,7 @@ public class GunWeapon extends MeleeWeapon {
                 curUser.sprite,
                 bolt.collisionPos,
                 callback);
-        Sample.INSTANCE.play( Assets.Sounds.ZAP_GUN );
+        Sample.INSTANCE.play( this.hitSound );
     }
 
     public boolean tryToZap(Hero owner, int target) {
@@ -306,10 +334,15 @@ public class GunWeapon extends MeleeWeapon {
             if (this instanceof R4C && Dungeon.hero.belongings.getItem(IsekaiItem.class) != null) {
                 if (Dungeon.hero.belongings.getItem(IsekaiItem.class).isEquipped(Dungeon.hero)) {
                     if (ch.buff(Paralysis.class) != null) {pala = true;}
-                }}
+                }
+            }
 
-            ACC = fireAccuracyFactor(FIRE_ACC_MULT);
-            if (ch.hit(Dungeon.hero, ch, false)) {
+            ACC *= fireAccuracyFactor(getFireAcc(Dungeon.hero.pos, ch.pos));
+            if (ACC <= 0f) {
+                String missed = Messages.get(ch, "missed");
+                ch.sprite.showStatus( CharSprite.NEUTRAL, missed );
+                Sample.INSTANCE.play(Assets.Sounds.MISS);
+            } else if (ch.hit(Dungeon.hero, ch, false)) {
 
                 // 첸 특성
                 if (Dungeon.hero.hasTalent(Talent.TARGET_FOCUSING)) {
@@ -319,7 +352,7 @@ public class GunWeapon extends MeleeWeapon {
                 }
 
                 ch.damage(dmg, this);
-                Sample.INSTANCE.play(Assets.Sounds.HIT_GUN, 1, Random.Float(0.87f, 1.15f));
+                Sample.INSTANCE.play(Assets.Sounds.HIT, 1, Random.Float(0.87f, 1.15f));
 
                 if (specialFire) specialFire(ch);
                 if (this instanceof C1_9mm) {
@@ -364,14 +397,10 @@ public class GunWeapon extends MeleeWeapon {
                         Buff.detach(Dungeon.hero,ChenShooterBuff.TACMove_tacshot.class);
                     }
                 }
-            }
-            else {
+            } else {
                 String defense = ch.defenseVerb();
                 ch.sprite.showStatus( CharSprite.NEUTRAL, defense );
-
-                //TODO enemy.defenseSound? currently miss plays for monks/crab even when they parry
                 Sample.INSTANCE.play(Assets.Sounds.MISS);
-
             }
 
         } else {

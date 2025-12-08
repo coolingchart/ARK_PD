@@ -1,9 +1,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Pkp extends GunWeapon {
@@ -12,10 +14,10 @@ public class Pkp extends GunWeapon {
         hitSound = Assets.Sounds.HIT_AR;
         hitSoundPitch = 0.9f;
 
-        FIRE_ACC_MULT = 1f;
-        FIRE_DELAY_MULT = 0.25f;
-        FIRE_DAMAGE_MULT = 0.25f;
+        FIRE_DELAY_MULT = 0.33f;
         bulletMax = 101;
+        MIN_RANGE = 0;
+        MAX_RANGE = 4;
 
         usesTargeting = true;
 
@@ -23,6 +25,26 @@ public class Pkp extends GunWeapon {
         tier = 5;
     }
 
+    @Override
+    public float getFireAcc(int from, int to) {
+        int distance = getDistance(from, to);
+
+        // 최대 사거리 6, 유효 사거리 4
+        if (distance > getMaxRange()) {
+            return Math.max(0f, 0.8f - 0.4f * (distance - getMaxRange()));
+        } else {
+            return 0.8f;
+        }
+    }
+
+    @Override
+    public int fireMax() {
+        return (int) 3
+                + tier * 3
+                + bulletTier
+                + level()
+                + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) * 2;
+    }
 
     @Override
     protected void specialFire(Char ch) {
