@@ -2498,8 +2498,7 @@ items.weapon.melee.divineavatar.setbouns=_아이템 시너지 : 응애기사 모
 items.weapon.melee.usg.name=USG 57
 items.weapon.melee.usg.gamza_name=USG Custom
 items.weapon.melee.usg.desc=_"빠른 탄환을 자랑하는 소구경 반자동 권총입니다. FBI SWAT 팀이 사용합니다."_\n\n이 무기는 _사격_ 무기입니다. 투척 무기로 탄약을 장전할 수 있습니다.\n현재 장전된 탄약의 레벨은 _%d_ 입니다.
-items.weapon.melee.usg.stats_desc=_권총._\n일정 확률로 탄약을 소모하지 않습니다.\n\n이 무기로 사격을 가해 적에게 _%1$d-%2$d의 피해_를 입힐 수 있습니다.
-
+items.weapon.melee.usg.stats_desc=_권총._\n특별하진 않은 소형 개인방어화기입니다.\n\n이 무기로 사격을 가해 적에게 _%1$d-%2$d의 피해_를 입힐 수 있습니다.
 
 items.weapon.melee.dp27.name=DP27
 items.weapon.melee.dp27.gamza_name=DP27 Custom
@@ -2659,8 +2658,8 @@ items.weapon.melee.kazemaruweapon.stats_desc=이 검은 공격시 10%% 확률로
 items.weapon.melee.kazemaruweapon.typical_stats_desc=이 검은 공격시 10%% 확률로 분신을 소환해 일반적으로 _%1$d-%2$d_의 피해를 입힙니다.
 
 items.weapon.melee.beowulf.name=베오울프
-items.weapon.melee.beowulf.desc="자, 나를 넘어서 봐라!" \n\n 이 건랜스는 대상과 사거리가 멀어질수록 높은 범위 데미지를 입히며, 가까울 수록 데미지가 줄어듭니다.
-items.weapon.melee.beowulf.stats_desc=사거리 +2
+items.weapon.melee.beowulf.desc="자, 나를 넘어서 봐라!" \n\n 이 건랜스는 최대 사거리에서 온전한 데미지를 주며, 3칸 이하부터 데미지가 50% 하락합니다. 또한 건랜스의 방패로 피해가 약간이나마 줄어듭니다. 
+items.weapon.melee.beowulf.stats_desc=사거리 +3, 명중률 +33% 
 
 
 
@@ -2671,6 +2670,7 @@ items.weapon.melee.gunweapon.ac_remove=부착물 제거
 items.weapon.melee.gunweapon.prompt=지정해주세요.
 items.weapon.melee.gunweapon.self_target=자신에게는 발사할 수 없습니다.
 items.weapon.melee.gunweapon.fizzles=탄약이 부족합니다.
+items.weapon.melee.gunweapon.not_equipped=사격하려면 무기를 장착해야 합니다.
 
 items.gunaccessories.accessories.ac_affix=부착
 items.gunaccessories.accessories.prompt=부착물을 붙힐 총기 선택
@@ -2869,7 +2869,7 @@ items.amulet.ac_end=여정을 끝낸다
 items.amulet.fail_th=독타는 던지는게 아닙니다.
 items.amulet.fail_drop=독타는 버리는게 아닙니다.
 items.amulet.rankings_desc=박사 구출
-items.amulet.desc=아무것도 기억이 나지 않는다. 처음에는 전혀 실감이 나지 않았지만, 천천히 기억이 돌아오고 있다고 한다. 하지만 중요한 기억들은 여전히 기억이 나지 않는다고 한다.\n\n제약회사 로도스 아일랜드의 박사. 바로 당신이다. 직접 켈시에게로 데려가거나, 아니면 "나쁜녀석들 호"가 현장에 도착할 때까지 기다리는 것으로 이 여정을 마무리 할 수 있을 것이다.\n\n박사가 있을 때 켈시에게 말을 걸면 게임이 끝납니다. 주의해주세요!  
+items.amulet.desc=아무것도 기억이 나지 않는다. 처음에는 전혀 실감이 나지 않았지만, 천천히 기억이 돌아오고 있다고 한다. 하지만 중요한 기억들은 여전히 기억이 나지 않는다고 한다.\n\n제약회사 로도스 아일랜드의 박사. 바로 당신이다. 직접 켈시에게로 데려가거나, 아니면 "나쁜녀석들 호"가 현장에 도착할 때까지 기다리는 것으로 이 여정을 마무리 할 수 있을 것이다.
 
 items.originiumshard.name=오리지늄 조각
 items.originiumshard.ac_use=사용한다!
@@ -3070,6 +3070,9 @@ items.snowsants_coin.ac_use=사용한다
 items.food.sanitypotion.name=이성회복제
 items.food.sanitypotion.desc=섭취시 신경 손상을 50% 회복시켜주는 긴급 이성회복제. 중요한 물건이니 필요할 때만 사용하자.
 items.food.sanitypotion.ac_drink=마신다
+
+seaplatform.littlehandy.name=이성회복제
+items.seaplatform.littlehandy.desc=섭취시 신경 손상을 50% 회복시켜주는 긴급 이성회복제. 중요한 물건이니 필요할 때만 사용하자.
 
 
 
