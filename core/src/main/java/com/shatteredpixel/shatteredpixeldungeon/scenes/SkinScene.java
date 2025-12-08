@@ -18,47 +18,53 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.RectF;
 
 public class SkinScene extends PixelScene {
 
     @Override
-public void create() {
-    super.create();
+    public void create() {
+        super.create();
 
-    Music.INSTANCE.play( Assets.Music.THEME, true );
+        Music.INSTANCE.play( Assets.Music.THEME, true );
 
-    uiCamera.visible = false;
+        uiCamera.visible = false;
 
-    int w = Camera.main.width;
-    int h = Camera.main.height;
+        int w = Camera.main.width;
+        int h = Camera.main.height;
 
-    Archs archs = new Archs();
-    archs.setSize( w, h );
-    add( archs );
+        RectF insets = getCommonInsets();
 
-    float margin = 5;
-    float top = 20;
+        w -= insets.left + insets.right;
+        h -= insets.top + insets.bottom;
 
-    RenderedTextBlock title = PixelScene.renderTextBlock( Messages.get(this, "title"), 9 );
-    title.hardlight(Window.TITLE_COLOR);
-    title.setPos(
-            (w - title.width()) / 2f,
-            (top - title.height()) / 2f
-    );
-    align(title);
-    add(title);
+        Archs archs = new Archs();
+        archs.setSize( w, h );
+        add( archs );
 
-    Badges.loadGlobal();
-    BadgesGrid grid = new BadgesGrid(true, true);
-    grid.setRect(margin, top, w-(2*margin), h-top-margin);
-    add(grid);
+        float margin = 5;
+        float top = 20;
 
-    SkinExitButton btnExit = new SkinExitButton();
-    btnExit.setPos( Camera.main.width - btnExit.width(), 0 );
-    add( btnExit );
+        RenderedTextBlock title = PixelScene.renderTextBlock( Messages.get(this, "title"), 9 );
+        title.hardlight(Window.TITLE_COLOR);
+        title.setPos(
+                insets.left + (w - title.width()) / 2f,
+                insets.top + (top - title.height()) / 2f
+        );
+        align(title);
+        add(title);
 
-    fadeIn();
-}
+        Badges.loadGlobal();
+        BadgesGrid grid = new BadgesGrid(true, true);
+        grid.setRect(margin, insets.top + top, w-(2*margin), h-top-margin-insets.bottom);
+        add(grid);
+
+        SkinExitButton btnExit = new SkinExitButton();
+        btnExit.setPos( Camera.main.width - btnExit.width() - insets.left, insets.top );
+        add( btnExit );
+
+        fadeIn();
+    }
 
     @Override
     public void destroy() {
