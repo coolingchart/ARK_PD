@@ -79,7 +79,7 @@ public class Dario extends NPC {
 
     @Override
     public int drRoll() {
-        return Random.NormalIntRange(0, 12);
+        return Random.NormalIntRange(4, 14);
     }
 
     @Override
@@ -92,10 +92,10 @@ public class Dario extends NPC {
         } else {
             seenBefore = false;
 
-            if (!encouraged && Quest.killCount >= 5) {
+            if (!encouraged && Quest.killCount >= Quest.KILL_COUNT_GOAL - 3) {
                 yell(Messages.get(this, "almost"));
                 encouraged = true;
-            } else if (!completed && Quest.isQuestComplete()) {
+            } else if (!completed && !isEnemyInFOV() && Quest.isQuestComplete()) {
                 yell(Messages.get(this, "complete"));
                 completed = true;
             }
@@ -203,6 +203,15 @@ public class Dario extends NPC {
         super.die(cause);
     }
 
+    private boolean isEnemyInFOV() {
+        for (Mob mob : Dungeon.level.mobs) {
+            if (mob != null && mob.isAlive() && fieldOfView[mob.pos] && mob.invisible <= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private class Wandering extends Mob.Wandering {
         @Override
         public boolean act( boolean enemyInFOV, boolean justAlerted) {
@@ -241,6 +250,7 @@ public class Dario extends NPC {
         private static boolean given;
         private static boolean prepared;
         private static int killCount;
+        private static final int KILL_COUNT_GOAL = 7;
 
         public static void reset() {
             given = false;
@@ -281,10 +291,16 @@ public class Dario extends NPC {
         }
 
         public static void pullMobs(int pos) {
+            int count = 0;
             for (Mob mob : Dungeon.level.mobs) {
+                if (count >= KILL_COUNT_GOAL - killCount) {
+                    break;
+                }
+
                 if (mob.isAlive() && (mob.state != mob.SLEEPING || mob.state != mob.FLEEING)) {
                     mob.beckon(pos);
                 }
+                count++;
             }
         }
 
@@ -292,7 +308,7 @@ public class Dario extends NPC {
             if (!given || !prepared) {
                 return false;
             } else {
-                return killCount >= 8;
+                return killCount >= KILL_COUNT_GOAL;
             }
         }
 
@@ -340,7 +356,6 @@ public class Dario extends NPC {
             mobs.add(new SeaReaper());
             mobs.add(new SeaReaper());
             mobs.add(new SeaReaper());
-            mobs.add(new SeaCapsule());
             mobs.add(new SeaCapsule());
             mobs.add(new SeaCapsule());
 
