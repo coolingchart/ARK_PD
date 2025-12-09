@@ -13,6 +13,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.SanityPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.SeaPlatform;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.NPC_DarioSprite;
@@ -275,17 +276,7 @@ public class Dario extends NPC {
         }
 
         public static void startQuest(int pos) {
-            HashSet<Mob> questMobs = spawnAdditionalMobs(Dungeon.level);
-            for (Mob mob : questMobs) {
-                do {
-                    // 시야 밖 랜덤 위치에서 스폰
-                    mob.pos = Dungeon.level.randomRespawnCell(mob);
-                }
-                while (Dungeon.level.heroFOV[mob.pos]);
-                mob.state = mob.WANDERING;
-                GameScene.add(mob, Random.Int(1, 10));
-                mob.beckon(pos);
-            }
+            spawnAdditionalMobs(pos);
             killCount = 0;
         }
 
@@ -330,6 +321,7 @@ public class Dario extends NPC {
             rewards.add(new PotionOfStrength().quantity(1));
             rewards.add(new ScrollOfUpgrade().quantity(1));
             rewards.add(new SanityPotion().quantity(5));
+            rewards.add(new SeaPlatform.LittleHandy().quantity(10));
 
             for (Item item : rewards) {
                 if (item.doPickUp( Dungeon.hero )) {
@@ -341,7 +333,7 @@ public class Dario extends NPC {
 
         }
 
-        private static HashSet<Mob> spawnAdditionalMobs(Level level) {
+        private static void spawnAdditionalMobs(int pos) {
             HashSet<Mob> mobs = new HashSet<>();
             mobs.add(new FloatingSeaDrifter());
             mobs.add(new FloatingSeaDrifter());
@@ -352,7 +344,16 @@ public class Dario extends NPC {
             mobs.add(new SeaCapsule());
             mobs.add(new SeaCapsule());
 
-            return mobs;
+            for (Mob mob : mobs) {
+                do {
+                    // 시야 밖 랜덤 위치에서 스폰
+                    mob.pos = Dungeon.level.randomRespawnCell(mob);
+                }
+                while (Dungeon.level.heroFOV[mob.pos]);
+                mob.state = mob.WANDERING;
+                GameScene.add(mob, Random.Int(1, 10));
+                mob.beckon(pos);
+            }
         }
     }
 }

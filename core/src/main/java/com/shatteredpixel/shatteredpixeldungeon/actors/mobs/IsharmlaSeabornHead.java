@@ -60,7 +60,7 @@ public class IsharmlaSeabornHead extends Mob {
 
     // 모든 믈라 파츠가 파괴되면 사망
     private boolean isDead = false;
-    private int laserCooldown = 6;
+    private int laserCooldown = 8;
     private static boolean isAngry = false;
     private static boolean isEnraged = false;
     private static boolean isHeadEnraged = false;
@@ -172,7 +172,7 @@ public class IsharmlaSeabornHead extends Mob {
                 }
             }
 
-            laserCooldown = Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) ? 4 : 6;
+            laserCooldown = Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) ? 6 : 8;
         } else {
             laserCooldown--;
         }
