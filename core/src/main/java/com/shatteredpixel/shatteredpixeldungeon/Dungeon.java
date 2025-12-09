@@ -352,7 +352,7 @@ public class Dungeon {
 		
 		depth++;
 		if (depth > Statistics.deepestFloor) {
-			if (depth != 27 && depth != 28) Statistics.deepestFloor = depth;
+			if (!(depth >= 27 && depth <= 30)) Statistics.deepestFloor = depth;
 			if (Statistics.deepestFloor <= 1) Statistics.deepestFloor = 1;
 			
 			if (Statistics.qualifiedForNoKilling) {
@@ -457,7 +457,7 @@ public class Dungeon {
 		
 		level.create();
 		
-		Statistics.qualifiedForNoKilling = !bossLevel();
+		Statistics.qualifiedForNoKilling = !bossLevel() && !(depth >= 27 && depth <= 30);
 		
 		return level;
 	}

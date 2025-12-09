@@ -34,7 +34,7 @@ public class TomorrowRogueNight extends Game {
 	//variable constants for specific older versions of shattered, used for data conversion
 	//versions older than v0.7.5e are no longer supported, and data from them is ignored
 	public static final int v0_5_0_b4 = 583;
-    public static final int v0_5_0_b5 = 596;
+    public static final int v0_5_0_b5 = 597;
 	
 	public TomorrowRogueNight(PlatformSupport platform ) {
 		super( sceneClass == null ? WelcomeScene.class : sceneClass, platform );

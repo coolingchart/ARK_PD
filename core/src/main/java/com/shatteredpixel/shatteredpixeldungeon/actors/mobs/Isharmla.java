@@ -110,6 +110,7 @@ public class Isharmla extends Mob {
         GameScene.flash(0x80FFFFFF);
         Camera.main.shake(2, 2f);
         Dungeon.observe();
+        GameScene.updateFog();
     }
 
     private void updateTerrain() {

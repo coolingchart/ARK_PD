@@ -70,6 +70,8 @@ public class RankingsScene extends PixelScene {
 		int w = Camera.main.width;
 		int h = Camera.main.height;
 		RectF insets = getCommonInsets();
+        w -= insets.left + insets.right;
+        h -= insets.top + insets.bottom;
 
 		archs = new Archs();
 		archs.setSize( w, h );
@@ -79,6 +81,7 @@ public class RankingsScene extends PixelScene {
 
 		RenderedTextBlock title = PixelScene.renderTextBlock( Messages.get(this, "title"), 9);
 		title.hardlight(Window.TITLE_COLOR);
+        title.setSize(200, 0);
 		title.setPos(
 				insets.left + (w - title.width()) / 2f,
 				insets.top + (20 - title.height()) / 2f
