@@ -21,10 +21,10 @@ public class Certificate extends Item {
 
     public Certificate( int value ) {
         this.quantity = value;
-        if (Challenges.activeChallenges() > 7) this.quantity += 20;
-        else if (Challenges.activeChallenges() > 5) this.quantity += 15;
-        else if (Challenges.activeChallenges() > 2) this.quantity += 10;
-        else if (Challenges.activeChallenges() > 0) this.quantity += 5;
+        if (Challenges.activeChallenges() > 7) this.quantity += 50;
+        else if (Challenges.activeChallenges() > 5) this.quantity += 40;
+        else if (Challenges.activeChallenges() > 2) this.quantity += 20;
+        else if (Challenges.activeChallenges() > 0) this.quantity += 10;
 
         if (Dungeon.eazymode == 1) this.quantity = 0;
     }

@@ -153,10 +153,10 @@ public enum Icons {
 			icon.frame( icon.texture.uvRect( 65, 0, 83, 16 ) );
 			break;
 		case PREFS:
-			icon.frame( icon.texture.uvRect( 83, 0, 95, 12 ) );
+			icon.frame( icon.texture.uvRect( 83, 0, 97, 14 ) );
 			break;
 		case LANGS:
-			icon.frame( icon.texture.uvRect( 97, 0, 109, 12 ) );
+			icon.frame( icon.texture.uvRect( 97, 0, 111, 14 ) );
 			break;
 		case EXIT:
 			icon.frame( icon.texture.uvRect( 113, 0, 127, 14 ) );
