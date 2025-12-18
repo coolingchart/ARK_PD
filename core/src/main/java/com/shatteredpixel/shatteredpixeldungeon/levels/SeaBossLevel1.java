@@ -76,6 +76,7 @@ public class SeaBossLevel1 extends Level {
             S, S, S, e, e, e, e, e, e, e, S, S, S, S, S, S, S,
             S, S, S, e, e, e, e, e, e, e, e, e, e, e, e, E, S,
             S, S, S, S, S, S, S, S, E, S, S, S, S, S, S, S, S,
+            S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S, S,
     };
 
     private void setMap(){
