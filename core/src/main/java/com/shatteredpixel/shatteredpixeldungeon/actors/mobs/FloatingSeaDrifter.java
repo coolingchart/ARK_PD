@@ -8,6 +8,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Dario;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SanityPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_DrifterSprite;
 import com.watabou.utils.Random;
@@ -19,12 +20,14 @@ public class FloatingSeaDrifter extends Mob {
             HP = HT = 65;
 
             EXP = 14;
-            maxLvl = 29;
+            maxLvl = 25;
 
             flying = true;
 
             loot = Gold.class;
             lootChance = 0.34f;
+            loot = new SanityPotion();
+            lootChance = 0.1f;
 
             properties.add(Property.SEA);
             immunities.add(Paralysis.class);

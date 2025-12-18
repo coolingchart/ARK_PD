@@ -172,7 +172,7 @@ public class Badges {
 		GREY_CHAMPION1              ( 117, true ),
 		ROSE_CHAMPION1              ( 118, true ),
 		NEARL_CHAMPION1             ( 119, true ),
-		CHEN_CHAMPION1              ( 119, true ),
+		CHEN_CHAMPION1              ( 121, true ),
 
 		GOLD_COLLECTED_5            ( 120 ),
 
@@ -208,7 +208,7 @@ public class Badges {
 		GREY_CHAMPION2              ( 170, true ),
 		ROSE_CHAMPION2              ( 171, true ),
 		NEARL_CHAMPION2             ( 172, true ),
-		CHEN_CHAMPION2              ( 172, true ),
+		CHEN_CHAMPION2              ( 173, true ),
 
 		SIESTA_PART2                ( 192),
 		GAVIAL_PART2                ( 193 ),
@@ -231,7 +231,7 @@ public class Badges {
 		GREY_CHAMPION3              ( 217, true ),
 		ROSE_CHAMPION3              ( 218, true ),
 		NEARL_CHAMPION3             ( 219, true ),
-		CHEN_CHAMPION3              ( 219, true ),
+		CHEN_CHAMPION3              ( 220, true ),
 
 		//Puple
 		Get_25_STONES               ( 256 ),

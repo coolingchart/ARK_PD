@@ -26,7 +26,7 @@ public class Sea_Octo extends Mob {
         defenseSkill = 20;
 
         EXP = 17;
-        maxLvl = 36;
+        maxLvl = 35;
 
         loot = Generator.Category.SEED;
         lootChance = 0.3f;

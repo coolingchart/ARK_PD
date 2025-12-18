@@ -4,6 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NervousImpairment;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Dario;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SanityPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_ReaperSprite;
 import com.watabou.utils.Bundle;
@@ -18,10 +19,12 @@ public class SeaReaper extends Mob{
         defenseSkill = 27;
 
         EXP = 15;
-        maxLvl = 31;
+        maxLvl = 30;
 
         loot = new PotionOfHealing();
         lootChance = 0.17f;
+        loot = new SanityPotion();
+        lootChance = 0.1f;
 
         properties.add(Property.SEA);
     }
