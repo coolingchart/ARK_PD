@@ -11,6 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class Certificate extends Item {
@@ -51,5 +52,19 @@ public class Certificate extends Item {
             else if (Challenges.activeChallenges() > 0) bouns += 5;
             SPDSettings.addSpecialcoin(10 + bouns);
         }
+    }
+
+    private static final String VALUE	= "value";
+
+    @Override
+    public void storeInBundle( Bundle bundle ) {
+        super.storeInBundle( bundle );
+        bundle.put( VALUE, quantity );
+    }
+
+    @Override
+    public void restoreFromBundle( Bundle bundle ) {
+        super.restoreFromBundle(bundle);
+        quantity = bundle.getInt( VALUE );
     }
 }
