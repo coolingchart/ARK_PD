@@ -5,6 +5,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SanityPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.SeaPlatform;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.IberiaPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.CursingTrap;
@@ -42,10 +44,23 @@ public class SeaLevel_part2 extends RegularLevel {
     }
 
     @Override
+    public void create() {
+        addItemToSpawn(new SeaPlatform.LittleHandy());
+        addItemToSpawn(new SeaPlatform.LittleHandy());
+        addItemToSpawn(new SeaPlatform.LittleHandy());
+        addItemToSpawn(new SeaPlatform.LittleHandy());
+        super.create();
+    }
+
+    @Override
     protected void createItems() {
         if (Dungeon.depth == 37 || Dungeon.depth == 39) {
             addItemToSpawn(new PotionOfHealing());}
-        else addItemToSpawn(new PotionOfStrength());
+        else if (Dungeon.depth == 38) {
+            addItemToSpawn(new ScrollOfUpgrade());
+        } else {
+            addItemToSpawn(new PotionOfStrength());
+        }
         addItemToSpawn(new SanityPotion());
         super.createItems();
     }
