@@ -47,7 +47,7 @@ public class v0_5_X_Changes {
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
-        changes.addButton(new ChangeButton(Icons.get(Icons.BUG_KILL), "버그 수정",
+        changes.addButton(new ChangeButton(Icons.get(Icons.BUG_KILL), "버그 수정 1",
                 "_절지생화_의 분신 소환시 간헐적으로 발생하던 크래시를 수정했습니다." + "\n\n" +
                         "_불사의 검은 뱀_의 페이즈가 진행되지 않던 버그를 수정했습니다." + "\n\n" +
                         "_정보증명서_가 제대로 저장 및 로드되지 않든 버그를 수정했습니다." + "\n\n" +
@@ -55,9 +55,12 @@ public class v0_5_X_Changes {
                         "_베오울프_의 사거리가 4 이상일때 데미지 감소 페널티가 적용되던 버그를 수정했습니다" + "\n\n" +
                         "_EX-42_에 _도달의 아츠_가 있을 경우 사거리가 1로 감소하던 버그를 수정했습니다" + "\n\n" +
                         "_검술 아미야_의 _푸른 분노_특성이 표기대로 적용되지 않던 버그를 수정했습니다" + "\n\n" +
-                        "_홀로 가는 먼 길_의 특수기술이 충전되지 않은 상태로도 사용 가능하던 버그를 수정했습니다" + "\n\n" +
+                        "_홀로 가는 먼 길_의 특수기술이 충전되지 않은 상태로도 사용 가능하던 버그를 수정했습니다"));
+        changes.addButton(new ChangeButton(Icons.get(Icons.BUG_KILL), "버그 수정 2",
                         "_탈룰라_가 정보증명서를 드롭하지 않던 버그를 수정했습니다." + "\n\n" +
                         "_지배의 반지_를 착용했을 때 발생하던 크래시를 수정했습니다." + "\n\n" +
+                        "_나기나타_의 처형 발동 시 데미지 숫자가 출력되지 않도록 수정했습니다." + "\n\n" +
+                        "_레드_의 _뼈찌르기_의 대상을 본인으로 지정하지 못하도록 수정했습니다." + "\n\n" +
                         "앱을 백그라운드로 전환 시 저장이 제대로 이루어지지 않아, 복귀 시 앱이 강제 종료되던 현상을 수정했습니다."));
         changes.addButton(new ChangeButton(Icons.get(Icons.ARKPD), "UI 업데이트",
                 "여러 UI요소들이 업데이트 되었습니다."));
