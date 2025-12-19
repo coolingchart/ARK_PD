@@ -48,7 +48,7 @@ public class Ots03 extends GunWeapon {
     public float getFireAcc(int from, int to) {
         int distance = getDistance(from, to);
 
-        float accuracy = 1f;
+        float accuracy = 2f;
         // 최소사거리 3, 유효 사거리 3-inf
         if (isWithinRange(distance)) {
             accuracy = accuracy + (distance - getMinRange()) * 3f;
