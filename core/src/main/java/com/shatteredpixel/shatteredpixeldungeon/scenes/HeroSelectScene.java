@@ -350,6 +350,8 @@ public class HeroSelectScene extends PixelScene {
 		background.visible = false;
 		startBtn.visible = false;
 		infoButton.visible = false;
+        btnOptions.visible = false;
+        optionsPane.visible = false;
 //		challengeButton.visible = false;
 
 		if (change == 0) change = 1;
