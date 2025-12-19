@@ -1,16 +1,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Silence;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.EnragedSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.HaundSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Tiacauh_fanaticSprite;
-import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class TiacauhFanatic extends Mob {
@@ -18,10 +12,10 @@ public class TiacauhFanatic extends Mob {
         spriteClass = Tiacauh_fanaticSprite.class;
 
         HP = HT = 55;
-        defenseSkill = 40;
+        defenseSkill = 34;
 
         EXP = 14;
-        maxLvl = 27;
+        maxLvl = 29;
 
         loot = Gold.class;
         lootChance = 0.35f;

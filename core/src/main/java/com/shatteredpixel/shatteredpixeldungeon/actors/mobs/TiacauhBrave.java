@@ -10,13 +10,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Silence;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.GolemSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.HaundSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Tiacauh_BraveSprite;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class TiacauhBrave extends Mob {
@@ -24,10 +19,10 @@ public class TiacauhBrave extends Mob {
         spriteClass = Tiacauh_BraveSprite.class;
 
         HP = HT = 145;
-        defenseSkill = 18;
+        defenseSkill = 16;
 
         EXP = 20;
-        maxLvl = 35;
+        maxLvl = 37;
 
         loot = Generator.Category.SCROLL;
         lootChance = 0.4f;

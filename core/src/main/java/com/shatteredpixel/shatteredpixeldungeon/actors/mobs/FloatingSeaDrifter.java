@@ -21,7 +21,7 @@ public class FloatingSeaDrifter extends Mob {
             HP = HT = 65;
 
             EXP = 14;
-            maxLvl = 25;
+            maxLvl = 29;
 
             flying = true;
 
@@ -58,7 +58,7 @@ public class FloatingSeaDrifter extends Mob {
                 }
             }
 
-            return 60;
+            return 50;
     }
 
     @Override

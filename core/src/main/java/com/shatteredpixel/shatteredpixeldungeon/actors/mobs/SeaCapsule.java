@@ -15,7 +15,7 @@ public class SeaCapsule extends Mob{
 
         HP = HT = 180;
         EXP = 17;
-        maxLvl = 20;
+        maxLvl = 32;
 
         defenseSkill = 10;
 

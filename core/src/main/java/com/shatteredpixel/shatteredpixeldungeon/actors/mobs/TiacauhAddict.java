@@ -6,18 +6,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hallucination;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Silence;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.BreakerSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.HaundSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Tiacauh_DrugsSprite;
-import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class TiacauhAddict extends Mob {
@@ -26,10 +20,10 @@ public class TiacauhAddict extends Mob {
         baseSpeed = 2f;
 
         HP = HT = 100;
-        defenseSkill = 24;
+        defenseSkill = 20;
 
         EXP = 14;
-        maxLvl = 30;
+        maxLvl = 32;
 
         loot = Generator.Category.SKL_RND;
         lootChance = 0.1f;

@@ -16,10 +16,10 @@ public class SeaReaper extends Mob{
         spriteClass = Sea_ReaperSprite.class;
 
         HP = HT = 140;
-        defenseSkill = 27;
+        defenseSkill = 20;
 
         EXP = 15;
-        maxLvl = 30;
+        maxLvl = 31;
 
         loot = new PotionOfHealing();
         lootChance = 0.17f;

@@ -6,7 +6,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SanityPotion;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.Bug_ASprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_RunnerSprite;
 import com.watabou.utils.Random;
 
@@ -16,9 +15,9 @@ public class SeaRunner extends Mob {
 
         HP = HT = 90;
         EXP = 13;
-        maxLvl = 27;
+        maxLvl = 29;
 
-        defenseSkill = 26;
+        defenseSkill = 18;
 
         loot = new MysteryMeat();
         lootChance = 0.12f;

@@ -23,10 +23,10 @@ public class Sea_Octo extends Mob {
         spriteClass = Sea_SpewerSprite.class;
 
         HP = HT = 125;
-        defenseSkill = 20;
+        defenseSkill = 12;
 
         EXP = 17;
-        maxLvl = 35;
+        maxLvl = 36;
 
         loot = Generator.Category.SEED;
         lootChance = 0.3f;

@@ -7,7 +7,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Silence;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.HaundSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Tiacauh_warriorSprite;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -17,10 +16,10 @@ public class TiacauhWarrior extends Mob {
         spriteClass = Tiacauh_warriorSprite.class;
 
         HP = HT =80;
-        defenseSkill = 18;
+        defenseSkill = 16;
 
         EXP = 14;
-        maxLvl = 27;
+        maxLvl = 29;
 
         loot = new MysteryMeat();
         lootChance = 0.137f;
