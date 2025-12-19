@@ -86,8 +86,8 @@ public class SeaBossLevel2 extends Level {
             W, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, e, W,
             W, W, W, W, W, W, W, W, W, e, e, e, W, W, W, W, W, W, W, W, W,
             W, W, W, W, W, W, W, W, W, e, e, e, W, W, W, W, W, W, W, W, W,
-            W, W, W, W, W, W, W, W, W, e, e, e, W, W, W, W, W, W, W, W, W,
             W, W, W, W, W, W, W, W, W, e, E, e, W, W, W, W, W, W, W, W, W,
+            W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
             W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W, W,
     };
 
