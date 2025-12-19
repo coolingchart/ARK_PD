@@ -3073,9 +3073,6 @@ items.food.sanitypotion.name=이성회복제
 items.food.sanitypotion.desc=섭취시 신경 손상을 50% 회복시켜주는 긴급 이성회복제. 중요한 물건이니 필요할 때만 사용하자.
 items.food.sanitypotion.ac_drink=마신다
 
-items.seaplatform.littlehandy.name=이성회복제
-items.seaplatform.littlehandy.desc=섭취시 신경 손상을 50% 회복시켜주는 긴급 이성회복제. 중요한 물건이니 필요할 때만 사용하자.
-
 
 
 // 정보증명서 관련 아이템
