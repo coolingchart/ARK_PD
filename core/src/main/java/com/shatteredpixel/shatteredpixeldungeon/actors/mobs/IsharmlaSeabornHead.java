@@ -60,7 +60,7 @@ public class IsharmlaSeabornHead extends Mob {
 
     // 모든 믈라 파츠가 파괴되면 사망
     private boolean isDead = false;
-    private int laserCooldown = 8;
+    private int laserCooldown = 6;
     private static boolean isAngry = false;
     private static boolean isEnraged = false;
     private static boolean isHeadEnraged = false;
@@ -157,7 +157,7 @@ public class IsharmlaSeabornHead extends Mob {
                 Dungeon.observe();
             }
 
-            int dmg = Random.NormalIntRange(4, 36);
+            int dmg = Random.NormalIntRange(12, 34);
 
             for (Char ch : affected) {
                 ch.damage(dmg, this );
@@ -172,7 +172,7 @@ public class IsharmlaSeabornHead extends Mob {
                 }
             }
 
-            laserCooldown = Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) ? 6 : 8;
+            laserCooldown = Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) ? 5 : 6;
         } else {
             laserCooldown--;
         }
@@ -227,7 +227,7 @@ public class IsharmlaSeabornHead extends Mob {
             enrageDuration = 999;
         } else {
             isAngry = true;
-            enrageDuration = 15 * Dungeon.mulaCount;
+            enrageDuration = (Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) ? 20 : 15) * Dungeon.mulaCount;
         }
     }
 
@@ -235,9 +235,15 @@ public class IsharmlaSeabornHead extends Mob {
         if (waveCooldown > 0) {
             waveCooldown--;
         } else {
-            waveCooldown = Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) ? 2 : 3;
+            waveCooldown = Dungeon.isChallenged(Challenges.DECISIVE_BATTLE) || isEnraged ? 2 : 3;
             sendWaves(this);
         }
+    }
+
+    public static void sendWaves(final Char thrower) {
+        WaveAbility waveAbility = Buff.append(thrower, WaveAbility.class);
+        waveAbility.width = isHeadEnraged ? 7 : 3 + 2 * Dungeon.mulaCount;
+        waveAbility.setStartPos();
     }
 
     private static final String IS_DEAD_HEAD  = "isDeadHead";
@@ -274,15 +280,10 @@ public class IsharmlaSeabornHead extends Mob {
         waveCooldown = bundle.getInt(WAVE_COOLDOWN);
     }
 
-    public static void sendWaves(final Char thrower) {
-        WaveAbility waveAbility = Buff.append(thrower, WaveAbility.class);
-        waveAbility.width = isHeadEnraged ? 7 : 3 + 2 * Dungeon.mulaCount;
-        waveAbility.start = Random.Int(168 + waveAbility.width / 2, 188 - waveAbility.width / 2);
-    }
-
     public static class WaveAbility extends Buff {
         public int start;
         public int width;
+        public int previousStart = -1;
         private int[] curCells;
 
         HashSet<Integer> toCells = new HashSet<>();
@@ -367,6 +368,15 @@ public class IsharmlaSeabornHead extends Mob {
             }
         }
 
+        private void setStartPos() {
+            int newStart;
+            do {
+                newStart = Random.Int(169 + width / 2, 187 - width / 2);
+            } while (previousStart != newStart);
+
+            start = newStart;
+        }
+
         private static final String START = "start";
         private static final String WIDTH = "width";
         private static final String CUR_CELLS = "cur_cells";
@@ -421,7 +431,7 @@ public class IsharmlaSeabornHead extends Mob {
                                     Buff.affect(ch, NervousImpairment.class);
                                 }
                                 ch.buff(NervousImpairment.class).sum(40);
-                                ch.damage(Random.Int(15, 40), this);
+                                ch.damage(Random.Int(25, 55), this);
                             }
 
                             burned = true;
