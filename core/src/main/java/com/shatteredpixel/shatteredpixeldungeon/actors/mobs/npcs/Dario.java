@@ -74,12 +74,12 @@ public class Dario extends NPC {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange(15, 34);
+        return Random.NormalIntRange(20, 47);
     }
 
     @Override
     public int drRoll() {
-        return Random.NormalIntRange(4, 14);
+        return Random.NormalIntRange(6, 14);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class Dario extends NPC {
             if (!encouraged && Quest.killCount >= Quest.KILL_COUNT_GOAL - 3) {
                 yell(Messages.get(this, "almost"));
                 encouraged = true;
-            } else if (!completed && !isEnemyInFOV() && Quest.isQuestComplete()) {
+            } else if (encouraged && !completed && !isEnemyInFOV() && Quest.isQuestComplete()) {
                 yell(Messages.get(this, "complete"));
                 completed = true;
             }
@@ -205,7 +205,8 @@ public class Dario extends NPC {
 
     private boolean isEnemyInFOV() {
         for (Mob mob : Dungeon.level.mobs) {
-            if (mob != null && mob.isAlive() && fieldOfView[mob.pos] && mob.invisible <= 0) {
+            if (mob != null && mob.alignment == Alignment.ENEMY
+                    && mob.isAlive() && fieldOfView[mob.pos] && mob.invisible <= 0) {
                 return true;
             }
         }

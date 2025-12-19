@@ -104,6 +104,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Level implements Bundlable {
 	
@@ -1315,6 +1316,16 @@ public abstract class Level implements Bundlable {
 				//left and right column
 				(tile % width == 0 || tile % width == width-1));
 	}
+
+    public Set<Integer> getAvailableNeighborCell(int cell) {
+        Set<Integer> neighborCells = new HashSet<>();
+        for (int i = 0; i < PathFinder.CIRCLE8.length; i ++) {
+            if (!Dungeon.level.solid[cell + PathFinder.CIRCLE8[i]]) {
+                neighborCells.add(cell + PathFinder.CIRCLE8[i]);
+            }
+        }
+        return neighborCells;
+    }
 
 	public Point cellToPoint( int cell ){
 		return new Point(cell % width(), cell / width());
