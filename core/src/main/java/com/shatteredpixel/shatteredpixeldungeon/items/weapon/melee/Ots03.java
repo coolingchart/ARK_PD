@@ -51,7 +51,7 @@ public class Ots03 extends GunWeapon {
         float accuracy = 1f;
         // 최소사거리 3, 유효 사거리 3-inf
         if (isWithinRange(distance)) {
-            accuracy = accuracy + (distance - getMinRange()) * 2f;
+            accuracy = accuracy + (distance - getMinRange()) * 3f;
         } else if (distance < getMinRange()) {
             accuracy = 0.33f * (distance);
         }

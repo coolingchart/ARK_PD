@@ -146,6 +146,8 @@ public class GunWeapon extends MeleeWeapon {
             acc += Dungeon.hero.pointsInTalent(Talent.PINPOINT) * 0.2f;
         }
 
+        acc += RingOfSharpshooting.accuracyBonus(Dungeon.hero);
+
         return acc;
     }
 
@@ -443,15 +445,23 @@ public class GunWeapon extends MeleeWeapon {
 
         Invisibility.dispel();
 
+        boolean consumeBullet = false;
+
         if (gunAccessories != null) {
-            if (gunAccessories.GetSavingChance() < Random.Int(100)) {
-                bullet -=1;
+            consumeBullet = gunAccessories.GetSavingChance() < Random.Int(100);
+        }
+        if (closerRange != null && closerRange.state() && Dungeon.hero.hasTalent(Talent.FRUGALITY)) {
+            if (Random.Int(100) > Dungeon.hero.pointsInTalent(Talent.FRUGALITY) * 15) {
+                consumeBullet = true;
             }
         }
-        else if (closerRange != null && closerRange.state() && Dungeon.hero.hasTalent(Talent.FRUGALITY)) {
-            if (Random.Int(100) > Dungeon.hero.pointsInTalent(Talent.FRUGALITY) * 15) bullet-=1;
+        if (RingOfSharpshooting.ammoMultiplier(Dungeon.hero) * 100f < Random.Int(100)) {
+            consumeBullet = true;
         }
-        else bullet -=1;
+
+        if (consumeBullet) {
+            bullet -= 1;
+        }
         updateQuickslot();
 
         ACC = oldacc;
