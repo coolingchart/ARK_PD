@@ -28,18 +28,18 @@ public class Usg extends GunWeapon {
     public float getFireAcc(int from, int to) {
         int distance = getDistance(from, to);
 
-        // 최대 사거리 6, 유효 사거리 3, 근거리시 2배 보정
-        if (distance > getMaxRange()) {
+        // 최대 사거리 5, 유효 사거리 3. +25% 보정
+        if (isWithinRange(distance)) {
+            return 1.25f;
+        } else if (distance > getMaxRange()) {
             return Math.max(0f, 1f - 0.33f * (distance - getMaxRange()));
-        } if (distance > 1) {
-            return 1.5f;
-        } else {
-            return 2f;
         }
+
+        return 1f;
     }
 
     @Override
     protected void specialFire(Char ch) {
-        Buff.affect(ch, Slow.class, 3f);
+        Buff.affect(ch, Slow.class, 2f);
     }
 }

@@ -18,7 +18,7 @@ public class DP27 extends GunWeapon {
         hitSound = Assets.Sounds.HIT_GUN2;
         hitSoundPitch = 0.9f;
 
-        FIRE_DELAY_MULT = 0.33f;
+        FIRE_DELAY_MULT = 0.5f;
         bulletMax = 47;
         MIN_RANGE = 1;
         MAX_RANGE = 4;
@@ -26,12 +26,12 @@ public class DP27 extends GunWeapon {
         usesTargeting = true;
 
         defaultAction = AC_ZAP;
-        tier = 3;
+        tier = 4;
     }
 
     @Override
     public int fireMin() {
-        return (int) (tier + bulletTier + level())
+        return (int) 2 + (tier + bulletTier + level())
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero);
     }
 
@@ -40,7 +40,7 @@ public class DP27 extends GunWeapon {
         return (int) 3
                 + tier * 3
                 + bulletTier
-                + level()
+                + level() * (tier)
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) * 2;
     }
 
@@ -49,11 +49,13 @@ public class DP27 extends GunWeapon {
         int distance = getDistance(from, to);
 
         // 최대 사거리 6, 유효 사거리 4
-        if (distance > getMaxRange()) {
-            return Math.max(0f, 0.8f - 0.4f * (distance - getMaxRange()));
-        } else {
+        if (isWithinRange(distance)) {
             return 0.8f;
+        } else if (distance > getMaxRange()) {
+            return Math.max(0f, 0.9f - 0.3f * (distance - getMaxRange()));
         }
+
+        return 0.8f;
     }
 
     @Override

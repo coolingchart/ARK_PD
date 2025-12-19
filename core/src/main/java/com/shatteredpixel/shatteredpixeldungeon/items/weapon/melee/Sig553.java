@@ -14,7 +14,7 @@ public class Sig553 extends GunWeapon {
         hitSound = Assets.Sounds.HIT_GUN;
         hitSoundPitch = 0.9f;
 
-        FIRE_DELAY_MULT = 0.5f;
+        FIRE_DELAY_MULT = 0.75f;
         bulletMax = 31;
         MIN_RANGE = 2;
         MAX_RANGE = 6;
@@ -28,10 +28,10 @@ public class Sig553 extends GunWeapon {
 
     @Override
     public int fireMax() {
-        return (int) 3
-                + tier * 3
-                + bulletTier * 2
-                + level() * 2
+        return (int) 2
+                + tier * 2
+                + bulletTier * 3
+                + level() * tier
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) * 2;
     }
 
@@ -39,18 +39,20 @@ public class Sig553 extends GunWeapon {
     public float getFireAcc(int from, int to) {
         int distance = getDistance(from, to);
 
-        // 최대 사거리 10, 최소사거리 2, 유효 사거리 2-6, 2배 보정
-        if (distance > getMaxRange()) {
-            return Math.max(0f, 1f - 0.25f * (distance - getMaxRange()));
+        // 최대 사거리 10, 최소사거리 2, 유효 사거리 2-6, +50% 보정
+        if (isWithinRange(distance)) {
+            return 1.5f;
+        } else if (distance > getMaxRange()) {
+            return Math.max(0f, 1f - 0.2f * (distance - getMaxRange()));
         } else if (distance < getMinRange()) {
             return 0.67f;
-        } else {
-            return 2f;
         }
+
+        return 1f;
     }
 
     @Override
     protected void specialFire(Char ch) {
-        Buff.affect(ch, Silence.class, 3f);
+        Buff.affect(ch, Silence.class, 2f);
     }
 }

@@ -16,6 +16,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -55,6 +56,7 @@ public class GunWeapon extends MeleeWeapon {
     protected int bulletTier = 3;
     protected int bullet = 5;
     protected int bulletMax = 25;
+    protected int specialBullet = 0;
     protected boolean specialFire = false; // 특수 사격 여부
     protected boolean gamza = false; // 썬더볼트 장착 여부
     protected float FIRE_DELAY_MULT = 1f;
@@ -70,15 +72,15 @@ public class GunWeapon extends MeleeWeapon {
     }
 
     public int fireMin() {
-        return (int) (tier + bulletTier + level())
+        return (int) ((tier - 1) + bulletTier + level())
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero);
     }
 
     public int fireMax() {
         return (int) 4
-                + tier * 3
-                + bulletTier * 2
-                + level() * 2
+                + tier * 2
+                + bulletTier * 3
+                + level() * tier
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) * 2;
     }
 
@@ -88,12 +90,15 @@ public class GunWeapon extends MeleeWeapon {
 
     public int getMaxRange() {
         boolean projecting = hasEnchant(Projecting.class, Dungeon.hero);
-
         return projecting ? MAX_RANGE + 1 : MAX_RANGE;
     }
 
     public int getMinRange() {
         return MIN_RANGE;
+    }
+
+    public boolean isWithinRange(int distance) {
+        return getMinRange() <= distance && distance <= getMaxRange();
     }
 
     public float getFireAcc(int from, int to) {
@@ -242,9 +247,8 @@ public class GunWeapon extends MeleeWeapon {
 
     public void reload(int tier, boolean sp) {
         bulletTier = tier;
-        bullet = bulletMax;
-
-        specialFire = sp;
+        bullet = Math.min(bullet + 31, bulletMax);
+        specialBullet = sp ? Math.min(specialBullet + 31, bulletMax) : specialBullet;
 
         if (Dungeon.hero.subClass == HeroSubClass.FREERUNNER) Dungeon.hero.spendAndNext(RELOAD_DELAY / 2);
         else Dungeon.hero.spendAndNext(RELOAD_DELAY);
@@ -307,15 +311,17 @@ public class GunWeapon extends MeleeWeapon {
     }
 
     public boolean tryToZap(Hero owner, int target) {
-
-        if (bullet >= 1) {
+        if (owner.STR() < STRReq()) {
+            GLog.w(Messages.get(this, "weak"));
+            return false;
+        } else if (bullet >= 1) {
+            specialFire = specialBullet > 0 || Random.Int(12 - bulletTier) == 0;
             return true;
         } else {
             GLog.w(Messages.get(this, "fizzles"));
             return false;
         }
     }
-
 
     protected void onZap( Ballistica bolt ) {
         CloserangeShot closerRange = Dungeon.hero.buff(CloserangeShot.class);
@@ -337,12 +343,12 @@ public class GunWeapon extends MeleeWeapon {
                 }
             }
 
-            ACC *= fireAccuracyFactor(getFireAcc(Dungeon.hero.pos, ch.pos));
+            ACC = fireAccuracyFactor(getFireAcc(Dungeon.hero.pos, ch.pos));
             if (ACC <= 0f) {
                 String missed = Messages.get(ch, "missed");
                 ch.sprite.showStatus( CharSprite.NEUTRAL, missed );
                 Sample.INSTANCE.play(Assets.Sounds.MISS);
-            } else if (ch.hit(Dungeon.hero, ch, false)) {
+            } else if (Char.hit(Dungeon.hero, ch, false)) {
 
                 // 첸 특성
                 if (Dungeon.hero.hasTalent(Talent.TARGET_FOCUSING)) {
@@ -351,10 +357,31 @@ public class GunWeapon extends MeleeWeapon {
                     }
                 }
 
-                ch.damage(dmg, this);
+                int dr = ch.drRoll();
+
+                int effectiveDamage = ch.defenseProc( Dungeon.hero, dmg );
+                effectiveDamage = Math.max( effectiveDamage - dr, 0 );
+
+                if ( ch.buff( Vulnerable.class ) != null){
+                    effectiveDamage *= 1.33f;
+                }
+
+                effectiveDamage = Dungeon.hero.attackProc( ch, effectiveDamage );
+
+                // If the enemy is already dead, interrupt the attack.
+                // This matters as defence procs can sometimes inflict self-damage, such as armor glyphs.
+                if (!ch.isAlive()){
+                    return;
+                }
+
+                ch.damage( effectiveDamage, this );
+
                 Sample.INSTANCE.play(Assets.Sounds.HIT, 1, Random.Float(0.87f, 1.15f));
 
-                if (specialFire) specialFire(ch);
+                if (specialFire) {
+                    specialFire(ch);
+                    specialBullet = Math.max(0, specialBullet - 1);
+                }
                 if (this instanceof C1_9mm) {
                     if (Random.Int(8) == 0) Buff.affect(ch, Chill.class, 2f);
                 }
@@ -475,7 +502,7 @@ public class GunWeapon extends MeleeWeapon {
     }
 
     public String statsInfo() {
-        if (specialFire) return Messages.get(this, "stats_desc_sp", fireMin(), fireMax());
+        if (specialBullet > 0) return Messages.get(this, "stats_desc_sp", fireMin(), fireMax(), specialBullet);
         return Messages.get(this, "stats_desc", fireMin(), fireMax());
     }
 
@@ -484,6 +511,7 @@ public class GunWeapon extends MeleeWeapon {
     private static final String GAMZA = "gamza";
     private static final String TIER = "bullettier";
     private static final String SP = "spshot";
+    private static final String SP_BULLET_COUNT = "spBulletCount";
     private static final String ACCESSORIES = "GunAccessories";
 
     @Override
@@ -493,8 +521,8 @@ public class GunWeapon extends MeleeWeapon {
         bundle.put(BULLET_CAP, bulletMax);
         bundle.put(GAMZA, gamza);
         bundle.put(TIER, bulletTier);
-        bundle.put(SP, specialFire);
-        bundle.put( ACCESSORIES, gunAccessories);
+        bundle.put(SP_BULLET_COUNT, specialBullet);
+        bundle.put(ACCESSORIES, gunAccessories);
     }
 
     @Override
@@ -505,7 +533,7 @@ public class GunWeapon extends MeleeWeapon {
         else bullet = bundle.getInt(BULLET);
 
         bulletTier = bundle.getInt(TIER);
-        specialFire = bundle.getBoolean(SP);
+        specialBullet = bundle.getInt(SP_BULLET_COUNT);
         gamza = bundle.getBoolean(GAMZA);
         gunAccessories = (Accessories) bundle.get(ACCESSORIES);
     }

@@ -31,16 +31,16 @@ public class Ots03 extends GunWeapon {
 
     @Override
     public int fireMin() {
-        return (int) (4 + bulletTier * 5 + level() * 3)
+        return (int) (4 + bulletTier * 5 + level() * 2)
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero);
     }
 
     @Override
     public int fireMax() {
-        return (int) 24
+        return (int) 20
                 + tier * 3
-                + bulletTier * 7
-                + level() * 6
+                + bulletTier * 6
+                + level() * (tier + 1)
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) * 2;
     }
 
@@ -50,10 +50,10 @@ public class Ots03 extends GunWeapon {
 
         float accuracy = 1f;
         // 최소사거리 3, 유효 사거리 3-inf
-        if (distance < getMinRange()) {
-            accuracy = Math.max(0f, 0.5f * (distance));
-        } else {
-            accuracy = (distance - getMinRange() + 1) * 2f;
+        if (isWithinRange(distance)) {
+            accuracy = accuracy + (distance - getMinRange()) * 2f;
+        } else if (distance < getMinRange()) {
+            accuracy = 0.33f * (distance);
         }
 
         if (mobsAdjacent(from)) {

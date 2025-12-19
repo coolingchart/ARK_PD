@@ -14,9 +14,9 @@ public class Pkp extends GunWeapon {
         hitSound = Assets.Sounds.HIT_AR;
         hitSoundPitch = 0.9f;
 
-        FIRE_DELAY_MULT = 0.33f;
+        FIRE_DELAY_MULT = 0.5f;
         bulletMax = 101;
-        MIN_RANGE = 0;
+        MIN_RANGE = 1;
         MAX_RANGE = 4;
 
         usesTargeting = true;
@@ -30,11 +30,19 @@ public class Pkp extends GunWeapon {
         int distance = getDistance(from, to);
 
         // 최대 사거리 6, 유효 사거리 4
-        if (distance > getMaxRange()) {
-            return Math.max(0f, 0.8f - 0.4f * (distance - getMaxRange()));
-        } else {
+        if (isWithinRange(distance)) {
             return 0.8f;
+        } else if (distance > getMaxRange()) {
+            return Math.max(0f, 0.9f - 0.6f * (distance - getMaxRange()));
         }
+
+        return 0.8f;
+    }
+
+    @Override
+    public int fireMin() {
+        return (int) 2 + (tier + bulletTier + level())
+                + RingOfSharpshooting.levelDamageBonus(Dungeon.hero);
     }
 
     @Override
@@ -42,12 +50,12 @@ public class Pkp extends GunWeapon {
         return (int) 3
                 + tier * 3
                 + bulletTier
-                + level()
+                + level() * (tier)
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) * 2;
     }
 
     @Override
     protected void specialFire(Char ch) {
-        Buff.affect(ch, Slow.class, 3f);
+        Buff.affect(ch, Slow.class, 2f);
     }
 }
