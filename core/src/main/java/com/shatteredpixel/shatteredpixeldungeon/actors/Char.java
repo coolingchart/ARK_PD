@@ -440,7 +440,7 @@ public abstract class Char extends Actor {
 			enemy != Dungeon.hero && Dungeon.hero.belongings.weapon instanceof Naginata && this instanceof Hero &&
 				!enemy.properties().contains(Char.Property.BOSS) && !enemy.properties().contains(Char.Property.MINIBOSS)) {
 					sprite.showStatus(CharSprite.NEUTRAL, Messages.get(Naginata.class, "skill"));
-					enemy.damage(108108, this);
+					enemy.die(this);
 					SpellSprite.show(enemy, SpellSprite.FOOD);
 
 			}
