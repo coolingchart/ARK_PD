@@ -9,6 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Dario;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SanityPotion;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.GunWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_DrifterSprite;
 import com.watabou.utils.Random;
@@ -51,12 +52,13 @@ public class FloatingSeaDrifter extends Mob {
     @Override
     public int defenseSkill(Char enemy) {
             if (enemy instanceof Hero) {
-                if (Dungeon.hero.belongings.weapon.getClass() == MissileWeapon.class) {
+                if (Dungeon.hero.belongings.weapon instanceof MissileWeapon
+                        || Dungeon.hero.belongings.weapon instanceof GunWeapon) {
                     return 0;
                 }
             }
 
-            return 70;
+            return 60;
     }
 
     @Override
