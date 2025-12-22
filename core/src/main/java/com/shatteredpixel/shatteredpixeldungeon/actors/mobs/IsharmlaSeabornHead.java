@@ -221,6 +221,11 @@ public class IsharmlaSeabornHead extends Mob {
     @Override
     public void die(Object cause) { }
 
+    @Override
+    public boolean isAlive() {
+        return true;
+    }
+
     public static void triggerAnger() {
         if (IsharmlaSeabornHead.isHeadEnraged) {
             isEnraged = true;
@@ -370,9 +375,11 @@ public class IsharmlaSeabornHead extends Mob {
 
         private void setStartPos() {
             int newStart;
+            int attempt = 0;
             do {
                 newStart = Random.Int(169 + width / 2, 187 - width / 2);
-            } while (previousStart != newStart);
+                attempt ++;
+            } while (attempt < 10 && previousStart != newStart);
 
             start = newStart;
         }

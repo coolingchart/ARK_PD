@@ -111,6 +111,11 @@ public class IsharmlaSeabornBody extends Mob {
     @Override
     public void die(Object cause) { }
 
+    @Override
+    public boolean isAlive() {
+        return true;
+    }
+
     private static final String IS_DEAD_BODY = "isDeadBody";
     private static final String SHIELD_COOLDOWN = "shieldCooldown";
 

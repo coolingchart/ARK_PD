@@ -27,7 +27,7 @@ public class Isharmla extends Mob {
     {
         spriteClass = Skadi_mulaSprite.class;
 
-        HP = HT = 1500;
+        HP = HT = 250;
         defenseSkill = 60;
 
         actPriority = MOB_PRIO-1;
