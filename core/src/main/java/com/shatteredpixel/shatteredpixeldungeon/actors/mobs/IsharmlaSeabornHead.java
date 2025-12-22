@@ -385,13 +385,13 @@ public class IsharmlaSeabornHead extends Mob {
         }
 
         private void setStartPos() {
-            int newStart;
-            int attempt = 0;
-            do {
+            int newStart = 199;
+            for (int i = 0; i < 10; i ++) {
                 newStart = Random.Int(169 + width / 2, 187 - width / 2);
-                attempt ++;
-            } while (attempt < 10 && previousStart != newStart);
-
+                if (previousStart != newStart) {
+                    break;
+                }
+            }
             start = newStart;
         }
 
