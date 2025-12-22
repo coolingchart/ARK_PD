@@ -107,7 +107,7 @@ public class IsharmlaSeabornHead extends Mob {
         rooted = true;
 
         if (isDead) {
-            if (Dungeon.mulaCount == 3) {
+            if (Dungeon.mulaCount == 3 || allBodyPartsDead()) {
                 Badges.validateVictory();
                 Badges.validateChampion(Challenges.activeChallenges());
                 Badges.validateChampion_char(Challenges.activeChallenges());
@@ -223,6 +223,17 @@ public class IsharmlaSeabornHead extends Mob {
 
     @Override
     public boolean isAlive() {
+        return true;
+    }
+
+    private boolean allBodyPartsDead() {
+        for (Mob mob : Dungeon.level.mobs) {
+            if ((mob instanceof IsharmlaSeabornHead
+                    || mob instanceof IsharmlaSeabornBody
+                    || mob instanceof  IsharmlaSeabornTail) && mob.HP > 0) {
+                return false;
+            }
+        }
         return true;
     }
 
