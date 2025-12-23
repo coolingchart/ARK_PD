@@ -75,8 +75,10 @@ public class IsharmlaSeabornBody extends Mob {
             cooldown--;
         } else {
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
-                if ((mob instanceof IsharmlaSeabornHead || mob instanceof IsharmlaSeabornBody || mob instanceof IsharmlaSeabornTail)
-                        && mob.HP > 0) {
+                if ((mob instanceof IsharmlaSeabornHead
+                        || mob instanceof IsharmlaSeabornBody
+                        || mob instanceof IsharmlaSeabornTail)
+                        && mob.isAlive()) {
                     mob.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
                     mob.HP = Math.min(mob.HT, mob.HP + healAmount);
                 }
