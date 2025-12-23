@@ -74,7 +74,7 @@ public class IsharmlaSeabornBody extends Mob {
         if (cooldown > 0) {
             cooldown--;
         } else {
-            for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+            for (Mob mob : Dungeon.level.mobs) {
                 if ((mob instanceof IsharmlaSeabornHead
                         || mob instanceof IsharmlaSeabornBody
                         || mob instanceof IsharmlaSeabornTail)
