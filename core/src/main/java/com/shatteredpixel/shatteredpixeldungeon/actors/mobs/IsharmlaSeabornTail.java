@@ -122,7 +122,7 @@ public class IsharmlaSeabornTail extends Mob {
 
     @Override
     public boolean isAlive() {
-        return true;
+        return !isDead;
     }
 
     private static final String IS_DEAD_TAIL   = "isDeadTail";

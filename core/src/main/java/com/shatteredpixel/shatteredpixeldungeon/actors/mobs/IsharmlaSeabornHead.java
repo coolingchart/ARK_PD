@@ -223,14 +223,14 @@ public class IsharmlaSeabornHead extends Mob {
 
     @Override
     public boolean isAlive() {
-        return true;
+        return !isDead;
     }
 
     private boolean allBodyPartsDead() {
         for (Mob mob : Dungeon.level.mobs) {
             if ((mob instanceof IsharmlaSeabornHead
                     || mob instanceof IsharmlaSeabornBody
-                    || mob instanceof  IsharmlaSeabornTail) && mob.HP > 0) {
+                    || mob instanceof IsharmlaSeabornTail) && mob.isAlive()) {
                 return false;
             }
         }
