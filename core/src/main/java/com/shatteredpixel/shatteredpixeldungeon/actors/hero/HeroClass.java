@@ -35,8 +35,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.AncientKin;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.Bookancientkin;
 import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfCorrupting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KazemaruWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Usg;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.SeaPlatform;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SkillBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
@@ -164,11 +166,9 @@ public enum HeroClass {
             new PlateArmor().identify().upgrade(10).collect();
             new TomeOfMastery().collect();
 
-            new SeaPlatform.LittleHandy().quantity(40).collect();
-            new Bookancientkin().collect();
-            new StaffOfCorrupting().identify().collect();
+            new RingOfFuror().identify().collect();
+            new Usg().identify().collect();
 
-            new KazemaruWeapon().identify().collect();
         }
 
 		Dungeon.LimitedDrops.FOOD_BAG.drop();

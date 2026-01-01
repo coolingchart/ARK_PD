@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gunaccessories.Accessories
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.IsekaiItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
@@ -151,8 +152,9 @@ public class GunWeapon extends MeleeWeapon {
         return acc;
     }
 
-    protected float fireDelayFactor(float dly) {
+    protected float fireDelayFactor(Char owner, float dly) {
         if (gunAccessories != null) dly *= gunAccessories.GetDLYcorrectionvalue();
+        dly *= RingOfFuror.shootDelayMultiplier(owner);
         return dly;
     }
 
@@ -466,8 +468,8 @@ public class GunWeapon extends MeleeWeapon {
 
         ACC = oldacc;
 
-        if (pala) { curUser.spendAndNext(fireDelayFactor(FIRE_DELAY_MULT / 4)); }
-        else curUser.spendAndNext(fireDelayFactor(FIRE_DELAY_MULT));
+        if (pala) { curUser.spendAndNext(fireDelayFactor(curUser, FIRE_DELAY_MULT / 4)); }
+        else curUser.spendAndNext(fireDelayFactor(curUser, FIRE_DELAY_MULT));
 
         if (ch != null && !ch.isAlive() && Dungeon.hero.hasTalent(Talent.BF_RULL) && Random.Int(5) < Dungeon.hero.pointsInTalent(Talent.BF_RULL)) {
             Buff.affect(Dungeon.hero, Swiftthistle.TimeBubble.class).bufftime(1f);
