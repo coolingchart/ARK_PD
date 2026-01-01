@@ -968,11 +968,15 @@ public class Dungeon {
 	public static void fail( Class cause ) {
 		if (hero.belongings.getItem( Ankh.class ) == null) {
             updateLevelExplored();
+            Statistics.gameWon = false;
             Rankings.INSTANCE.submit( false, cause );
 		}
 	}
 	
-	public static void win( Class cause ) {
+	public static void win( Object cause ) {
+
+        updateLevelExplored();
+        Statistics.gameWon = true;
 
 		hero.belongings.identify();
 
