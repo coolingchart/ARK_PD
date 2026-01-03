@@ -35,9 +35,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.AncientKin;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.Bookancientkin;
 import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfCorrupting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KazemaruWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Pkp;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Usg;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.SeaPlatform;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SkillBook;
@@ -167,7 +170,10 @@ public enum HeroClass {
             new TomeOfMastery().collect();
 
             new RingOfFuror().identify().collect();
+            new RingOfAccuracy().identify().collect();
+            new RingOfSharpshooting().identify().collect();
             new Usg().identify().collect();
+            new Pkp().identify().collect();
 
         }
 

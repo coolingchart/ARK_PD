@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gunaccessories.Accessories
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.IsekaiItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
@@ -91,7 +92,8 @@ public class GunWeapon extends MeleeWeapon {
 
     public int getMaxRange() {
         boolean projecting = hasEnchant(Projecting.class, Dungeon.hero);
-        return projecting ? MAX_RANGE + 1 : MAX_RANGE;
+        int range = projecting ? MAX_RANGE + 1 : MAX_RANGE;
+        return range + RingOfSharpshooting.rangeBonus(Dungeon.hero);
     }
 
     public int getMinRange() {
@@ -147,7 +149,7 @@ public class GunWeapon extends MeleeWeapon {
             acc += Dungeon.hero.pointsInTalent(Talent.PINPOINT) * 0.2f;
         }
 
-        acc += RingOfSharpshooting.accuracyBonus(Dungeon.hero);
+        acc += RingOfAccuracy.shootAccuracyMultiplier(Dungeon.hero);
 
         return acc;
     }
