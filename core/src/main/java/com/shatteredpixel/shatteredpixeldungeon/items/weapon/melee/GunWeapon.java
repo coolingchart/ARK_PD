@@ -12,6 +12,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChenShooterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CloserangeShot;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Heat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
@@ -380,7 +381,7 @@ public class GunWeapon extends MeleeWeapon {
                     return;
                 }
 
-                ch.damage( effectiveDamage, this );
+                ch.damage( effectiveDamage, Dungeon.hero );
 
                 Sample.INSTANCE.play(Assets.Sounds.HIT, 1, Random.Float(0.87f, 1.15f));
 
@@ -406,6 +407,12 @@ public class GunWeapon extends MeleeWeapon {
                         if (Random.Int(10) < Dungeon.hero.pointsInTalent(Talent.CLEAVE)) {
                             Buff.affect(Dungeon.hero, Combo.class).hit(ch);
                         }
+                    }
+                }
+
+                if (Dungeon.hero.hasTalent(Talent.SPARKOFLIFE)) {
+                    if (1 + Dungeon.hero.pointsInTalent(Talent.SPARKOFLIFE) > Random.Int(33)) {
+                        Dungeon.hero.HP = Math.min(Dungeon.hero.HP + Dungeon.hero.HT / 20, Dungeon.hero.HT);
                     }
                 }
 
