@@ -60,7 +60,7 @@ public class RingOfSharpshooting extends Ring {
 	}
 
     public static float ammoMultiplier( Char target ){
-        return (float)(Math.min(1f, (Math.pow(1.06, getBonus(target, Aim.class))) - 1f));
+        return (float)(Math.min(1f, (Math.pow(1.06, getBuffedBonus(target, Aim.class))) - 1f));
     }
 
     public static int rangeBonus( Char target ) {

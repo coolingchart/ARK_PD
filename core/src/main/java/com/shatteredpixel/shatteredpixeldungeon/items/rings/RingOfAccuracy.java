@@ -55,7 +55,7 @@ public class RingOfAccuracy extends Ring {
 	}
 
     public static float shootAccuracyMultiplier(Char target ){
-        return (float) Math.pow(1.12, getBonus(target, Accuracy.class));
+        return (float) Math.pow(1.12, getBuffedBonus(target, Accuracy.class));
     }
 	
 	public class Accuracy extends RingBuff {
