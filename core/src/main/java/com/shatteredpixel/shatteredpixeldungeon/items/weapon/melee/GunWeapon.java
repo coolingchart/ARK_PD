@@ -372,6 +372,8 @@ public class GunWeapon extends MeleeWeapon {
                     effectiveDamage *= 1.33f;
                 }
 
+                // Mark this as a ranged attack for talents that need to distinguish ranged vs melee
+                Buff.affect(Dungeon.hero, RangedAttackTracker.class);
                 effectiveDamage = Dungeon.hero.attackProc( ch, effectiveDamage );
 
                 // If the enemy is already dead, interrupt the attack.
@@ -449,6 +451,8 @@ public class GunWeapon extends MeleeWeapon {
         Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
         if (buff != null) buff.detach();
         buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+        if (buff != null) buff.detach();
+        buff = Dungeon.hero.buff(RangedAttackTracker.class);
         if (buff != null) buff.detach();
 
         if (Dungeon.hero.buff(Bonk.BonkBuff.class) != null) Buff.detach(Dungeon.hero, Bonk.BonkBuff.class);
@@ -564,4 +568,8 @@ public class GunWeapon extends MeleeWeapon {
         gamza = bundle.getBoolean(GAMZA);
         gunAccessories = (Accessories) bundle.get(ACCESSORIES);
     }
+
+    // Marker buff to indicate the current attack is a ranged attack from a gun weapon
+    // Used to distinguish ranged attacks (onZap) from melee attacks (proc) with the same weapon
+    public static class RangedAttackTracker extends Buff {}
 }
