@@ -37,7 +37,7 @@ public class RingOfAccuracy extends Ring {
 		if (isIdentified()){
 			return Messages.get(this, "stats",
                     new DecimalFormat("#.##").format(100f * (Math.pow(1.3f, soloBuffedBonus()) - 1f)),
-                    new DecimalFormat("#.##").format(100f * (Math.pow(1.12f, soloBonus()) - 1f)));
+                    new DecimalFormat("#.##").format(100f * (Math.pow(1.12f, soloBuffedBonus()) - 1f)));
 		} else {
 			return Messages.get(this, "typical_stats",
                     new DecimalFormat("#.##").format(30f),
