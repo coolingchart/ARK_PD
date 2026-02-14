@@ -338,11 +338,7 @@ public class GunWeapon extends MeleeWeapon {
         boolean pala = false;
 
         if (ch != null) {
-            int dmg = fireDamageFactor(fireDamageRoll());
-
-            // 사격 스롯 판정
-            if (Dungeon.hero.subClass == HeroSubClass.SNIPER) dmg -= (ch.drRoll() / 2);
-            else dmg -= ch.drRoll();
+            float dmg = fireDamageFactor(fireDamageRoll());
 
             if (this instanceof R4C && Dungeon.hero.belongings.getItem(IsekaiItem.class) != null) {
                 if (Dungeon.hero.belongings.getItem(IsekaiItem.class).isEquipped(Dungeon.hero)) {
@@ -366,7 +362,10 @@ public class GunWeapon extends MeleeWeapon {
 
                 int dr = ch.drRoll();
 
-                int effectiveDamage = ch.defenseProc( Dungeon.hero, dmg );
+                int effectiveDamage = ch.defenseProc( Dungeon.hero, (int) dmg );
+
+                // 사격 스롯 판정
+                if (Dungeon.hero.subClass == HeroSubClass.SNIPER) dr /= 2;
                 effectiveDamage = Math.max( effectiveDamage - dr, 0 );
 
                 if ( ch.buff( Vulnerable.class ) != null){
@@ -456,21 +455,28 @@ public class GunWeapon extends MeleeWeapon {
 
         Invisibility.dispel();
 
-        boolean consumeBullet = false;
-
-        if (gunAccessories != null) {
-            consumeBullet = gunAccessories.GetSavingChance() < Random.Int(100);
-        }
-        if (closerRange != null && closerRange.state() && Dungeon.hero.hasTalent(Talent.FRUGALITY)) {
-            if (Random.Int(100) > Dungeon.hero.pointsInTalent(Talent.FRUGALITY) * 15) {
-                consumeBullet = true;
-            }
-        }
-        if (RingOfSharpshooting.ammoMultiplier(Dungeon.hero) * 100f < Random.Int(100)) {
-            consumeBullet = true;
+        // Each source independently checks to save the bullet
+        // If ANY check succeeds, the bullet is saved
+        boolean savedBullet = false;
+        int bulletConsumeChance = Random.Int(100);
+        // Check if gun accessories saves the bullet
+        if (gunAccessories != null && gunAccessories.GetSavingChance() >= bulletConsumeChance) {
+            savedBullet = true;
         }
 
-        if (consumeBullet) {
+        // Check if frugality talent saves the bullet
+        if (closerRange != null && closerRange.state() && Dungeon.hero.hasTalent(Talent.FRUGALITY)
+            && Dungeon.hero.pointsInTalent(Talent.FRUGALITY) * 15 >= bulletConsumeChance) {
+            savedBullet = true;
+        }
+
+        // Check if ring of sharpshooting saves the bullet
+        if (RingOfSharpshooting.ammoMultiplier(Dungeon.hero) * 100f >= bulletConsumeChance) {
+            savedBullet = true;
+        }
+
+        // Only consume if no source saved the bullet
+        if (!savedBullet) {
             bullet -= 1;
         }
         updateQuickslot();
