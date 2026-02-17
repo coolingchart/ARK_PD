@@ -24,7 +24,7 @@ public class SeaLeef extends Mob {
         properties.add(Property.SEA);
     }
 
-    int damageBonus = 0;
+    protected int damageBonus = 0;
 
     @Override
     public int damageRoll() { return Random.NormalIntRange(16 + (damageBonus / 2), 24 + damageBonus); }

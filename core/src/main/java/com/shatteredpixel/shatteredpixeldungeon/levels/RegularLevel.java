@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.MiniShopRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.EndspeakerRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.LACNET2Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.MagicGloemRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.PitRoom;
@@ -148,6 +149,9 @@ public abstract class RegularLevel extends Level {
 				initRooms.add(new SeaObjRoom());
 				initRooms.add(new SeaObjRoom());
 			}
+            if (Dungeon.depth == 39) {
+                initRooms.add(new EndspeakerRoom());
+            }
 		} else if (Dungeon.depth > 30) {
 			if (Dungeon.depth != 35 & Dungeon.depth != 40) {
 				if (Dungeon.depth < 35) {
