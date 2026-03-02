@@ -70,6 +70,16 @@ public class StaffOfShining extends DamageWand {
         if (ch.buff(Blindness.class) == null) Blinddmg = 0;
         else Blinddmg = 4 + buffedLvl();
 
+        int shieldAmt = 2 + buffedLvl();
+
+        //shield ally targets instead of damaging them
+        if (ch.alignment == Char.Alignment.ALLY) {
+            ch.sprite.centerEmitter().burst( RainbowParticle.BURST, 10+buffedLvl() );
+            Buff.affect(ch, Barrier.class).incShield(shieldAmt + Blinddmg);
+            Buff.affect(curUser, Barrier.class).incShield(shieldAmt);
+            return;
+        }
+
         //three in (5+lvl) chance of failing
         if (Random.Int(5+buffedLvl()) >= 3) {
             Buff.prolong(ch, Blindness.class, 2f + (buffedLvl() * 0.333f));
@@ -82,11 +92,12 @@ public class StaffOfShining extends DamageWand {
             ch.damage(Math.round(dmg * 1.333f), this);
         } else {
             ch.sprite.centerEmitter().burst( RainbowParticle.BURST, 10+buffedLvl() );
-
             ch.damage(dmg, this);
             Buff.affect(curUser, Barrier.class).incShield(Blinddmg);
         }
 
+        //shield caster after damaging an enemy
+        Buff.affect(curUser, Barrier.class).incShield(shieldAmt);
     }
 
     private void affectMap(Ballistica beam){

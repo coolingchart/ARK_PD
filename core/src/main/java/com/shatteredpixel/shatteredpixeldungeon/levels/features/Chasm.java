@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfWeedy;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.FeatherFall;
@@ -132,8 +133,17 @@ public class Chasm implements Hero.Doom {
 	}
 
 	public static void mobFall( Mob mob ) {
+		//check for Weedy knockback refund before die() detaches buffs
+		StaffOfWeedy.WeedyKnockback kb = mob.buff(StaffOfWeedy.WeedyKnockback.class);
+		if (kb != null && kb.getRefund() > 0) {
+			StaffOfWeedy staff = Dungeon.hero.belongings.getItem(StaffOfWeedy.class);
+			if (staff != null) {
+				staff.gainCharge(kb.getRefund());
+			}
+		}
+
 		if (mob.isAlive()) mob.die( Chasm.class );
-		
+
 		((MobSprite)mob.sprite).fall();
 	}
 	

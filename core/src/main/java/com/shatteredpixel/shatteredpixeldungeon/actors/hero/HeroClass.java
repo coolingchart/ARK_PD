@@ -38,7 +38,16 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfBreeze;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfCorrupting;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfGreyy;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfPodenco;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfPurgatory;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfShining;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfSnowsant;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfSuzuran;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfVigna;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfWeedy;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KazemaruWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Pkp;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Usg;
@@ -157,6 +166,7 @@ public enum HeroClass {
 
 		if (DeviceCompat.isDebug()) {
             new VelvetPouch().collect();
+            new MagicalHolster().collect();
 
             new PotionOfStrength().identify().quantity(40).collect();
             new PotionOfExperience().identify().quantity(40).collect();
@@ -169,11 +179,16 @@ public enum HeroClass {
             new PlateArmor().identify().upgrade(10).collect();
             new TomeOfMastery().collect();
 
-            new RingOfFuror().identify().collect();
-            new RingOfAccuracy().identify().collect();
-            new RingOfSharpshooting().identify().collect();
-            new Usg().identify().collect();
-            new Pkp().identify().collect();
+            new StaffOfBreeze().identify().collect();
+            new StaffOfCorrupting().identify().collect();
+            new StaffOfGreyy().identify().collect();
+            new StaffOfPodenco().identify().collect();
+            new StaffOfPurgatory().identify().collect();
+            new StaffOfShining().identify().collect();
+            new StaffOfSnowsant().identify().collect();
+            new StaffOfSuzuran().identify().collect();
+            new StaffOfVigna().identify().collect();
+            new StaffOfWeedy().identify().collect();
 
         }
 
