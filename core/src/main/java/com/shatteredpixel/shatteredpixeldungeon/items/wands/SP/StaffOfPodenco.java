@@ -41,7 +41,6 @@ public class StaffOfPodenco extends Wand {
                 Buff.affect(ch, Poison.class).set(2 + buffedLvl());
             }
             else Buff.affect(ch, Cripple.class, 2 + buffedLvl());
-            Buff.affect(ch, Poison.class).set(2 + buffedLvl());
             Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(1.33f, 1.47f) );
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
