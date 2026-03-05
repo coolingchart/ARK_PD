@@ -56,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.IberiaPart1
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ShopRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.BeachRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.AdvanceguardRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EntranceRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.ExitRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.FloodingRoom;
@@ -114,6 +115,13 @@ public abstract class RegularLevel extends Level {
 		ArrayList<Room> initRooms = new ArrayList<>();
 		initRooms.add ( roomEntrance = new EntranceRoom());
 		initRooms.add( roomExit = new ExitRoom());
+
+		// Advanceguard rooms spawn at set intervals in early chapters
+		AdvanceguardRoom.guaranteedThisFloor = false;
+		if (Dungeon.depth <= 9 && Dungeon.depth%5 == ((Dungeon.seed/3)%3 + 2)) {
+			initRooms.add(new AdvanceguardRoom());
+			AdvanceguardRoom.guaranteedThisFloor = true;
+		}
 
 		//force max standard rooms and multiple by 1.5x for large levels
 		int standards = standardRooms(feeling == Feeling.LARGE);
