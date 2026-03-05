@@ -30,5 +30,7 @@ public class EndspeakerRoom extends SpecialRoom {
         TheEndspeaker endspeaker = new TheEndspeaker();
         endspeaker.pos = cx + cy * level.width();
         level.mobs.add( endspeaker );
+
+        level.addItemToSpawn( new PotionOfLiquidFlame() );
     }
 }
