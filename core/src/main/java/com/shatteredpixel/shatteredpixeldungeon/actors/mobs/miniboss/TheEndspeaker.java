@@ -27,6 +27,10 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.SeaLevel_part2;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.Endspeaker1Sprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.Endspeaker2Sprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.Endspeaker3Sprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.Endspeaker4Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.NetherseaBrandguiderSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_LeefSprite;
@@ -725,14 +729,14 @@ public class TheEndspeaker extends Mob {
         public static Class<? extends MobSprite> getSprite() {
             switch (abilityCount / 2) {
                 case 1:
-                    return Sea_SpewerSprite.class;
+                    return Endspeaker1Sprite.class;
                 case 2:
-                    return Sea_LeefSprite.class;
+                    return Endspeaker2Sprite.class;
                 case 3:
-                    return NetherseaBrandguiderSprite.class;
+                    return Endspeaker3Sprite.class;
                 case 0:
                 default:
-                    return Sea_RunnerSprite.class;
+                    return Endspeaker4Sprite.class;
             }
         }
 
