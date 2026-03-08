@@ -32,10 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.Endspeaker2Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Endspeaker3Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Endspeaker4Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.NetherseaBrandguiderSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_LeefSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_RunnerSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_SpewerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
@@ -257,6 +253,7 @@ public class TheEndspeaker extends Mob {
         // If path is now blocked, cancel charge
         if (rooted || b.collisionPos != chargePos) {
             chargePos = -1;
+            spend(TICK);
             next();
             return;
         }
@@ -275,6 +272,7 @@ public class TheEndspeaker extends Mob {
             }
             if (bouncepos == -1) {
                 chargePos = -1;
+                spend(TICK);
                 next();
                 return;
             }
@@ -311,6 +309,7 @@ public class TheEndspeaker extends Mob {
                 chargePos = -1;
                 sprite.idle();
                 Dungeon.level.occupyCell(TheEndspeaker.this);
+                spend(TICK);
                 next();
             }
         });
