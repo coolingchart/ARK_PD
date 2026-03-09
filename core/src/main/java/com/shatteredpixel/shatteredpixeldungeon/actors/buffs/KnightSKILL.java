@@ -279,7 +279,7 @@ public class KnightSKILL extends Buff implements ActionIndicator.Action {
                     if (counter.count() < 10) {
                         counter.countUp(1);
                         if (counter.count() == 10) GLog.p(Messages.get(KnightSKILL.class, "combo_max"));
-                        else GLog.i(Messages.get(KnightSKILL.class, "combo_stack", counter.count()));
+                        else GLog.i(Messages.get(KnightSKILL.class, "combo_stack", (int)counter.count()));
                     }
                     break;
                 case SMASH:
@@ -287,7 +287,7 @@ public class KnightSKILL extends Buff implements ActionIndicator.Action {
                     if (counter.count() < 10) {
                         counter.countUp(1);
                         if (counter.count() == 10) GLog.p(Messages.get(KnightSKILL.class, "combo_max"));
-                        else GLog.i(Messages.get(KnightSKILL.class, "combo_stack", counter.count()));
+                        else GLog.i(Messages.get(KnightSKILL.class, "combo_stack", (int)counter.count()));
                     }
                     break;
                 case KILLBLOW:
@@ -295,7 +295,7 @@ public class KnightSKILL extends Buff implements ActionIndicator.Action {
                     if (counter.count() < 10) {
                         counter.countUp(1);
                         if (counter.count() == 10) GLog.p(Messages.get(KnightSKILL.class, "combo_max"));
-                        else GLog.i(Messages.get(KnightSKILL.class, "combo_stack", counter.count()));
+                        else GLog.i(Messages.get(KnightSKILL.class, "combo_stack", (int)counter.count()));
                     }
                     break;
                 case LIGHTSWORD:

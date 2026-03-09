@@ -378,6 +378,8 @@ public class GunWeapon extends MeleeWeapon {
                 // If the enemy is already dead, interrupt the attack.
                 // This matters as defence procs can sometimes inflict self-damage, such as armor glyphs.
                 if (!ch.isAlive()){
+                    Buff buff = Dungeon.hero.buff(RangedAttackTracker.class);
+                    if (buff != null) buff.detach();
                     return;
                 }
 

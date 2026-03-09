@@ -1619,7 +1619,7 @@ public class Hero extends Char {
             }
         }
 
-        // 구제자 방패 강타
+        // 구제자 방패 밀기
         if (subClass == HeroSubClass.SAVIOR && damage > 0
                 && enemy instanceof Mob && Dungeon.level.adjacent(pos, enemy.pos)) {
             ShieldSlamCounter slamCounter = Buff.affect(this, ShieldSlamCounter.class);

@@ -1,7 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.wands.SP;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -9,7 +8,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -28,7 +26,6 @@ import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 public class StaffOfShining extends DamageWand {
@@ -58,7 +55,9 @@ public class StaffOfShining extends DamageWand {
 
         Char ch = Actor.findChar(beam.collisionPos);
         if (ch != null){
-            processSoulMark(ch, chargesPerCast());
+            if (ch.alignment != Char.Alignment.ALLY) {
+                processSoulMark(ch, chargesPerCast());
+            }
             affectTarget(ch);
         }
     }

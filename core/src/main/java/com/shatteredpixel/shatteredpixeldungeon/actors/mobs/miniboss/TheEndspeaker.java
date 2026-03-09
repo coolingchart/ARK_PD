@@ -42,6 +42,8 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
+import java.util.ArrayList;
+
 public class TheEndspeaker extends Mob {
     {
         spriteClass = Status.getSprite();
@@ -93,7 +95,7 @@ public class TheEndspeaker extends Mob {
 
     @Override
     public void damage(int dmg, Object src) {
-        if (Status.abilitySpellAbsorption && spellAbsorptionCooldown <= 0 && AntiMagic.RESISTS.contains(src.getClass())) {
+        if (Status.abilitySpellAbsorption && spellAbsorptionCooldown <= 0 && src != null && AntiMagic.RESISTS.contains(src.getClass())) {
             dmg = dmg / 4;
             Buff.affect(this, SpellAbsorptionActive.class);
             spellAbsorptionCooldown = 5;
@@ -370,11 +372,14 @@ public class TheEndspeaker extends Mob {
     }
 
     private void dropLoot(Item item) {
-        int lootPos;
-        do {
-            lootPos = PathFinder.NEIGHBOURS8[Random.Int(8)];
-        } while (!Dungeon.level.passable[pos + lootPos]);
-        Dungeon.level.drop(item, pos + lootPos).sprite.drop(pos);
+        ArrayList<Integer> candidates = new ArrayList<>();
+        for (int offset : PathFinder.NEIGHBOURS8) {
+            if (Dungeon.level.passable[pos + offset]) {
+                candidates.add(pos + offset);
+            }
+        }
+        int lootPos = candidates.isEmpty() ? pos : Random.element(candidates);
+        Dungeon.level.drop(item, lootPos).sprite.drop(pos);
     }
 
     @Override
@@ -388,7 +393,7 @@ public class TheEndspeaker extends Mob {
             if (Status.abilityRampUp) desc += Messages.get(this, "desc_sp_rampup");
             if (Status.abilityCharge) desc += Messages.get(this, "desc_sp_charge");
             if (Status.abilityHardening) desc += Messages.get(this, "desc_sp_hardening");
-            if (Status.abilityCcImmune) desc += Messages.get(this, "desc_sp_crowncontrolimmune");
+            if (Status.abilityCcImmune) desc += Messages.get(this, "desc_sp_crowdcontrolimmune");
         }
         return desc;
     }
@@ -791,7 +796,7 @@ public class TheEndspeaker extends Mob {
                         AspectLarge aspectHarden = new AspectLarge();
                         AspectLarge aspectCcImmune = new AspectLarge();
                         summonMob(level, aspectHarden, EndspeakerAspect.Hardening.class);
-                        summonMob(level, aspectCcImmune, EndspeakerAspect.CrownControlImmune.class);
+                        summonMob(level, aspectCcImmune, EndspeakerAspect.CrowdControlImmune.class);
                         break;
                     default:
                         break;

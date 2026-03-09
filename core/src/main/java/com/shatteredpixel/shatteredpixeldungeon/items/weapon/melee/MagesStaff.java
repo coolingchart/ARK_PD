@@ -490,10 +490,11 @@ public class MagesStaff extends MeleeWeapon {
 	public boolean tierUpgraded = false;
 
 	public void upgradeTier() {
-		tier += 2;
-		tierUpgraded = true;
-		updateQuickslot();
-	}
+        if (tierUpgraded) return;
+        tier += 2;
+        tierUpgraded = true;
+        updateWand(false);
+    }
 
 	private static final String WAND          = "wand";
 	private static final String MAXCHARGE     = "charge";
