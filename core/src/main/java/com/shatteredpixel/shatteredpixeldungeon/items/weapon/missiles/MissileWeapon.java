@@ -297,8 +297,9 @@ abstract public class MissileWeapon extends Weapon {
                     if (!candidates.isEmpty()) {
                         Dungeon.level.drop(this, Random.element(candidates)).sprite.drop();
                     }
+                } else {
+                    Dungeon.level.drop(this, cell).sprite.drop();
                 }
-                Dungeon.level.drop(this, cell).sprite.drop();
             }
 		}
 	}
