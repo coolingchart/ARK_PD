@@ -126,6 +126,7 @@ public class ShieldSlamCounter extends CounterBuff implements ActionIndicator.Ac
 
             dmg = enemy.defenseProc(target, dmg);
             dmg -= enemy.drRoll();
+            dmg = Math.max(0, dmg);
 
             if (enemy.buff(Vulnerable.class) != null) {
                 dmg *= 1.33f;
@@ -175,7 +176,8 @@ public class ShieldSlamCounter extends CounterBuff implements ActionIndicator.Ac
             if (enemy == null
                     || enemy == target
                     || !Dungeon.level.heroFOV[cell]
-                    || target.isCharmedBy(enemy)) {
+                    || target.isCharmedBy(enemy)
+                    || enemy.alignment == Char.Alignment.ALLY) {
                 GLog.w(Messages.get(ShieldSlamCounter.class, "bad_target"));
             } else if (!((Hero) target).canAttack(enemy)) {
                 GLog.w(Messages.get(ShieldSlamCounter.class, "bad_target"));

@@ -1,6 +1,5 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.miniboss.EmperorPursuer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.miniboss.TheEndspeaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -30,6 +29,7 @@ public class EndspeakerRoom extends SpecialRoom {
         TheEndspeaker endspeaker = new TheEndspeaker();
         endspeaker.pos = cx + cy * level.width();
         level.mobs.add( endspeaker );
+        TheEndspeaker.Status.spawned = true;
 
         level.addItemToSpawn( new PotionOfLiquidFlame() );
     }

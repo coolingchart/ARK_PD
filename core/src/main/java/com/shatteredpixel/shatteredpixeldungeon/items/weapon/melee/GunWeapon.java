@@ -12,7 +12,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChenShooterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CloserangeShot;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Heat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
@@ -150,7 +149,7 @@ public class GunWeapon extends MeleeWeapon {
             acc += Dungeon.hero.pointsInTalent(Talent.PINPOINT) * 0.2f;
         }
 
-        acc += RingOfAccuracy.shootAccuracyMultiplier(Dungeon.hero);
+        acc *= RingOfAccuracy.shootAccuracyMultiplier(Dungeon.hero);
 
         return acc;
     }

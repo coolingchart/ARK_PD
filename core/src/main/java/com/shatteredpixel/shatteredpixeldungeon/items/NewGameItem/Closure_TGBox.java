@@ -17,10 +17,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.BookThoughts;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.BookWhispers;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.BookGenesis;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.Brew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.Elixir;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Gamza;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Nmould;
@@ -47,7 +44,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.CrabGun;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.PurgatoryKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Thunderbolt;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewRhodesLevel2;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -316,17 +312,21 @@ public class Closure_TGBox extends ClosuresBox {
 
     private Scroll changeScroll(Scroll s) {
         if (s instanceof ExoticScroll) {
-            return Reflection.newInstance(ExoticScroll.exoToReg.get(s.getClass()));
+            Class<? extends Scroll> mapped = ExoticScroll.exoToReg.get(s.getClass());
+            return mapped != null ? Reflection.newInstance(mapped) : s;
         } else {
-            return Reflection.newInstance(ExoticScroll.regToExo.get(s.getClass()));
+            Class<? extends ExoticScroll> mapped = ExoticScroll.regToExo.get(s.getClass());
+            return mapped != null ? Reflection.newInstance(mapped) : s;
         }
     }
 
     private Potion changePotion(Potion p) {
         if (p instanceof ExoticPotion) {
-            return Reflection.newInstance(ExoticPotion.exoToReg.get(p.getClass()));
+            Class<? extends Potion> mapped = ExoticPotion.exoToReg.get(p.getClass());
+            return mapped != null ? Reflection.newInstance(mapped) : p;
         } else {
-            return Reflection.newInstance(ExoticPotion.regToExo.get(p.getClass()));
+            Class<? extends ExoticPotion> mapped = ExoticPotion.regToExo.get(p.getClass());
+            return mapped != null ? Reflection.newInstance(mapped) : p;
         }
     }
 

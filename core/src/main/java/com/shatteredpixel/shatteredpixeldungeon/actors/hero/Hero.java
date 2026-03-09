@@ -1835,9 +1835,10 @@ public class Hero extends Char {
                 if (hasTalent(Talent.HOPELIGHT)) {
                     saviorRedu += pointsInTalent(Talent.HOPELIGHT) * 0.05f;
                 }
-                dmg -= Math.max(2, Math.round(dmg * saviorRedu));
+                int mitigation = Math.max(2, Math.round(dmg * saviorRedu));
+                dmg = Math.max(0, dmg - mitigation);
             } else {
-                dmg -= Math.max(2, Math.round(dmg * 0.2f));
+                dmg = Math.max(0, dmg - Math.max(2, Math.round(dmg * 0.2f)));
             }
         }
 

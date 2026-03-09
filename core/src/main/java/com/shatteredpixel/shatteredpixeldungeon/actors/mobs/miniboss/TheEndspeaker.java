@@ -290,7 +290,8 @@ public class TheEndspeaker extends Mob {
                 for (int cell : b.path) {
                     Char ch = Actor.findChar(cell);
                     if (ch != null && ch != TheEndspeaker.this && alignment != ch.alignment) {
-                        int damage = Random.NormalIntRange(damageRoll() / 2, damageRoll());
+                        int base = damageRoll();
+                        int damage = Random.NormalIntRange(base / 2, base);
                         ch.damage(damage, TheEndspeaker.this);
                         if (ch.isAlive()) {
                             Buff.prolong(ch, Cripple.class, 3f);
@@ -389,7 +390,7 @@ public class TheEndspeaker extends Mob {
             if (Status.abilityHardening) desc += Messages.get(this, "desc_sp_hardening");
             if (Status.abilityCcImmune) desc += Messages.get(this, "desc_sp_crowncontrolimmune");
         }
-        return Messages.get(this, "desc");
+        return desc;
     }
 
     private static final String SPELL_ABSORPTION_CD = "spell_absorption_cooldown";
@@ -735,7 +736,7 @@ public class TheEndspeaker extends Mob {
     }
 
     public static class Status {
-        private static boolean spawned;
+        public static boolean spawned;
         public static boolean abilitySpellAbsorption;
         public static boolean abilityHardening;
         public static boolean abilityCcImmune;

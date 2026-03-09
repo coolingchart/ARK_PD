@@ -14,11 +14,9 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
@@ -50,12 +48,14 @@ public class StaffOfSnowsant extends Wand {
                 ch.damage(bonusDmg, this);
             }
 
-            //chance to slow, scaling with level
-            if (Random.Int(5 + buffedLvl()) >= 3) {
-                Buff.affect(ch, Slow.class, 2f + buffedLvl());
-            }
+            if (ch.isAlive()) {
+                //chance to slow, scaling with level
+                if (Random.Int(5 + buffedLvl()) >= 3) {
+                    Buff.affect(ch, Slow.class, 2f + buffedLvl());
+                }
 
-            chainEnemy(bolt, curUser, ch);
+                chainEnemy(bolt, curUser, ch);
+            }
             Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.65f, 0.75f) );
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);

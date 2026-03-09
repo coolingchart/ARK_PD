@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.miniboss.TheEndspeaker;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
@@ -65,7 +64,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.NewRhodesLevel3;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewRhodesLevel4;
 import com.shatteredpixel.shatteredpixeldungeon.levels.HallsLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.LastLevel;
-import com.shatteredpixel.shatteredpixeldungeon.levels.LastShopLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewCavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewCityBossLevel;
@@ -316,6 +314,7 @@ public class Dungeon {
 		Blacksmith.Quest.reset();
         Imp.Quest.reset();
         Dario.Quest.reset();
+        TheEndspeaker.Status.reset();
 
 		Generator.fullReset();
 		hero = new Hero();
@@ -855,8 +854,13 @@ public class Dungeon {
                 }
             }
 
+            int maxDropFloor = 26;
+            for (int floor : generatedLevels) {
+                if (floor > maxDropFloor) maxDropFloor = floor;
+            }
+
             droppedItems = new SparseArray<>();
-            for (int i=1; i <= 26; i++) {
+            for (int i=1; i <= maxDropFloor; i++) {
 
                 //dropped items
                 ArrayList<Item> items = new ArrayList<>();
@@ -917,8 +921,8 @@ public class Dungeon {
 		Jessica.QuestClear = bundle.getBoolean(JESI_QUESTCLEAR);
 		FrostLeaf.QuestClear = bundle.getBoolean(LEAF_QUESTCLEAR);
 
-        highestRhodesGenerated = bundle.getInt(HIGHEST_RHODES_GENERATED);
-		
+        highestRhodesGenerated = bundle.contains(HIGHEST_RHODES_GENERATED) ? bundle.getInt(HIGHEST_RHODES_GENERATED) : -1;
+
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );
 		TheEndspeaker.Status.restoreFromBundle( bundle );
