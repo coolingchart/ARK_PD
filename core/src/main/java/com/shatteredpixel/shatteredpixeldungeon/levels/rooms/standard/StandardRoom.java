@@ -193,12 +193,18 @@ public abstract class StandardRoom extends Room {
 	
 	
 	public static StandardRoom createRoom(){
+		float[] depthChances = chances[Dungeon.depth];
+		int advIdx = rooms.indexOf(AdvanceguardRoom.class);
+		float savedWeight = depthChances[advIdx];
+		if (AdvanceguardRoom.guaranteedThisFloor) {
+			depthChances[advIdx] = 0;
+		}
 		StandardRoom room;
-		int attempts = 0;
-		do {
-			room = Reflection.newInstance(rooms.get(Random.chances(chances[Dungeon.depth])));
-			attempts++;
-		} while (room instanceof AdvanceguardRoom && AdvanceguardRoom.guaranteedThisFloor && attempts < 100);
+		try {
+			room = Reflection.newInstance(rooms.get(Random.chances(depthChances)));
+		} finally {
+			depthChances[advIdx] = savedWeight;
+		}
 		return room;
 	}
 	

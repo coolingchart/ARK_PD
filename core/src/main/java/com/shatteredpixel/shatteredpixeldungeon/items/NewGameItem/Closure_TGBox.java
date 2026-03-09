@@ -59,7 +59,7 @@ import com.watabou.utils.Reflection;
 
 public class Closure_TGBox extends ClosuresBox {
 
-    private static final int[] PRICES = {25, 40, 75, 125, 200};
+    private static final int[] PRICES = {80, 120, 175, 250, 400};
 
     private int priceTier = 0;
 
@@ -70,24 +70,18 @@ public class Closure_TGBox extends ClosuresBox {
     }
 
     @Override
-    public boolean doPickUp(Hero hero) {
-        if (Dungeon.level instanceof NewRhodesLevel2) {
-            Closure_TGBox next = new Closure_TGBox();
-            next.priceTier = Math.min(priceTier + 1, PRICES.length - 1);
-            Dungeon.level.drop(next, 3832).type = Heap.Type.FOR_SALE_28F;
-        }
-        return super.doPickUp(hero);
-    }
-
-    @Override
     public void execute(Hero hero, String action) {
         super.execute(hero, action);
 
         if (action.equals(AC_OPEN)) {
-            curUser = hero;
-            curItem = this;
-            GameScene.selectItem(itemSelector, WndBag.Mode.TRANMSUTABLE,
-                    Messages.get(this, "select"));
+            if (Dungeon.level instanceof NewRhodesLevel2) {
+                curUser = hero;
+                curItem = this;
+                GameScene.selectItem(itemSelector, WndBag.Mode.TRANMSUTABLE,
+                        Messages.get(this, "select"));
+            } else {
+                    GLog.n(Messages.get(this, "fail"));
+            }
         }
     }
 
@@ -95,7 +89,6 @@ public class Closure_TGBox extends ClosuresBox {
         @Override
         public void onSelect(Item item) {
             if (!(curItem instanceof Closure_TGBox)) return;
-
             Closure_TGBox box = (Closure_TGBox) curItem;
 
             if (item == null) {
@@ -134,6 +127,9 @@ public class Closure_TGBox extends ClosuresBox {
             curUser.sprite.operate(curUser.pos);
 
             box.detach(curUser.belongings.backpack);
+            Closure_TGBox next = new Closure_TGBox();
+            next.priceTier = Math.min(box.priceTier + 1, PRICES.length - 1);
+            Dungeon.level.drop(next, 3832).type = Heap.Type.FOR_SALE_28F;
         }
     };
 
@@ -333,7 +329,7 @@ public class Closure_TGBox extends ClosuresBox {
 
     @Override
     public int value() {
-        return PRICES[priceTier];
+        return PRICES[Math.max(0, Math.min(priceTier, PRICES.length - 1))];
     }
 
     // --- Bundle ---
@@ -349,6 +345,6 @@ public class Closure_TGBox extends ClosuresBox {
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        priceTier = bundle.getInt(PRICE_TIER);
+        priceTier = Math.max(0, Math.min(bundle.getInt(PRICE_TIER), PRICES.length - 1));
     }
 }

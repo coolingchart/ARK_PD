@@ -334,7 +334,7 @@ public class TheEndspeaker extends Mob {
     public void die(Object cause) {
         super.die(cause);
 
-        int lootTier = Status.abilityCount / 3;
+        int lootTier = Status.abilityCount / 2;
         Ankh lootAnkh;
         switch(lootTier) {
             case 1:
@@ -385,7 +385,7 @@ public class TheEndspeaker extends Mob {
     @Override
     public String description() {
         String desc = Messages.get(this, "desc");
-        desc += Messages.get(this, "desc_" + Status.abilityCount % 2);
+        desc += Messages.get(this, "desc_" + Status.abilityCount / 2);
         if (Status.abilityCount > 0) {
             desc += Messages.get(this, "desc_sp");
             if (Status.abilitySpellAbsorption) desc += Messages.get(this, "desc_sp_spellabsorption");
