@@ -979,9 +979,9 @@ public class Dungeon {
 	public static void win( Object cause ) {
 
         updateLevelExplored();
+        Badges.validateChenUnlock();
         Statistics.gameWon = true;
-
-		hero.belongings.identify();
+        hero.belongings.identify();
 
 		Rankings.INSTANCE.submit( true, cause );
 	}
