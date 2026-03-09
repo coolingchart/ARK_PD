@@ -59,6 +59,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.IronSkin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.KnightSKILL;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldSlamCounter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LanceCharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
@@ -698,7 +699,6 @@ public class Hero extends Char {
         if (hasTalent(Talent.SHIELD_OF_LIGHT)) {
             int drplus_n = pointsInTalent(Talent.SHIELD_OF_LIGHT);
             if (HP <= HT/2) drplus_n*=2;
-            if (buff(RadiantKnight.class) != null) drplus_n*=2;
             dr += Random.NormalIntRange(0,drplus_n);
         }
 
@@ -1617,6 +1617,13 @@ public class Hero extends Char {
                     Buff.detach(this, Corruption.class);
                 } else GLog.w(Messages.get(RingOfDominate.class, "soulless"));
             }
+        }
+
+        // 구제자 방패 강타
+        if (subClass == HeroSubClass.SAVIOR && damage > 0
+                && enemy instanceof Mob && Dungeon.level.adjacent(pos, enemy.pos)) {
+            ShieldSlamCounter slamCounter = Buff.affect(this, ShieldSlamCounter.class);
+            slamCounter.countUp(damage);
         }
 
         if (damage > 0 && subClass == HeroSubClass.BERSERKER) {
