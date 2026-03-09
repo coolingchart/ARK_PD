@@ -98,3 +98,4 @@ fabric.properties
 *.pepk
 /android/release/
 /.claude/settings.local.json
+/.claude/
