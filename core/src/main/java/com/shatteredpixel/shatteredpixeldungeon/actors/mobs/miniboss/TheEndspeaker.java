@@ -335,11 +335,13 @@ public class TheEndspeaker extends Mob {
         Ankh lootAnkh;
         switch(lootTier) {
             case 1:
+                // 1단계 폼 (2 형태)
                 Dungeon.level.drop(new Certificate(20), pos).sprite.drop(pos);
                 dropLoot(new ScrollOfUpgrade());
                 dropLoot(new PotionOfExperience());
                 break;
             case 2:
+                // 2딘계 폼 (3 형태)
                 Dungeon.level.drop(new Certificate(30), pos).sprite.drop(pos);
                 dropLoot(new ScrollOfUpgrade());
                 dropLoot(new PotionOfExperience());
@@ -348,6 +350,7 @@ public class TheEndspeaker extends Mob {
                 dropLoot(lootAnkh);
                 break;
             case 3:
+                // 3단계 폼 (4 형태)
                 Dungeon.level.drop(new Certificate(40), pos).sprite.drop(pos);
                 dropLoot(new ScrollOfUpgrade());
                 dropLoot(new PotionOfExperience());
@@ -357,6 +360,7 @@ public class TheEndspeaker extends Mob {
                 break;
             case 0:
             default:
+                // 기본 폼 (1 형태)
                 Dungeon.level.drop(new Certificate(10), pos).sprite.drop(pos);
                 dropLoot(new PotionOfExperience());
                 break;
@@ -370,6 +374,22 @@ public class TheEndspeaker extends Mob {
             lootPos = PathFinder.NEIGHBOURS8[Random.Int(8)];
         } while (!Dungeon.level.passable[pos + lootPos]);
         Dungeon.level.drop(item, pos + lootPos).sprite.drop(pos);
+    }
+
+    @Override
+    public String description() {
+        String desc = Messages.get(this, "desc");
+        desc += Messages.get(this, "desc_" + Status.abilityCount % 2);
+        if (Status.abilityCount > 0) {
+            desc += Messages.get(this, "desc_sp");
+            if (Status.abilitySpellAbsorption) desc += Messages.get(this, "desc_sp_spellabsorption");
+            if (Status.abilityIncreasedRange) desc += Messages.get(this, "desc_sp_increasedrange");
+            if (Status.abilityRampUp) desc += Messages.get(this, "desc_sp_rampup");
+            if (Status.abilityCharge) desc += Messages.get(this, "desc_sp_charge");
+            if (Status.abilityHardening) desc += Messages.get(this, "desc_sp_hardening");
+            if (Status.abilityCcImmune) desc += Messages.get(this, "desc_sp_crowncontrolimmune");
+        }
+        return Messages.get(this, "desc");
     }
 
     private static final String SPELL_ABSORPTION_CD = "spell_absorption_cooldown";
