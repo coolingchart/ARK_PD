@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
@@ -353,6 +354,7 @@ public abstract class Char extends Actor {
 			}
 			
 			int dmg;
+            int trueDmg = 0;
 			Preparation prep = buff(Preparation.class);
 			if (prep != null){
 				dmg = prep.damageRoll(this);
@@ -364,6 +366,9 @@ public abstract class Char extends Actor {
 			} else {
 				dmg = damageRoll();
 			}
+            if (this == Dungeon.hero && enemy.buff(Blindness.class) != null && Dungeon.hero.hasTalent(Talent.FLASH_SPEAR)) {
+                trueDmg += (int) (dmg * (Dungeon.hero.pointsInTalent(Talent.FLASH_SPEAR) * 0.1f));
+            }
 			
 			int effectiveDamage = enemy.defenseProc( this, dmg );
 			effectiveDamage = Math.max( effectiveDamage - dr, 0 );
@@ -388,12 +393,16 @@ public abstract class Char extends Actor {
 
 			enemy.damage( effectiveDamage, this );
 
-			if (buff(FireImbue.class) != null)  buff(FireImbue.class).proc(enemy);
-			if (buff(Hallucination.class) != null)  buff(Hallucination.class).proc();
-			if (buff(ElixirOfDragonsBlood.Dragonsblood.class) != null)  buff(ElixirOfDragonsBlood.Dragonsblood.class).proc(this, enemy);
-			if (buff(FrostImbue.class) != null) buff(FrostImbue.class).proc(enemy);
+            // if enemy is not dead from the main attack, process true damage
+            if (enemy.isAlive() && trueDmg > 0) {
+                enemy.damage(trueDmg, this);
+            }
+            if (buff(FireImbue.class) != null)  buff(FireImbue.class).proc(enemy);
+            if (buff(Hallucination.class) != null)  buff(Hallucination.class).proc();
+            if (buff(ElixirOfDragonsBlood.Dragonsblood.class) != null)  buff(ElixirOfDragonsBlood.Dragonsblood.class).proc(this, enemy);
+            if (buff(FrostImbue.class) != null) buff(FrostImbue.class).proc(enemy);
 
-			if (enemy.isAlive() && prep != null && prep.canKO(enemy)){
+            if (enemy.isAlive() && prep != null && prep.canKO(enemy)){
 				enemy.HP = 0;
 				if (!enemy.isAlive()) {
 					enemy.die(this);
@@ -404,10 +413,10 @@ public abstract class Char extends Actor {
 				enemy.sprite.showStatus(CharSprite.NEGATIVE, Messages.get(Preparation.class, "assassinated"));
 			}
 
-			enemy.sprite.bloodBurstA( sprite.center(), effectiveDamage );
-			enemy.sprite.flash();
+            enemy.sprite.bloodBurstA( sprite.center(), effectiveDamage );
+            enemy.sprite.flash();
 
-			if (!enemy.isAlive()) {
+            if (!enemy.isAlive()) {
 				if (this instanceof Hero) {
 					Hero h = (Hero) this;
 					if ((h.belongings.weapon instanceof RhodesSword)) {
@@ -421,7 +430,7 @@ public abstract class Char extends Actor {
 				}}
 			}
 
-			if (!enemy.isAlive() && visibleFight) {
+            if (!enemy.isAlive() && visibleFight) {
 				if (enemy == Dungeon.hero) {
 					
 					if (this == Dungeon.hero) {
@@ -436,19 +445,17 @@ public abstract class Char extends Actor {
 				}
 			}
 
-			if (enemy.isAlive() && enemy.HP < enemy.HT * 0.15f &&
-			enemy != Dungeon.hero && Dungeon.hero.belongings.weapon instanceof Naginata && this instanceof Hero &&
-				!enemy.properties().contains(Char.Property.BOSS) && !enemy.properties().contains(Char.Property.MINIBOSS)) {
-					sprite.showStatus(CharSprite.NEUTRAL, Messages.get(Naginata.class, "skill"));
-					enemy.die(this);
-					SpellSprite.show(enemy, SpellSprite.FOOD);
-
+            if (enemy.isAlive() && enemy.HP < enemy.HT * 0.15f &&
+                    enemy != Dungeon.hero && Dungeon.hero.belongings.weapon instanceof Naginata && this instanceof Hero &&
+                    !enemy.properties().contains(Char.Property.BOSS) && !enemy.properties().contains(Char.Property.MINIBOSS)) {
+                sprite.showStatus(CharSprite.NEUTRAL, Messages.get(Naginata.class, "skill"));
+                enemy.die(this);
+                SpellSprite.show(enemy, SpellSprite.FOOD);
 			}
-			
-			return true;
+
+            return true;
 			
 		} else {
-			
 			if (visibleFight) {
 				String defense = enemy.defenseVerb();
 				enemy.sprite.showStatus( CharSprite.NEUTRAL, defense );
