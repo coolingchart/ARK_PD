@@ -927,18 +927,21 @@ public class TheEndspeaker extends Mob {
                         AspectSmall aspectSpell = new AspectSmall();
                         summonMob(level, aspectSpell, EndspeakerAspect.SpellAbsorption.class);
                         summonMob(level, aspectRange, EndspeakerAspect.IncreasedRange.class);
+                        spawnMsgShown = false;
                         break;
                     case 37:
                         AspectMedium aspectRamp = new AspectMedium();
                         AspectMedium aspectCharge = new AspectMedium();
                         summonMob(level, aspectRamp, EndspeakerAspect.RampUp.class);
                         summonMob(level, aspectCharge, EndspeakerAspect.Charge.class);
+                        spawnMsgShown = false;
                         break;
                     case 38:
                         AspectLarge aspectHarden = new AspectLarge();
                         AspectLarge aspectCcImmune = new AspectLarge();
                         summonMob(level, aspectHarden, EndspeakerAspect.Hardening.class);
                         summonMob(level, aspectCcImmune, EndspeakerAspect.CrowdControlImmune.class);
+                        spawnMsgShown = false;
                         break;
                     default:
                         break;
@@ -964,9 +967,9 @@ public class TheEndspeaker extends Mob {
             level.mobs.add(mob);
         }
 
-        public static void activate(EndspeakerAspect.EndspeakerAbility ability) {
+        public static boolean activate(EndspeakerAspect.EndspeakerAbility ability) {
             if (spawned) {
-                return;
+                return false;
             }
             switch (ability) {
                 case SPELL_ABSORPTION:
@@ -988,8 +991,9 @@ public class TheEndspeaker extends Mob {
                     abilityCcImmune = true;
                     break;
                 default:
-                    break;
+                    return false;
             }
+            return true;
         }
 
         public static void reset() {

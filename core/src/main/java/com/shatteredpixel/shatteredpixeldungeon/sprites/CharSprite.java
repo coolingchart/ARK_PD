@@ -693,13 +693,16 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	@Override
 	public void kill() {
 		super.kill();
-		
+
 		hideEmo();
-		
+
 		for( State s : State.values()){
 			remove(s);
 		}
-		
+
+		// ring is parented to the scene group (not the sprite), so it must be cleaned up explicitly
+		clearRing();
+
 		if (health != null){
 			health.killAndErase();
 		}
