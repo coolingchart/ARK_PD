@@ -296,15 +296,20 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		jump( from, to, callback, distance * 2, distance * 0.1f );
 	}
 
-	public void jump( int from, int to, Callback callback, float height, float duration ) {
-		jumpCallback = callback;
+    public void dash( int from, int to, Callback callback ) {
+        float distance = Dungeon.level.trueDistance( from, to );
+        jump( from, to, callback, distance/2, distance * 0.1f );
+    }
 
-		jumpTweener = new JumpTweener( this, worldToCamera( to ), height, duration );
-		jumpTweener.listener = this;
-		parent.add( jumpTweener );
+    public void jump( int from, int to, Callback callback, float height, float duration ) {
+        jumpCallback = callback;
 
-		turnTo( from, to );
-	}
+        jumpTweener = new JumpTweener( this, worldToCamera( to ), height, duration );
+        jumpTweener.listener = this;
+        parent.add( jumpTweener );
+
+        turnTo( from, to );
+    }
 
 	public void die() {
 		sleeping = false;
@@ -502,13 +507,17 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void aura( int color ){
+		aura(color, 90);
+	}
+
+	public void aura( int color, float angularSpeed ){
 		if (aura != null){
 			aura.killAndErase();
 		}
 		float size = Math.max(width(), height());
 		size = Math.max(size+4, 16);
 		aura = new Flare(5, size);
-		aura.angularSpeed = 90;
+		aura.angularSpeed = angularSpeed;
 		aura.color(color, true).show(this, 0);
 	}
 

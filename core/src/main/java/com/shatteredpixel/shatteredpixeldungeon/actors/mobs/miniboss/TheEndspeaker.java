@@ -17,13 +17,16 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Sea_Octo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.NewGameItem.Certificate;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SanityPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SeaLevel_part2;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.SeaPlatform;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -68,8 +71,8 @@ public class TheEndspeaker extends Mob {
 
     @Override
     public int damageRoll() {
-        int low = 20 + (Status.abilityCount / 2) * 6;
-        int high = 40 + (Status.abilityCount / 2) * 8;
+        int low = 10 + (Status.abilityCount / 2) * 8;
+        int high = 27 + (Status.abilityCount / 2) * 11;
         int damage = Random.NormalIntRange(low, high);
 
         // Apply Ramp Up damage bonus (5% per stack)
@@ -88,8 +91,8 @@ public class TheEndspeaker extends Mob {
 
     @Override
     public int drRoll() {
-        int low = (Status.abilityCount / 2) * 9;
-        int high = 17 + (Status.abilityCount / 2) * 8;
+        int low = 5 + (Status.abilityCount / 2) * 4;
+        int high = 13 + (Status.abilityCount / 2) * 6;
         return Random.NormalIntRange(low, high);
     }
 
@@ -110,7 +113,7 @@ public class TheEndspeaker extends Mob {
     @Override
     protected boolean canAttack( Char enemy ) {
         if (Status.abilityIncreasedRange) {
-            return this.fieldOfView[enemy.pos] && Dungeon.level.distance(this.pos, enemy.pos) <= 3;
+            return this.fieldOfView[enemy.pos] && Dungeon.level.distance(this.pos, enemy.pos) <= 2;
         }
         return Dungeon.level.adjacent( this.pos, enemy.pos );
     }
@@ -285,7 +288,7 @@ public class TheEndspeaker extends Mob {
 
         // Do the charge with animation
         sprite.visible = Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[chargePos] || Dungeon.level.heroFOV[endPos];
-        sprite.jump(pos, chargePos, new Callback() {
+        sprite.dash(pos, chargePos, new Callback() {
             @Override
             public void call() {
                 // Damage all characters along the path
@@ -321,7 +324,6 @@ public class TheEndspeaker extends Mob {
     private void reduceCooldown() {
         chargeCooldown--;
         spellAbsorptionCooldown--;
-        // Note: rampUpResetCooldown is handled in act() based on attack state
     }
 
     private void addImmunities() {
@@ -336,38 +338,54 @@ public class TheEndspeaker extends Mob {
 
         int lootTier = Status.abilityCount / 2;
         Ankh lootAnkh;
+        dropLoot(new PotionOfExperience());
+        dropLoot(new SanityPotion().quantity(5));
         switch(lootTier) {
             case 1:
                 // 1단계 폼 (2 형태)
-                Dungeon.level.drop(new Certificate(20), pos).sprite.drop(pos);
+                Dungeon.level.drop(new Certificate(25), pos).sprite.drop(pos);
                 dropLoot(new ScrollOfUpgrade());
-                dropLoot(new PotionOfExperience());
+                dropLoot(Generator.random(Generator.Category.EXOTIC_POTION));
+                dropLoot(Generator.random(Generator.Category.EXOTIC_SCROLL));
+                dropLoot(Generator.random(Generator.Category.SKL_T3));
+                dropLoot(new SeaPlatform.LittleHandy().quantity(10));
                 break;
             case 2:
                 // 2딘계 폼 (3 형태)
-                Dungeon.level.drop(new Certificate(30), pos).sprite.drop(pos);
+                Dungeon.level.drop(new Certificate(40), pos).sprite.drop(pos);
                 dropLoot(new ScrollOfUpgrade());
-                dropLoot(new PotionOfExperience());
+                dropLoot(Generator.random(Generator.Category.EXOTIC_POTION));
+                dropLoot(Generator.random(Generator.Category.EXOTIC_SCROLL));
+                dropLoot(Generator.random(Generator.Category.ELIXIR_BREW));
+                dropLoot(Generator.random(Generator.Category.SKL_T2));
+                dropLoot(Generator.random(Generator.Category.SKL_T3));
                 lootAnkh = new Ankh();
                 lootAnkh.bless();
                 dropLoot(lootAnkh);
+                dropLoot(new SeaPlatform.LittleHandy().quantity(10));
                 break;
             case 3:
                 // 3단계 폼 (4 형태)
-                Dungeon.level.drop(new Certificate(40), pos).sprite.drop(pos);
+                Dungeon.level.drop(new Certificate(75), pos).sprite.drop(pos);
                 dropLoot(new ScrollOfUpgrade());
-                dropLoot(new PotionOfExperience());
+                dropLoot(Generator.random(Generator.Category.EXOTIC_POTION));
+                dropLoot(Generator.random(Generator.Category.EXOTIC_SCROLL));
+                dropLoot(Generator.random(Generator.Category.ELIXIR_BREW));
+                dropLoot(Generator.random(Generator.Category.SKL_T2));
+                dropLoot(Generator.random(Generator.Category.SKL_T3));
                 lootAnkh = new Ankh();
                 lootAnkh.bless();
                 dropLoot(lootAnkh);
+                dropLoot(new SeaPlatform.EnhancedLittleHandy());
                 break;
             case 0:
             default:
                 // 기본 폼 (1 형태)
-                Dungeon.level.drop(new Certificate(10), pos).sprite.drop(pos);
-                dropLoot(new PotionOfExperience());
+                Dungeon.level.drop(new Certificate(15), pos).sprite.drop(pos);
+                dropLoot(Generator.random(Generator.Category.POTION));
+                dropLoot(Generator.random(Generator.Category.SCROLL));
+                dropLoot(new SeaPlatform.LittleHandy().quantity(5));
                 break;
-
         }
     }
 
@@ -414,8 +432,8 @@ public class TheEndspeaker extends Mob {
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         spellAbsorptionCooldown = bundle.getInt(SPELL_ABSORPTION_CD);
-        chargeCooldown = bundle.getInt(CHARGE_CD);
-        chargePos = bundle.getInt(CHARGE_POS);
+        chargeCooldown = bundle.contains(CHARGE_CD) ? bundle.getInt(CHARGE_CD) : 3;
+        chargePos = bundle.contains(CHARGE_POS) ? bundle.getInt(CHARGE_POS) : -1;
     }
 
     /**
@@ -439,6 +457,11 @@ public class TheEndspeaker extends Mob {
         @Override
         public void tintIcon(Image icon) {
             icon.hardlight(0xFF9900);
+        }
+
+        @Override
+        public String toString() {
+            return Messages.get(this, "name");
         }
 
         @Override
@@ -505,6 +528,11 @@ public class TheEndspeaker extends Mob {
         @Override
         public void tintIcon(com.watabou.noosa.Image icon) {
             icon.hardlight(0x00FFFF);
+        }
+
+        @Override
+        public String toString() {
+            return Messages.get(this, "name");
         }
 
         @Override
@@ -717,26 +745,38 @@ public class TheEndspeaker extends Mob {
     }
 
     protected static void removeAbility(Mob mob) {
-        EndspeakerAspect ability = null;
         for (EndspeakerAspect buff : mob.buffs(EndspeakerAspect.class)) {
             buff.detach();
         }
     }
 
     protected static void grantAbility(Mob mob) {
-        EndspeakerAspect ability = null;
+        boolean granted = false;
         for (EndspeakerAspect buff : mob.buffs(EndspeakerAspect.class)){
-            if (buff.giveAbility()) TheEndspeaker.Status.abilityCount++;
+            if (buff.giveAbility()) {
+                TheEndspeaker.Status.abilityCount++;
+                granted = true;
+            }
+        }
+        if (granted) {
+            GLog.w(Messages.get(TheEndspeaker.class, "aspect_destroy"));
         }
     }
 
     protected static void empowerRemainingAspect() {
+        boolean empowered = false;
         for (Mob mob : Dungeon.level.mobs) {
             if (mob.isAlive() && (mob instanceof AspectSmall
                     || mob instanceof AspectMedium
                     || mob instanceof AspectLarge)) {
                 Buff.affect(mob, EndspeakerAspect.Empowering.class);
+                empowered = true;
             }
+        }
+        if (empowered) {
+            GLog.w(Messages.get(TheEndspeaker.class, "aspect_die_empower"));
+        } else {
+            GLog.w(Messages.get(TheEndspeaker.class, "aspect_die_last"));
         }
     }
 
@@ -754,14 +794,14 @@ public class TheEndspeaker extends Mob {
         public static Class<? extends MobSprite> getSprite() {
             switch (abilityCount / 2) {
                 case 1:
-                    return Endspeaker1Sprite.class;
-                case 2:
                     return Endspeaker2Sprite.class;
-                case 3:
+                case 2:
                     return Endspeaker3Sprite.class;
+                case 3:
+                    return Endspeaker4Sprite.class;
                 case 0:
                 default:
-                    return Endspeaker4Sprite.class;
+                    return Endspeaker1Sprite.class;
             }
         }
 
@@ -770,7 +810,7 @@ public class TheEndspeaker extends Mob {
         }
 
         public static int getDefense() {
-            return 10 + 7 * (abilityCount / 2);
+            return 10 + 5 * (abilityCount / 2);
         }
 
         public static int getExp() {
@@ -779,6 +819,7 @@ public class TheEndspeaker extends Mob {
 
         public static void spawnAspects(SeaLevel_part2 level) {
             if (Dungeon.depth > 35 && Dungeon.depth < 40) {
+                GLog.w(Messages.get(TheEndspeaker.class, "aspect_spawn"));
                 switch (Dungeon.depth) {
                     case 36:
                         AspectSmall aspectRange = new AspectSmall();
