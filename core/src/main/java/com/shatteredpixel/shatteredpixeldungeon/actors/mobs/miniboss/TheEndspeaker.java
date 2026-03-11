@@ -9,7 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EndspeakerAspect;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NervousImpairment;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NetherseaBrandguider;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SeaLeef;
@@ -46,6 +46,8 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+
+import lombok.Getter;
 
 public class TheEndspeaker extends Mob {
     {
@@ -103,17 +105,20 @@ public class TheEndspeaker extends Mob {
             Buff.affect(this, SpellAbsorptionActive.class);
             spellAbsorptionCooldown = 5;
         }
-        if (Status.abilityHardening && HP < HT / 4) {
+        if (buff(HardeningActive.class) != null) {
             dmg = dmg / 2;
         }
         if (state == PASSIVE) state = HUNTING;
         super.damage(dmg, src);
+        if (Status.abilityHardening && isAlive() && HP < HT / 4) {
+            Buff.affect(this, HardeningActive.class);
+        }
     }
 
     @Override
     protected boolean canAttack( Char enemy ) {
         if (Status.abilityIncreasedRange) {
-            return this.fieldOfView[enemy.pos] && Dungeon.level.distance(this.pos, enemy.pos) <= 2;
+            return this.fieldOfView[enemy.pos] && Dungeon.level.distance(this.pos, enemy.pos) <= 3;
         }
         return Dungeon.level.adjacent( this.pos, enemy.pos );
     }
@@ -134,12 +139,14 @@ public class TheEndspeaker extends Mob {
         int dmg = super.attackProc(enemy, damage);
 
         // Ramp Up: gain stack only on successful hit
-        if (dmg > 0 && Status.abilityRampUp) {
-            RampUpStacks rampBuff = buff(RampUpStacks.class);
-            if (rampBuff == null) {
-                rampBuff = Buff.affect(this, RampUpStacks.class, 3f);
+        if (dmg > 0) {
+            if (Status.abilityRampUp) {
+                Buff.affect(this, RampUpStacks.class).addStack();
             }
-            rampBuff.addStack(); // Adds stack and resets duration to 3
+            Buff.affect(enemy, NervousImpairment.class).sum(Status.getNerveDamage());
+            if (Status.abilityCount > 4) {
+                this.HP = Math.min(HT, this.HP + (int) (dmg * 0.25));
+            }
         }
 
         return dmg;
@@ -156,11 +163,7 @@ public class TheEndspeaker extends Mob {
 
             // Ramp Up: grant stack on successful zap hit
             if (dmg > 0 && Status.abilityRampUp) {
-                RampUpStacks rampBuff = buff(RampUpStacks.class);
-                if (rampBuff == null) {
-                    rampBuff = Buff.affect(this, RampUpStacks.class, 3f);
-                }
-                rampBuff.addStack(); // Adds stack and resets duration to 3
+                Buff.affect(this, RampUpStacks.class).addStack();
             }
 
             if (enemy == Dungeon.hero) {
@@ -196,8 +199,7 @@ public class TheEndspeaker extends Mob {
         }
 
         // Setup charge if conditions are met
-        if (Status.abilityCharge && chargeCooldown <= 0 && enemy != null
-                && !rooted && Dungeon.level.distance(pos, enemy.pos) >= 3) {
+        if (Status.abilityCharge && chargeCooldown <= 0 && enemy != null && !rooted) {
             if (setupCharge()) {
                 return true;
             }
@@ -212,14 +214,24 @@ public class TheEndspeaker extends Mob {
     private boolean setupCharge() {
         if (enemy == null) return false;
 
+        // Verify path to enemy is not blocked by terrain
         Ballistica b = new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID);
-
-        // Check if path is clear enough
-        if (b.collisionPos != enemy.pos && Dungeon.level.distance(pos, b.collisionPos) < 3) {
+        if (b.collisionPos != enemy.pos) {
             return false;
         }
 
-        int targetPos = b.collisionPos;
+        // Target one cell past the enemy in the direction of travel; fall back to enemy's cell
+        int w = Dungeon.level.width();
+        int dx = Integer.signum((enemy.pos % w) - (pos % w));
+        int dy = Integer.signum((enemy.pos / w) - (pos / w));
+        int beyondPos = enemy.pos + dy * w + dx;
+
+        int targetPos;
+        if (beyondPos >= 0 && beyondPos < Dungeon.level.length() && Dungeon.level.passable[beyondPos]) {
+            targetPos = beyondPos;
+        } else {
+            targetPos = enemy.pos;
+        }
 
         // Check if we can land at target
         Char targetChar = Actor.findChar(targetPos);
@@ -440,9 +452,11 @@ public class TheEndspeaker extends Mob {
      * Buff that tracks and displays Ramp Up stacks
      * Duration automatically manages the reset cooldown
      */
-    public static class RampUpStacks extends FlavourBuff {
+    public static class RampUpStacks extends Buff {
 
+        @Getter
         private int stacks = 0;
+        private int turnsWithoutDamage = 0;
 
         {
             type = buffType.POSITIVE;
@@ -469,44 +483,37 @@ public class TheEndspeaker extends Mob {
             return Messages.get(this, "desc", stacks, (int)(stacks * 5));
         }
 
-        /**
-         * Add a stack and reset the duration to 3 turns
-         */
         public void addStack() {
             stacks++;
-            spend(3f - cooldown()); // Reset to 3 turns
-        }
-
-        public int getStacks() {
-            return stacks;
+            turnsWithoutDamage = 0;
         }
 
         @Override
         public boolean act() {
-            // Only tick down when the boss can't attack
-            TheEndspeaker boss = (TheEndspeaker) target;
-            if (boss.enemy == null || !boss.canAttack(boss.enemy)) {
-                spend(TICK);
-                return super.act();
+            turnsWithoutDamage++;
+            if (turnsWithoutDamage >= 3) {
+                detach();
             } else {
-                // Boss is actively attacking, pause the countdown
                 spend(TICK);
-                return true;
             }
+            return true;
         }
 
         private static final String STACKS = "stacks";
+        private static final String TURNS_NO_DMG = "turnsWithoutDamage";
 
         @Override
         public void storeInBundle(Bundle bundle) {
             super.storeInBundle(bundle);
             bundle.put(STACKS, stacks);
+            bundle.put(TURNS_NO_DMG, turnsWithoutDamage);
         }
 
         @Override
         public void restoreFromBundle(Bundle bundle) {
             super.restoreFromBundle(bundle);
             stacks = bundle.getInt(STACKS);
+            turnsWithoutDamage = bundle.getInt(TURNS_NO_DMG);
         }
     }
 
@@ -544,6 +551,55 @@ public class TheEndspeaker extends Mob {
         public boolean act() {
             // This buff is manually controlled, not time-based
             spend(TICK);
+            return true;
+        }
+    }
+
+    /**
+     * Visual indicator buff for Hardening ability — shown while HP < 25% of max
+     */
+    public static class HardeningActive extends Buff {
+
+        {
+            type = buffType.POSITIVE;
+        }
+
+        @Override
+        public int icon() {
+            return BuffIndicator.ARMOR;
+        }
+
+        @Override
+        public void tintIcon(Image icon) {
+            icon.hardlight(0x2244CC);
+        }
+
+        @Override
+        public String toString() {
+            return Messages.get(this, "name");
+        }
+
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc");
+        }
+
+        @Override
+        public void fx(boolean on) {
+            if (on && target.sprite != null) {
+                target.sprite.shieldHalo(0x2244CC);
+            } else if (!on && target.sprite != null) {
+                target.sprite.clearShieldHalo();
+            }
+        }
+
+        @Override
+        public boolean act() {
+            if (target.HP >= target.HT / 4) {
+                detach();
+            } else {
+                spend(TICK);
+            }
             return true;
         }
     }
@@ -759,7 +815,7 @@ public class TheEndspeaker extends Mob {
             }
         }
         if (granted) {
-            GLog.w(Messages.get(TheEndspeaker.class, "aspect_destroy"));
+            Status.pendingDestroyMessage = true;
         }
     }
 
@@ -782,6 +838,8 @@ public class TheEndspeaker extends Mob {
 
     public static class Status {
         public static boolean spawned;
+        public static boolean pendingDestroyMessage;
+        public static boolean spawnMsgShown;
         public static boolean abilitySpellAbsorption;
         public static boolean abilityHardening;
         public static boolean abilityCcImmune;
@@ -806,20 +864,63 @@ public class TheEndspeaker extends Mob {
         }
 
         public static int getMaxHp() {
-            return 700 + 150 * (abilityCount / 2);
+            switch(abilityCount / 2) {
+                case 1:
+                    return 1250;
+                case 2:
+                    return 1750;
+                case 3:
+                    return 2000;
+                case 0:
+                default:
+                    return 750;
+            }
         }
 
         public static int getDefense() {
-            return 10 + 5 * (abilityCount / 2);
+            switch(abilityCount / 2) {
+                case 1:
+                    return 20;
+                case 2:
+                    return 23;
+                case 3:
+                    return 25;
+                case 0:
+                default:
+                    return 10;
+            }
         }
 
         public static int getExp() {
-            return 50 + 25 * (abilityCount / 2);
+            switch(abilityCount / 2) {
+                case 1:
+                    return 100;
+                case 2:
+                    return 125;
+                case 3:
+                    return 200;
+                case 0:
+                default:
+                    return 50;
+            }
+        }
+
+        public static int getNerveDamage() {
+            switch(abilityCount / 2) {
+                case 1:
+                    return 15;
+                case 2:
+                    return 5;
+                case 3:
+                    return 10;
+                case 0:
+                default:
+                    return 2;
+            }
         }
 
         public static void spawnAspects(SeaLevel_part2 level) {
             if (Dungeon.depth > 35 && Dungeon.depth < 40) {
-                GLog.w(Messages.get(TheEndspeaker.class, "aspect_spawn"));
                 switch (Dungeon.depth) {
                     case 36:
                         AspectSmall aspectRange = new AspectSmall();
@@ -893,6 +994,7 @@ public class TheEndspeaker extends Mob {
 
         public static void reset() {
             spawned = false;
+            pendingDestroyMessage = false;
             abilitySpellAbsorption = false;
             abilityHardening = false;
             abilityCcImmune = false;
@@ -900,11 +1002,13 @@ public class TheEndspeaker extends Mob {
             abilityRampUp =false;
             abilityCharge = false;
             abilityCount = 0;
+            spawnMsgShown = false;
         }
 
         private static final String NODE		= "theEndspeakerStatus";
 
         private static final String SPAWNED		= "spawned";
+        private static final String PENDING_DESTROY = "pendingDestroyMessage";
         private static final String ABILITY_SPELL = "abilitySpell";
         private static final String ABILITY_HARDENING = "abilityHardening";
         private static final String ABILITY_CC = "abilityCcImmune";
@@ -912,11 +1016,13 @@ public class TheEndspeaker extends Mob {
         private static final String ABILITY_RAMP = "abilityRamp";
         private static final String ABILITY_CHARGE = "abilityCharge";
         private static final String ABILITY_COUNT = "abilityCount";
+        private static final String SPAWN_MSG = "spawnMsgShown";
 
         public static void storeInBundle( Bundle bundle ) {
             Bundle node = new Bundle();
 
             node.put( SPAWNED, spawned );
+            node.put( PENDING_DESTROY, pendingDestroyMessage );
 
             node.put( ABILITY_SPELL, abilitySpellAbsorption );
             node.put( ABILITY_HARDENING, abilityHardening );
@@ -925,6 +1031,7 @@ public class TheEndspeaker extends Mob {
             node.put( ABILITY_RAMP, abilityRampUp );
             node.put( ABILITY_CHARGE, abilityCharge );
             node.put( ABILITY_COUNT, abilityCount );
+            node.put( SPAWN_MSG, spawnMsgShown );
 
             bundle.put( NODE, node );
         }
@@ -934,6 +1041,7 @@ public class TheEndspeaker extends Mob {
 
             if (!node.isNull()) {
                 spawned = node.getBoolean(SPAWNED);
+                pendingDestroyMessage = node.getBoolean(PENDING_DESTROY);
                 abilitySpellAbsorption = node.getBoolean(ABILITY_SPELL);
                 abilityHardening = node.getBoolean(ABILITY_HARDENING);
                 abilityCcImmune = node.getBoolean(ABILITY_CC);
@@ -941,6 +1049,7 @@ public class TheEndspeaker extends Mob {
                 abilityRampUp = node.getBoolean(ABILITY_RAMP);
                 abilityCharge = node.getBoolean(ABILITY_CHARGE);
                 abilityCount = node.getInt(ABILITY_COUNT);
+                spawnMsgShown = node.getBoolean(SPAWN_MSG);
             }
         }
     }

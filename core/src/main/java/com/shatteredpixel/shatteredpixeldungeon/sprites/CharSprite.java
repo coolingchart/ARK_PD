@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.DarkBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.EmoIcon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.watabou.noosa.Halo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.IceBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
@@ -112,6 +113,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected ShieldHalo shield;
 	protected AlphaTweener invisible;
 	protected Flare aura;
+	protected Halo ring;
 	
 	protected EmoIcon emo;
 	protected CharHealthIndicator health;
@@ -527,6 +529,36 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			aura = null;
 		}
 	}
+
+	public void ring( int color ){
+		if (ring != null){
+			ring.killAndErase();
+		}
+		float radius = (float)Math.sqrt(Math.pow(width()/2f, 2) + Math.pow(height()/2f, 2));
+		ring = new Halo(radius, color, 0.5f);
+		ring.point(x + width/2, y + height/2);
+		parent.addToBack(ring);
+	}
+
+	public void clearRing(){
+		if (ring != null){
+			ring.killAndErase();
+			ring = null;
+		}
+	}
+
+	public void shieldHalo( int color ){
+		if (shield != null) shield.putOut();
+		GameScene.effect( shield = new ShieldHalo( this, color ) );
+	}
+
+	public boolean hasActiveShield(){
+		return shield != null && shield.alive;
+	}
+
+	public void clearShieldHalo(){
+		if (shield != null) shield.putOut();
+	}
 	
 	@Override
 	public void update() {
@@ -559,6 +591,11 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		if (aura != null){
 			aura.visible = visible;
 			aura.point(center());
+		}
+		if (ring != null && ring.alive){
+			ring.visible = visible;
+			ring.point(x + width/2, y + height/2);
+			ring.am = 0.4f + 0.15f * (float)Math.sin(Game.timeTotal * Math.PI);
 		}
 		if (sleeping) {
 			showSleep();
