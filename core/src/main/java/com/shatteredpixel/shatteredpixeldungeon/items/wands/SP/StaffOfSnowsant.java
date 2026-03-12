@@ -14,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -22,6 +23,10 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
 public class StaffOfSnowsant extends Wand {
+    private int min(int lvl) { return 1 + lvl; }
+    private int max(int lvl) { return 7 + lvl * 5; }
+    private int min() { return min(buffedLvl()); }
+    private int max() { return max(buffedLvl()); }
     private static ItemSprite.Glowing COL = new ItemSprite.Glowing(0xFF1493);
     {
         image = ItemSpriteSheet.WAND_SNOWSANT;
@@ -44,13 +49,11 @@ public class StaffOfSnowsant extends Wand {
 
             //bonus damage against INFECTED enemies
             if (ch.properties().contains(Char.Property.INFECTED)) {
-                int bonusDmg = 4 + buffedLvl() * 3;
-                ch.damage(bonusDmg, this);
+                ch.damage(Random.NormalIntRange(min(), max()), this);
             }
 
             if (ch.isAlive()) {
-                //chance to slow, scaling with level
-                if (Random.Int(5 + buffedLvl()) >= 3) {
+                if (Random.Float() < slowChance()) {
                     Buff.affect(ch, Slow.class, 2f + buffedLvl());
                 }
 
@@ -70,8 +73,25 @@ public class StaffOfSnowsant extends Wand {
         if (defender.buff(Silence.class) != null)
         {
             int dmg = damage / 5;
-            defender.damage(dmg, curUser);
+            defender.damage(dmg, attacker);
         }
+    }
+
+    private float slowChance() {
+        if (buffedLvl() >= 10) return 1f;
+        return (float)(0.30 * Math.pow(10.0 / 3.0, buffedLvl() / 10.0));
+    }
+
+    private int slowChancePct() {
+        return Math.round(slowChance() * 100f);
+    }
+
+    @Override
+    public String statsDesc() {
+        if (levelKnown)
+            return Messages.get(this, "stats_desc", min(), max(), slowChancePct());
+        else
+            return Messages.get(this, "stats_desc", min(0), max(0), 30);
     }
 
     private void chainEnemy(Ballistica chain, final Hero hero, final Char enemy ){

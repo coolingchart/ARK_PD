@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.AnnihilationGear;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.StaffKit;
 import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfBreeze;
@@ -184,7 +185,7 @@ public enum HeroClass {
             new StaffOfSuzuran().identify().collect();
             new StaffOfVigna().identify().collect();
             new StaffOfWeedy().identify().collect();
-
+            new StaffKit().collect();
         }
 
 		Dungeon.LimitedDrops.FOOD_BAG.drop();

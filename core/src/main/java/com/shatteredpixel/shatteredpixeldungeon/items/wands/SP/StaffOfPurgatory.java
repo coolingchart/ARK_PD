@@ -37,6 +37,12 @@ public class StaffOfPurgatory extends Wand {
 
         collisionProperties = Ballistica.STOP_TARGET | Ballistica.STOP_SOLID;
     }
+    private int min(int lvl) { return 2 + lvl; }
+    private int max(int lvl) { return 4 + lvl * 3; }
+    private int min() { return min(buffedLvl()); }
+    private int max() { return max(buffedLvl()); }
+    private int aoeDamageRoll() { return Random.NormalIntRange(min(), max()); }
+
     @Override
     protected void onZap( Ballistica bolt ) {
 
@@ -78,11 +84,10 @@ public class StaffOfPurgatory extends Wand {
                 if (!Dungeon.bossLevel() || !(Dungeon.depth>27&&Dungeon.depth<30))  wandattack(ch, beamdis);
 
                 //area damage around both the hero and the swapped target
-                int aoeDmg = 2 + buffedLvl() * 2;
-                aoeBlast(Dungeon.hero.pos, aoeDmg);
-                aoeBlast(ch.pos, aoeDmg);
+                aoeBlast(Dungeon.hero.pos, aoeDamageRoll());
+                aoeBlast(ch.pos, aoeDamageRoll());
 
-                ch.damage(aoeDmg, this);
+                ch.damage(aoeDamageRoll(), this);
                 Buff.affect(ch, Cripple.class, 2 + buffedLvl());
 
             } else {
@@ -135,6 +140,14 @@ public class StaffOfPurgatory extends Wand {
                 }
             }
         }
+    }
+
+    @Override
+    public String statsDesc() {
+        if (levelKnown)
+            return Messages.get(this, "stats_desc", min(), max());
+        else
+            return Messages.get(this, "stats_desc", min(0), max(0));
     }
 
     @Override
