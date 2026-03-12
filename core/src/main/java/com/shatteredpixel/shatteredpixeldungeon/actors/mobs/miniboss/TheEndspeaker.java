@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.miniboss;
 import static com.shatteredpixel.shatteredpixeldungeon.actors.Char.Property.STATIC;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -389,6 +390,7 @@ public class TheEndspeaker extends Mob {
                 lootAnkh.bless();
                 dropLoot(lootAnkh);
                 dropLoot(new SeaPlatform.EnhancedLittleHandy());
+                Badges.validateEndspeakerTier4Kill();
                 break;
             case 0:
             default:
@@ -488,11 +490,20 @@ public class TheEndspeaker extends Mob {
             turnsWithoutDamage = 0;
         }
 
+        public void removeStack() {
+            stacks = stacks - 2;
+            if (stacks <= 0) {
+                detach();
+            } else {
+                spend(TICK);
+            }
+        }
+
         @Override
         public boolean act() {
             turnsWithoutDamage++;
             if (turnsWithoutDamage >= 3) {
-                detach();
+                removeStack();
             } else {
                 spend(TICK);
             }
@@ -866,14 +877,14 @@ public class TheEndspeaker extends Mob {
         public static int getMaxHp() {
             switch(abilityCount / 2) {
                 case 1:
-                    return 1250;
+                    return 1000;
                 case 2:
-                    return 1750;
+                    return 1200;
                 case 3:
-                    return 2000;
+                    return 1500;
                 case 0:
                 default:
-                    return 750;
+                    return 600;
             }
         }
 
