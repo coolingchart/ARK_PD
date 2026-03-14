@@ -238,7 +238,7 @@ public class Badges {
 		Get_40_STONES               ( 257 ),
 		DOLL_COLLECTOR              ( 258 ),
 		SLAIN_PURSUER				( 259 ),
-		SLAIN_ENDSPEAKER_FULL		( 259 ),
+		SLAIN_ENDSPEAKER_FULL		( 260),
 
 		//GREEN
 		SKIN_BABOSKADI              ( 288, false, true ),
