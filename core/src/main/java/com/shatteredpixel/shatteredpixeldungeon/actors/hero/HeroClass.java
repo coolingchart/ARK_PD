@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.StaffKit;
 import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfBreeze;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfCorrupting;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfGreyy;
@@ -171,6 +172,7 @@ public enum HeroClass {
             new Amulet().collect();
             new Heamyo().collect();
             new PlateArmor().identify().upgrade(10).collect();
+            new RingOfSharpshooting().identify().collect();
             new R4C().identify().upgrade(10).collect();
             new ForceCube().quantity(40).collect();
             new TomeOfMastery().collect();

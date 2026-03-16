@@ -546,8 +546,8 @@ public class GunWeapon extends MeleeWeapon {
     }
 
     public String statsInfo() {
-        if (specialBullet > 0) return Messages.get(this, "stats_desc_sp", fireMin(), fireMax(), specialBullet);
-        return Messages.get(this, "stats_desc", fireMin(), fireMax());
+        if (specialBullet > 0) return Messages.get(this, "stats_desc_sp", fireMin(), fireMax(), specialBullet, getMinRange(), getMaxRange());
+        return Messages.get(this, "stats_desc", fireMin(), fireMax(), getMinRange(), getMaxRange());
     }
 
     private static final String BULLET = "bullet";

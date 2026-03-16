@@ -502,6 +502,7 @@ public abstract class Char extends Actor {
 			float phan = 1f - (Dungeon.hero.pointsInTalent(Talent.RESTRICTION) * 0.05f);
 			acuRoll *= phan; }
 		if (attacker.buff(Hallucination.class) != null) acuRoll *= 0.65f;
+		if (attacker.buff(Blindness.class) != null) acuRoll *= 0.75f;
 		for (ChampionEnemy buff : attacker.buffs(ChampionEnemy.class)){
 			acuRoll *= buff.evasionAndAccuracyFactor();
 		}
