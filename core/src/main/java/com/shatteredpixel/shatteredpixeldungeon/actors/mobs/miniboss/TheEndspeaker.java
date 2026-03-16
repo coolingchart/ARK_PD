@@ -13,6 +13,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EndspeakerAspect;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NervousImpairment;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Silence;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NetherseaBrandguider;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SeaLeef;
@@ -195,10 +196,14 @@ public class TheEndspeaker extends Mob {
     protected boolean act() {
         if (state == PASSIVE) return super.act();
 
-        // Execute charge if position is set
-        if (Status.abilityCharge && !isSilenced() && chargePos != -1) {
-            executeCharge();
-            return false;
+        // Execute charge if position is set, cancel if silenced
+        if (Status.abilityCharge && chargePos != -1) {
+            if (isSilenced()) {
+                chargePos = -1;
+            } else {
+                executeCharge();
+                return false;
+            }
         }
 
         // Setup charge if conditions are met
@@ -312,11 +317,14 @@ public class TheEndspeaker extends Mob {
                 // Damage all characters along the path
                 for (int cell : b.path) {
                     Char ch = Actor.findChar(cell);
-                    if (ch != null && ch != TheEndspeaker.this && alignment != ch.alignment) {
+                    if (ch != null && ch != TheEndspeaker.this) {
                         int base = damageRoll();
                         int damage = Random.NormalIntRange(base / 2, base);
                         ch.damage(damage, TheEndspeaker.this);
-                        if (ch.isAlive()) {
+                        if (ch instanceof Hero && !ch.isAlive()) {
+                            Dungeon.fail( getClass() );
+                            GLog.n(Messages.get(Char.class, "kill", name()));
+                        } else if (ch.isAlive()) {
                             Buff.prolong(ch, Cripple.class, 3f);
                         }
                         ch.sprite.flash();

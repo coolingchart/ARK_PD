@@ -1466,9 +1466,10 @@ public class Hero extends Char {
             // 난입 특성
             if (hasTalent(Talent.PHASERUSH)) {
                 SealOfLight Seal = this.belongings.getItem(SealOfLight.class);
-                if (Seal != null)
+                if (Seal != null) {
                     Seal.charge(this, pointsInTalent(Talent.PHASERUSH));
-                Seal.updateQuickslot();
+                    Seal.updateQuickslot();
+                }
             }
             // 카시미어의 기사
             if (hasTalent(Talent.KNIGHT_OF_KAZIMIERZ) && Random.Int(5) == 0) {
