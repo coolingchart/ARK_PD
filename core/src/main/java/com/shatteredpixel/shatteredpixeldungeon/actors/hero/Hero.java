@@ -199,6 +199,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SHISHIOH;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SanktaBet;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Suffering;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewHallsBossLevel;
@@ -445,6 +446,11 @@ public class Hero extends Char {
         STR = bundle.getInt(STRENGTH);
 
         belongings.restoreFromBundle(bundle);
+
+        if (belongings.getItem(ThrowingKnife.class) != null
+                && buff(ThrowingKnife.KnifeSafeguard.class) == null) {
+            Buff.affect(this, ThrowingKnife.KnifeSafeguard.class);
+        }
     }
 
     public static void preview(GamesInProgress.Info info, Bundle bundle) {
@@ -1167,6 +1173,8 @@ public class Hero extends Char {
                             || item instanceof DriedRose.Petal
                             || item instanceof Key) {
                         //Do Nothing
+                    } else if (item instanceof ThrowingKnife && ((ThrowingKnife) item).duplicateDestroyed) {
+                        GLog.i(Messages.get(ThrowingKnife.class, "duplicate"));
                     } else {
 
                         //TODO make all unique items important? or just POS / SOU?
