@@ -352,6 +352,14 @@ public class TheEndspeaker extends Mob {
         spellAbsorptionCooldown--;
     }
 
+    @Override
+    public boolean isImmune(Class effect) {
+        if (effect == Silence.class && !Status.abilityCcImmune) {
+            return false;
+        }
+        return super.isImmune(effect);
+    }
+
     private boolean isSilenced() {
         return buff(Silence.class) != null;
     }
