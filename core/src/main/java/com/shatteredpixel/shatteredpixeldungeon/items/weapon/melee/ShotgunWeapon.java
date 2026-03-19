@@ -29,9 +29,16 @@ public class ShotgunWeapon extends GunWeapon {
                 lvl*(tier-1);        //scaling: between gun (tier-2) and melee (tier+1)
     }
 
+    protected float effectiveCone() {
+        float cone = CONE_DEGREES;
+        if (gunAccessories != null) cone *= gunAccessories.GetCONEcorrectionvalue();
+        return cone;
+    }
+
     protected String coneDesc() {
-        if (CONE_DEGREES <= 45f) return Messages.get(ShotgunWeapon.class, "cone_narrow");
-        if (CONE_DEGREES >= 75f) return Messages.get(ShotgunWeapon.class, "cone_wide");
+        float cone = effectiveCone();
+        if (cone <= 45f) return Messages.get(ShotgunWeapon.class, "cone_narrow");
+        if (cone >= 75f) return Messages.get(ShotgunWeapon.class, "cone_wide");
         return Messages.get(ShotgunWeapon.class, "cone_typical");
     }
 
@@ -56,7 +63,7 @@ public class ShotgunWeapon extends GunWeapon {
         // Scan at long distance so the grid produces many unique direction cells;
         // actual pellet travel is capped to getMaxRange() via rayEndPos()
         float scanDist = getMaxRange() * 3f;
-        float halfCone = CONE_DEGREES / 2f;
+        float halfCone = effectiveCone() / 2f;
 
         // --- Center pellet: far cell in the exact aimed direction ---
         int centerFarCell = angleFarCell(fromP, centerAngle, scanDist, w, h);
