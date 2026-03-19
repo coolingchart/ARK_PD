@@ -128,7 +128,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.ShockingBrew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.Elixir;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAquaticRejuvenation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfDragonsBlood;
@@ -232,7 +231,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KazemaruWeapo
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.LoneJourney;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Ots03;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Pkp;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SG_CQB;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ShadowFirmament;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DeepAbyss;
@@ -252,6 +250,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MetallicUnion
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MidnightSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Naginata;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.NEARL_AXE;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.M870;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.R4C;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RadiantSpear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
@@ -267,6 +266,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SwordofArtorius;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Laevateinn;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Destreza;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cassidy;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Usg;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarJournalist;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WintersScar;
@@ -492,9 +492,10 @@ public class Generator {
                     MidnightSword.class,
                     Halberd.class,
                     FlameKatana.class,
-                    Usg.class
+                    Usg.class,
+                    Cassidy.class
             };
-            WEP_T2.probs = new float[]{4, 5, 4, 4, 4, 5, 3, 4};
+            WEP_T2.probs = new float[]{4, 5, 4, 4, 4, 5, 3, 4, 3};
 
             WEP_T3.classes = new Class<?>[]{
                     Sword.class,
@@ -550,9 +551,10 @@ public class Generator {
                     KRISSVector.class,
                     LoneJourney.class,
                     Echeveria.class,
-                    Suffering.class
+                    Suffering.class,
+                    M870.class
             };
-            WEP_T5.probs = new float[]{4, 3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3};
+            WEP_T5.probs = new float[]{4, 3, 3, 4, 4, 4, 4, 3, 3, 4, 4, 4, 3, 3, 3, 3, 3, 3};
 
             //see Generator.randomArmor
             ARMOR.classes = new Class<?>[]{
