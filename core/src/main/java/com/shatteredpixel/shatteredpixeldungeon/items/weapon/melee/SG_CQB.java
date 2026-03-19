@@ -3,9 +3,9 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class SG_CQB extends ShotgunWeapon {
@@ -42,6 +42,8 @@ public class SG_CQB extends ShotgunWeapon {
 
     @Override
     protected void specialFire(Char ch) {
-        Buff.affect(ch, Slow.class, 3f);
+        Ballistica trajectory = new Ballistica(Dungeon.hero.pos, ch.pos, Ballistica.STOP_TARGET);
+        trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.PROJECTILE);
+        WandOfBlastWave.throwChar(ch, trajectory, 2);
     }
 }

@@ -4,7 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -45,6 +45,6 @@ public class Cassidy extends ShotgunWeapon {
 
     @Override
     protected void specialFire(Char ch) {
-        Buff.affect(ch, Burning.class).reignite(ch, 4f);
+        Buff.affect(ch, Slow.class, 3f);
     }
 }

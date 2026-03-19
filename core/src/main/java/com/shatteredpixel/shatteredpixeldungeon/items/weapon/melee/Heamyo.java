@@ -76,7 +76,6 @@ public class Heamyo extends MeleeWeapon {
             Char existing = Actor.findChar(cell);
             if (existing instanceof Dummy) {
                 existing.die(null);
-                GLog.i("Dummy removed.");
             } else if (existing != null) {
                 GLog.w("Cell occupied by " + existing.getClass().getSimpleName());
             } else if (Dungeon.level.passable[cell] || Dungeon.level.avoid[cell]) {
@@ -84,15 +83,12 @@ public class Heamyo extends MeleeWeapon {
                 dummy.pos = cell;
                 Dungeon.level.occupyCell(dummy);
                 GameScene.add(dummy);
-                GLog.i("Dummy spawned.");
-            } else {
-                GLog.w("Can't place dummy there.");
             }
         }
 
         @Override
         public String prompt() {
-            return "Select a cell to place/remove a Dummy";
+            return "훈련인형 소환/삭제";
         }
     };
 
