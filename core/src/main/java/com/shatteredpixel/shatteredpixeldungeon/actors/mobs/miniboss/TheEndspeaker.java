@@ -1058,6 +1058,26 @@ public class TheEndspeaker extends Mob {
             }
         }
 
+        public static void destroyAspects() {
+            if (!(Dungeon.level instanceof SeaLevel_part2)
+                    || Dungeon.depth < 36 || Dungeon.depth > 38
+                    || Dungeon.level.mobs == null) {
+                return;
+            }
+            ArrayList<Mob> toDestroy = new ArrayList<>();
+            for (Mob mob : Dungeon.level.mobs) {
+                if ((mob instanceof AspectSmall
+                        || mob instanceof AspectMedium
+                        || mob instanceof AspectLarge) && mob.isAlive()) {
+                    toDestroy.add(mob);
+                }
+            }
+            for (Mob mob : toDestroy) {
+                mob.EXP = 0;
+                mob.destroy();
+            }
+        }
+
         private static <T extends EndspeakerAspect> void summonMob(SeaLevel_part2 level, Mob mob, Class<T> ability) {
             if (spawned) {
                 return;
