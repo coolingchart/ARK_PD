@@ -1181,4 +1181,8 @@ public class Dungeon {
 		
 	}
 
+    public static boolean isInRhodes() {
+        return depth >= 27 && depth <= 30;
+    }
+
 }

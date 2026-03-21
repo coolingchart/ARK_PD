@@ -383,7 +383,7 @@ public class InterlevelScene extends PixelScene {
 		}
 
 		Level level;
-        if ((Dungeon.depth >= 27 && Dungeon.depth <= 30)) {
+        if (Dungeon.isInRhodes()) {
             level = handleDescendRhodes();
         } else if (Dungeon.depth >= Statistics.deepestFloor) {
 			level = Dungeon.newLevel();
