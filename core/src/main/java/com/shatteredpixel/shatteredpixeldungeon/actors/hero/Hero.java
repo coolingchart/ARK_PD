@@ -1438,7 +1438,7 @@ public class Hero extends Char {
     @Override
     public int attackProc(final Char enemy, int damage) {
         damage = super.attackProc(enemy, damage);
-        float BounsDamage = 0;
+        float bonusDamage = 0;
 
         KindOfWeapon wep = belongings.weapon;
 
@@ -1450,7 +1450,7 @@ public class Hero extends Char {
 
         if (enemy instanceof Mob) {
             if (((Mob) enemy).surprisedBy(this)) {
-                BounsDamage += damage * (RingOfAssassin.supriseattackbouns(this) - 1f);}
+                bonusDamage += damage * (RingOfAssassin.supriseattackbouns(this) - 1f);}
         }
 
         AnnihilationGear Gear = this.belongings.getItem(AnnihilationGear.class);
@@ -1463,7 +1463,7 @@ public class Hero extends Char {
         if (hasTalent(Talent.WEAKNESS_COVER)) {
             int geardmg = Gear.level();
             geardmg *= Random.IntRange(pointsInTalent(Talent.WEAKNESS_COVER) - 1, 2);
-            BounsDamage += geardmg;
+            bonusDamage += geardmg;
         }
 
         if (buff(RadiantKnight.class) != null) {
@@ -1541,7 +1541,7 @@ public class Hero extends Char {
         }
 
         if (hasTalent(Talent.SAVIOR_BELIEF) && enemy.buff(Roots.class) != null || enemy.buff(Paralysis.class) != null) {
-            BounsDamage = damage * (pointsInTalent(Talent.SAVIOR_BELIEF) * 0.15f);
+            bonusDamage += damage * (pointsInTalent(Talent.SAVIOR_BELIEF) * 0.15f);
         }
 
         if (Dungeon.hero.hasTalent(Talent.SAVIOR_BELIEF)) {
@@ -1579,16 +1579,16 @@ public class Hero extends Char {
         if (heat != null) {
             boolean heatbouns = (heat.power() >= 50f);
             if (heat.state() == Heat.State.OVERHEAT) {
-                BounsDamage += damage * 0.5f;
+                bonusDamage += damage * 0.5f;
                 heatbouns = true;
             }
 
             if (heatbouns && hasTalent(Talent.HEAT_BLOW)) {
-                BounsDamage += damage * (0.05f + (pointsInTalent(Talent.HEAT_BLOW) * 0.05f));
+                bonusDamage += damage * (0.05f + (pointsInTalent(Talent.HEAT_BLOW) * 0.05f));
             }
 
             if (hasTalent(Talent.HEAT_OF_ABSORPTION) && heat.state() == Heat.State.OVERHEAT) {
-                int heal = Math.min(10, (int) ((damage + BounsDamage) * (0.01f + (pointsInTalent(Talent.HEAT_OF_ABSORPTION) * 0.01f))));
+                int heal = Math.min(10, (int) ((damage + bonusDamage) * (0.01f + (pointsInTalent(Talent.HEAT_OF_ABSORPTION) * 0.01f))));
                 if (heal > 0) {
                     HP = Math.min(HP + heal, HT);
                     sprite.showStatus(CharSprite.POSITIVE, "+%dHP", heal);
@@ -1603,7 +1603,7 @@ public class Hero extends Char {
             }
         }
 
-        damage += BounsDamage;
+        damage += bonusDamage;
 
         return damage;
     }
