@@ -95,7 +95,7 @@ public class IsharmlaSeabornHead extends Mob {
             return INFINITE_EVASION;
         }
 
-        else return defenseSkill;
+        else return super.defenseSkill(enemy);
     }
 
     // 사거리 2

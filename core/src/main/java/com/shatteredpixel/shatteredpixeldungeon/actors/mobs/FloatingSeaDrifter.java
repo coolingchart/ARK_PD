@@ -24,6 +24,7 @@ public class FloatingSeaDrifter extends Mob {
             maxLvl = 29;
 
             flying = true;
+            defenseSkill = 50;
 
             loot = Gold.class;
             lootChance = 0.34f;
@@ -58,7 +59,7 @@ public class FloatingSeaDrifter extends Mob {
                 }
             }
 
-            return 50;
+            return super.defenseSkill(enemy);
     }
 
     @Override

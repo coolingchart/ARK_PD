@@ -94,8 +94,10 @@ public class Talu_BlackSnake extends Mob {
 
     @Override
     public int defenseSkill(Char enemy) {
-        if (Dungeon.level.map[this.pos] == Terrain.WATER) return 16;
-        return 32; }
+        if (Dungeon.level.map[this.pos] == Terrain.WATER) this.defenseSkill = 16;
+        else this.defenseSkill = 32;
+        return super.defenseSkill(enemy);
+    }
 
     @Override
     public int drRoll() { return Random.NormalIntRange(0, 20); }
