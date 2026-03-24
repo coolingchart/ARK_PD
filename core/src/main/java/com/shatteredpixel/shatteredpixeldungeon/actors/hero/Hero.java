@@ -1695,9 +1695,8 @@ public class Hero extends Char {
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
                 if (Dungeon.level.adjacent(mob.pos, this.pos) && mob.alignment != Char.Alignment.ALLY) {
                     mob.damage(Math.min(drRoll(), mob.HT / 3), this);
-                    if (!enemy.isAlive() && enemy instanceof Ghoul == false) {
-                        CellEmitter.center(enemy.pos).burst(BlastParticle.FACTORY, 10);
-                        enemy.sprite.killAndErase();
+                    if (!mob.isAlive() && !(mob instanceof Ghoul)) {
+                        CellEmitter.center(mob.pos).burst(BlastParticle.FACTORY, 10);
                     }
                 }
             }
