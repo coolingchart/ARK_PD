@@ -26,7 +26,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
-public class SeaBoss1 extends Mob{
+public class SeaBoss1 extends Mob {
     {
         spriteClass = First_talkSprite.class;
 
@@ -57,7 +57,7 @@ public class SeaBoss1 extends Mob{
     }
 
     @Override
-    public int attackSkill( Char target ) {
+    public int attackSkill(Char target) {
         return 40;
     }
 
@@ -70,9 +70,7 @@ public class SeaBoss1 extends Mob{
     public int attackProc(Char enemy, int damage) {
 
         if (enemy instanceof Hero || enemy instanceof DriedRose.GhostHero) {
-            if (enemy.buff(NervousImpairment.class) == null) {
-                Buff.affect(enemy, NervousImpairment.class);
-            } else enemy.buff(NervousImpairment.class).sum(10);
+            Buff.affect(enemy, NervousImpairment.class).sum(10);
         }
 
         return super.attackProc(enemy, damage);
@@ -84,7 +82,7 @@ public class SeaBoss1 extends Mob{
 
         super.damage(dmg, src);
 
-        if (phase==1 && HP <= 600) {
+        if (phase == 1 && HP <= 600) {
             HP = 600;
             phase = 2;
             GameScene.flash(0x80FF0000);
@@ -114,7 +112,10 @@ public class SeaBoss1 extends Mob{
         return super.act();
     }
 
-    public static class SeaBoss_SkillAttack{};
+    public static class SeaBoss_SkillAttack {
+    }
+
+    ;
 
     boolean Skill() {
         switch (skillProcVaule) {
@@ -150,7 +151,7 @@ public class SeaBoss1 extends Mob{
             SkillActive = false;
         }
 
-        return  true;
+        return true;
     }
 
 
@@ -164,39 +165,39 @@ public class SeaBoss1 extends Mob{
                     int damage = Random.IntRange(13, 19);
                     if (ch != Dungeon.hero) damage /= 4;
                     if (ch == this) damage = 0;
-                    if (ch instanceof SeaObject) damage = Random.IntRange(95,110);
+                    if (ch instanceof SeaObject) damage = Random.IntRange(95, 110);
                     ch.damage(damage, SeaBoss_SkillAttack.class);
 
                     if (ch instanceof Hero || ch instanceof DriedRose.GhostHero) {
-                        if (ch.buff(NervousImpairment.class) == null) {
-                            Buff.affect(ch, NervousImpairment.class);
-                        } else ch.buff(NervousImpairment.class).sum(20);
+                        Buff.affect(ch, NervousImpairment.class).sum(20);
                     }
 
                     if (!ch.isAlive() && ch == Dungeon.hero) {
                         Dungeon.fail(getClass());
                         GLog.n(Messages.get(this, "destroy"));
                     }
-                }}}
+                }
+            }
+        }
     }
 
     @Override
     public void die(Object cause) {
         Badges.validateiberia1();
 
-       // yell(Messages.get(this, "defeated")); 보스 사망 대사
+        // yell(Messages.get(this, "defeated")); 보스 사망 대사
 
 
         GameScene.bossSlain();
         Dungeon.level.unseal();
-        super.die( cause );
+        super.die(cause);
     }
 
     @Override
     public void notice() {
         if (!BossHealthBar.isAssigned()) {
             BossHealthBar.assignBoss(this);
-           // yell(Messages.get(this, "notice"));
+            // yell(Messages.get(this, "notice"));
 
             if (phase == 0) {
                 phase = 1;
@@ -204,18 +205,18 @@ public class SeaBoss1 extends Mob{
         }
     }
 
-    private static final String PHASE   = "phase";
+    private static final String PHASE = "phase";
 
 
     @Override
-    public void storeInBundle( Bundle bundle ) {
-        super.storeInBundle( bundle );
-        bundle.put( PHASE, phase );
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(PHASE, phase);
     }
 
     @Override
-    public void restoreFromBundle( Bundle bundle ) {
-        super.restoreFromBundle( bundle );
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
         phase = bundle.getInt(PHASE);
         BossHealthBar.assignBoss(this);
 

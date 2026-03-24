@@ -11,7 +11,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
-public class SeaReaper extends Mob{
+public class SeaReaper extends Mob {
     {
         spriteClass = Sea_ReaperSprite.class;
 
@@ -38,7 +38,7 @@ public class SeaReaper extends Mob{
     }
 
     @Override
-    public int attackSkill( Char target ) {
+    public int attackSkill(Char target) {
         return 35;
     }
 
@@ -73,12 +73,9 @@ public class SeaReaper extends Mob{
         if (awake) {
 
             for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
-                Char ch = findChar( pos + PathFinder.NEIGHBOURS8[i] );
+                Char ch = findChar(pos + PathFinder.NEIGHBOURS8[i]);
                 if (ch != null && ch.isAlive() && ch.alignment == Alignment.ALLY) {
-                    if (ch.buff(NervousImpairment.class) == null) {
-                        Buff.affect(ch, NervousImpairment.class);
-                    }
-                    ch.buff(NervousImpairment.class).sum(16);
+                    Buff.affect(ch, NervousImpairment.class).sum(16);
                 }
             }
         }
@@ -90,21 +87,21 @@ public class SeaReaper extends Mob{
     private static final String FIRST_HIT = "firstHit";
 
     @Override
-    public void storeInBundle( Bundle bundle ) {
-        super.storeInBundle( bundle );
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
         bundle.put(AWAKE, awake);
         bundle.put(FIRST_HIT, firstHit);
     }
 
     @Override
-    public void restoreFromBundle( Bundle bundle ) {
-        super.restoreFromBundle( bundle );
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
         awake = bundle.getBoolean(AWAKE);
         firstHit = bundle.getBoolean(FIRST_HIT);
     }
 
     @Override
-    public void die( Object cause ) {
+    public void die(Object cause) {
         super.die(cause);
         Dario.Quest.process();
     }

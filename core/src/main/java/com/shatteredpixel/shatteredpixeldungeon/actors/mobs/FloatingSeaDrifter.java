@@ -15,25 +15,25 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_DrifterSprite;
 import com.watabou.utils.Random;
 
 public class FloatingSeaDrifter extends Mob {
-        {
-            spriteClass = Sea_DrifterSprite.class;
+    {
+        spriteClass = Sea_DrifterSprite.class;
 
-            HP = HT = 65;
+        HP = HT = 65;
 
-            EXP = 14;
-            maxLvl = 29;
+        EXP = 14;
+        maxLvl = 29;
 
-            flying = true;
-            defenseSkill = 50;
+        flying = true;
+        defenseSkill = 50;
 
-            loot = Gold.class;
-            lootChance = 0.34f;
-            loot = new SanityPotion();
-            lootChance = 0.1f;
+        loot = Gold.class;
+        lootChance = 0.34f;
+        loot = new SanityPotion();
+        lootChance = 0.1f;
 
-            properties.add(Property.SEA);
-            immunities.add(Paralysis.class);
-        }
+        properties.add(Property.SEA);
+        immunities.add(Paralysis.class);
+    }
 
     @Override
     public int damageRoll() {
@@ -41,7 +41,7 @@ public class FloatingSeaDrifter extends Mob {
     }
 
     @Override
-    public int attackSkill( Char target ) {
+    public int attackSkill(Char target) {
         return 32;
     }
 
@@ -52,28 +52,25 @@ public class FloatingSeaDrifter extends Mob {
 
     @Override
     public int defenseSkill(Char enemy) {
-            if (enemy instanceof Hero) {
-                if (Dungeon.hero.belongings.weapon instanceof MissileWeapon
-                        || Dungeon.hero.belongings.weapon instanceof GunWeapon) {
-                    return 0;
-                }
+        if (enemy instanceof Hero) {
+            if (Dungeon.hero.belongings.weapon instanceof MissileWeapon
+                    || Dungeon.hero.belongings.weapon instanceof GunWeapon) {
+                return 0;
             }
+        }
 
-            return super.defenseSkill(enemy);
+        return super.defenseSkill(enemy);
     }
 
     @Override
     public int attackProc(Char enemy, int damage) {
-        if (enemy.buff(NervousImpairment.class) == null) {
-            Buff.affect(enemy, NervousImpairment.class);
-        }
-        else enemy.buff(NervousImpairment.class).sum(10);
+        Buff.affect(enemy, NervousImpairment.class).sum(10);
 
         return super.attackProc(enemy, damage);
     }
 
     @Override
-    public void die( Object cause ) {
+    public void die(Object cause) {
         super.die(cause);
         Dario.Quest.process();
     }
