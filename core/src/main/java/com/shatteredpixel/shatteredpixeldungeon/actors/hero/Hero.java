@@ -607,7 +607,7 @@ public class Hero extends Char {
         if (Dungeon.hero.hasTalent(Talent.DRAGONS_SWORD)) {
             float bouns = 1f;
             ChenCombo combo = buff(ChenCombo.class);
-            if (combo != null) bouns += combo.getComboCount() * 0.02f;
+            if (combo != null) bouns += Math.min(combo.getComboCount() * 0.02f, pointsInTalent(Talent.DRAGONS_SWORD) * 0.10f);
 
             accuracy *= bouns;
         }
@@ -696,7 +696,7 @@ public class Hero extends Char {
 
         if (buff(IronSkin.class) != null) dr += Random.NormalIntRange(0,2);
 
-        if (hasTalent(Talent.TACTICAL_SHIELD)) {
+        if (hasTalent(Talent.TACTICAL_SHIELD) && belongings.armor != null) {
             int drplus = belongings.armor.buffedLvl() * 2;
             drplus = Math.min(drplus, 1 + pointsInTalent(Talent.TACTICAL_SHIELD) * 3);
             dr += Random.NormalIntRange(0,drplus);
