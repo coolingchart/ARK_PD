@@ -136,7 +136,7 @@ public class KollamSword extends MeleeWeapon {
     @Override
     public String status() {
         if (chargeCap == 100)
-            return Messages.format("%d%%", charge);
+            return Messages.format("%d%%", (int)charge);
         return null;
     }
 

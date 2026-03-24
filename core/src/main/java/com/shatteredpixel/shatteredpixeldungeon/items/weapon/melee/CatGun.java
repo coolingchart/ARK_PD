@@ -121,7 +121,7 @@ public class CatGun extends MeleeWeapon {
         }
         //display as percent
         if (chargeCap == 100)
-            return Messages.format("%d%%", charge);
+            return Messages.format("%d%%", (int)charge);
 
 
         //otherwise, if there's no charge, return null.

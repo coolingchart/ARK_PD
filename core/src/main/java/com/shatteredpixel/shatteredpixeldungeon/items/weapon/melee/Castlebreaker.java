@@ -123,7 +123,7 @@ public class Castlebreaker extends MeleeWeapon {
 	@Override
 	public String status() {
 		if (chargeCap == 100)
-			return Messages.format("%d%%", charge);
+			return Messages.format("%d%%", (int)charge);
 
 
 		//otherwise, if there's no charge, return null.

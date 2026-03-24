@@ -87,9 +87,9 @@ public class MidnightSword extends MeleeWeapon {
             return Messages.get(this, "stats_desc", 2+buffedLvl(),11+buffedLvl()*2);
     }
 
-    public void SPCharge(int n) {
+    public void SPCharge(float n) {
         if (Random.Int(17) < 2) {
-            arts += n;
+            arts += (int)n;
             if (artschargeCap < arts) arts = artschargeCap;
             updateQuickslot();
         }

@@ -105,9 +105,9 @@ public class Longsword extends MeleeWeapon {
 		return Messages.get(this, "stats_desc");
 	}
 
-	public void SPCharge(int n) {
+	public void SPCharge(float n) {
 		if (Random.Int(11) < 2) {
-			arts += n;
+			arts += (int)n;
 			if (artscap < arts) arts = artscap;
 			updateQuickslot();
 		}
