@@ -106,6 +106,7 @@ public class RunicBlade extends MeleeWeapon {
 					Buff.affect(Dungeon.hero, ArtifactRecharge.class).set(6).ignoreHornOfPlenty=false;
 					Sample.INSTANCE.play(Assets.Sounds.SKILL_TEXAS);
 					charge = 0;
+					updateQuickslot();
 
 					Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
 					if (buff != null) buff.detach();

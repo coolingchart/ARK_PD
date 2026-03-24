@@ -492,8 +492,7 @@ public class AnnihilationGear extends Item {
     }
 
     public Weapon.Augment weaponAug() {
-        if (Dungeon.hero.belongings.weapon == null) return Weapon.Augment.NONE;
-        if (Dungeon.hero.belongings.weapon instanceof Pickaxe) return Weapon.Augment.NONE;
+        if (!(Dungeon.hero.belongings.weapon instanceof MeleeWeapon)) return Weapon.Augment.NONE;
         return ((MeleeWeapon) Dungeon.hero.belongings.weapon).augment;
     }
 

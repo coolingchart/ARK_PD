@@ -382,7 +382,9 @@ public class GunWeapon extends MeleeWeapon {
                 effectiveDamage = (int) (effectiveDamage * 1.33f);
             }
 
-            effectiveDamage = Dungeon.hero.attackProc( ch, effectiveDamage );
+            if (triggerTalentProcs) {
+                effectiveDamage = Dungeon.hero.attackProc( ch, effectiveDamage );
+            }
 
             // If the enemy is already dead, interrupt the attack.
             // This matters as defence procs can sometimes inflict self-damage, such as armor glyphs.
@@ -474,24 +476,16 @@ public class GunWeapon extends MeleeWeapon {
 
         Invisibility.dispel();
 
-        // Each source independently checks to save the bullet
-        // If ANY check succeeds, the bullet is saved
+        // Each source independently rolls to save the bullet
         boolean savedBullet = false;
-        int bulletConsumeChance = Random.Int(100);
-        // Check if gun accessories saves the bullet
-        if (gunAccessories != null && gunAccessories.GetSavingChance() >= bulletConsumeChance) {
+        if (gunAccessories != null && Random.Int(100) < gunAccessories.GetSavingChance()) {
             savedBullet = true;
         }
-
-        // Check if frugality talent saves the bullet
         if (closerRange != null && closerRange.state() && Dungeon.hero.hasTalent(Talent.FRUGALITY)
-            && Dungeon.hero.pointsInTalent(Talent.FRUGALITY) * 15 >= bulletConsumeChance) {
+            && Random.Int(100) < Dungeon.hero.pointsInTalent(Talent.FRUGALITY) * 15) {
             savedBullet = true;
         }
-
-        // Check if ring of sharpshooting saves the bullet
-        float ammoMult = RingOfSharpshooting.ammoMultiplier(Dungeon.hero);
-        if (ammoMult > 0f && ammoMult * 100f >= bulletConsumeChance) {
+        if (Random.Float() < RingOfSharpshooting.ammoMultiplier(Dungeon.hero)) {
             savedBullet = true;
         }
 

@@ -85,38 +85,34 @@ public class RandomBox extends Item {
 
     public void getWeapon() {
         int chance = Random.IntRange(0, 50);
-
         chance += Random.IntRange(-5, Dungeon.hero.STR);
-        chance += Random.IntRange(0, Dungeon.hero.belongings.weapon != null ? Dungeon.hero.belongings.weapon.buffedLvl() * 8 : 0);
-
-        Weapon n;
-
-        if (chance > 65) {
-            Generator.Category c = Generator.wepTiers[4];
-            n = (MeleeWeapon) Reflection.newInstance(c.classes[Random.chances(c.probs)]);
-        } else if (chance > 50) {
-            Generator.Category c = Generator.wepTiers[3];
-            n = (MeleeWeapon) Reflection.newInstance(c.classes[Random.chances(c.probs)]);
-        } else if (chance > 35) {
-            Generator.Category c = Generator.wepTiers[2];
-            n = (MeleeWeapon) Reflection.newInstance(c.classes[Random.chances(c.probs)]);
-        } else {
-            Generator.Category c = Generator.wepTiers[1];
-            n = (MeleeWeapon) Reflection.newInstance(c.classes[Random.chances(c.probs)]);
+        if (Dungeon.hero.belongings.weapon != null) {
+            chance += Random.IntRange(0, Dungeon.hero.belongings.weapon.buffedLvl() * 8);
         }
 
-        int upchacne = Random.IntRange(0, 25);
+        //determine weapon tier based on roll
+        int tier;
+        if      (chance > 65) tier = 4;
+        else if (chance > 50) tier = 3;
+        else if (chance > 35) tier = 2;
+        else                  tier = 1;
 
-        upchacne += Random.IntRange(-10, Dungeon.depth);
-        upchacne += Random.IntRange(-5, Dungeon.hero.belongings.armor != null ? Dungeon.hero.belongings.armor.buffedLvl() * 3 : 0);
+        Generator.Category c = Generator.wepTiers[tier];
+        Weapon n = (MeleeWeapon) Reflection.newInstance(c.classes[Random.chances(c.probs)]);
 
-        if (upchacne > 35) n.level(4);
-        else if (upchacne > 20) n.level(3);
-        else if (upchacne > 12) n.level(2);
-        else if (upchacne < -8) n.level(-2);
-        else if (upchacne < 0) n.level(1);
-        else n.level(0);
+        //determine upgrade level based on depth + armor
+        int upChance = Random.IntRange(0, 25);
+        upChance += Random.IntRange(-10, Dungeon.depth);
+        if (Dungeon.hero.belongings.armor != null) {
+            upChance += Random.IntRange(-5, Dungeon.hero.belongings.armor.buffedLvl() * 3);
+        }
 
+        if      (upChance > 35)  n.level(4);
+        else if (upChance > 20)  n.level(3);
+        else if (upChance > 12)  n.level(2);
+        else if (upChance < -8)  n.level(-2);
+        else if (upChance < 0)   n.level(-1);
+        else                     n.level(0);
 
         Dungeon.level.drop(n, Dungeon.hero.pos).sprite.drop(Dungeon.hero.pos);
     }
