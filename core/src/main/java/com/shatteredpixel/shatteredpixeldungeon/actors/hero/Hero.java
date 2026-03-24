@@ -589,7 +589,7 @@ public class Hero extends Char {
 
         if (hasTalent(Talent.PEGASUS_AURA) && buff(RadiantKnight.class) != null) {
             float bouns = 1f;
-            bouns += pointsInTalent(Talent.PEGASUS_AURA) / 10;
+            bouns += pointsInTalent(Talent.PEGASUS_AURA) / 10f;
 
             accuracy *= bouns;
         }
