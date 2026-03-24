@@ -1744,7 +1744,7 @@ public class Hero extends Char {
 
         // 첸 특성
 
-        if (hasTalent(Talent.SCOLDING) && buffs(Talent.ScoldingCooldown.class) == null && HT / 2 >= HP) {
+        if (hasTalent(Talent.SCOLDING) && buff(Talent.ScoldingCooldown.class) == null && HT / 2 >= HP) {
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
                 if (mob.alignment != Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]) {
                     Buff.prolong(mob, Amok.class, pointsInTalent(Talent.SCOLDING));
