@@ -297,6 +297,7 @@ public class IsharmlaSeabornHead extends Mob {
         bundle.put(WAVE_COOLDOWN, waveCooldown);
     }
 
+    @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
 

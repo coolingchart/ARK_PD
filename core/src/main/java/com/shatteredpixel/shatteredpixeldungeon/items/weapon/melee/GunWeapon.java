@@ -553,7 +553,6 @@ public class GunWeapon extends MeleeWeapon {
     private static final String SP = "spshot";
     private static final String SP_BULLET_COUNT = "spBulletCount";
     private static final String ACCESSORIES = "GunAccessories";
-    private static final String SPECIAL_FIRE = "specialFire";
 
     @Override
     public void storeInBundle(Bundle bundle) {

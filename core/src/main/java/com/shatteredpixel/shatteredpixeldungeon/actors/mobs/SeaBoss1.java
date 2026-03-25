@@ -115,8 +115,6 @@ public class SeaBoss1 extends Mob {
     public static class SeaBoss_SkillAttack {
     }
 
-    ;
-
     boolean Skill() {
         switch (skillProcVaule) {
             case 0:
@@ -206,19 +204,29 @@ public class SeaBoss1 extends Mob {
     }
 
     private static final String PHASE = "phase";
-
+    private static final String SKILL_ACTIVE = "skillActive";
+    private static final String SKILL_CD = "skillCD";
+    private static final String SKILL_POINT = "skillAttackPoint1";
+    private static final String SKILL_PROC = "skillProcVaule";
 
     @Override
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
         bundle.put(PHASE, phase);
+        bundle.put(SKILL_ACTIVE, SkillActive);
+        bundle.put(SKILL_CD, skillCD);
+        bundle.put(SKILL_POINT, skillAttackPoint1);
+        bundle.put(SKILL_PROC, skillProcVaule);
     }
 
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         phase = bundle.getInt(PHASE);
+        SkillActive = bundle.getBoolean(SKILL_ACTIVE);
+        skillCD = bundle.getInt(SKILL_CD);
+        skillAttackPoint1 = bundle.getInt(SKILL_POINT);
+        skillProcVaule = bundle.getInt(SKILL_PROC);
         BossHealthBar.assignBoss(this);
-
     }
 }
