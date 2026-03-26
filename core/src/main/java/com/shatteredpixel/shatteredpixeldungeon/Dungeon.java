@@ -986,6 +986,7 @@ public class Dungeon {
         updateLevelExplored();
         Statistics.gameWon = true;
         Badges.validateChenUnlock();
+        Badges.saveGlobal();
         hero.belongings.identify();
 
         Rankings.INSTANCE.submit(true, cause);
