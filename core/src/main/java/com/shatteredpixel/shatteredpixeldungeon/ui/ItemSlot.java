@@ -121,7 +121,7 @@ public class ItemSlot extends Button {
 		if (status != null) {
 			status.measure();
 			float availW = width - (margin.left + margin.right);
-			float extraW = (extra != null && extra.width() > 0) ? extra.width() : 0;
+			float extraW = (extra != null && extra.parent != null && extra.width() > 0) ? extra.width() : 0;
 			float targetW = availW - extraW;
             if (status.width > targetW * 0.75f){
                 status.scale.set(PixelScene.align(
