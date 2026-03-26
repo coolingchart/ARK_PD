@@ -404,13 +404,13 @@ public class GunWeapon extends MeleeWeapon {
             if (triggerTalentProcs && specialFire) {
                 specialFire(ch);
             }
-            if (this instanceof C1_9mm) {
-                if (Random.Int(8) == 0) Buff.affect(ch, Chill.class, 2f);
-            }
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
 
             if (triggerTalentProcs) {
+                if (this instanceof C1_9mm) {
+                    if (Random.Int(8) == 0) Buff.affect(ch, Chill.class, 2f);
+                }
                 // 사격 그레이스롯 판정
                 int bonusTurns = Dungeon.hero.hasTalent(Talent.SHARED_UPGRADES) ? this.buffedLvl() : 0;
                 if (Dungeon.hero.subClass == HeroSubClass.SNIPER) Buff.prolong(Dungeon.hero, SnipersMark.class, SnipersMark.DURATION).set(ch.id(), bonusTurns);
