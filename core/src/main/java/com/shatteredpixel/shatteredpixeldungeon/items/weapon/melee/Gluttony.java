@@ -78,7 +78,7 @@ public class Gluttony extends MeleeWeapon {
             else {
                 Buff.affect(hero, Roots.class, 5f);
                 cursedKnown = true;
-                charge -= 50;
+                charge = Math.max(0, charge - 50);
                 Invisibility.dispel();
                 updateQuickslot();
                 hero.spendAndNext(1f);

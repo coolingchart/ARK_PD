@@ -61,7 +61,9 @@ public class FloatingSeaDrifter extends Mob {
 
     @Override
     public int attackProc(Char enemy, int damage) {
-        Buff.affect(enemy, NervousImpairment.class).sum(10);
+        if (enemy.alignment == Alignment.ALLY) {
+            Buff.affect(enemy, NervousImpairment.class).sum(10);
+        }
 
         return super.attackProc(enemy, damage);
     }

@@ -80,7 +80,7 @@ public class Sea_Octo extends Mob {
 
         if (Dungeon.depth == 39) ndamage /= 2;
 
-        if (enemy instanceof Hero || enemy instanceof DriedRose.GhostHero) {
+        if (enemy.alignment == Alignment.ALLY) {
             Buff.affect(enemy, NervousImpairment.class).sum(ndamage);
         }
 

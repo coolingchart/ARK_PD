@@ -73,7 +73,7 @@ public class Gamzashield extends MeleeWeapon {
 
         super.execute(hero, action);
 
-        if (action.equals(AC_ZAP)) {
+        if (action.equals(AC_ZAP) && isEquipped(hero)) {
             curUser = hero;
             curItem = this;
             GameScene.selectCell(zapper);

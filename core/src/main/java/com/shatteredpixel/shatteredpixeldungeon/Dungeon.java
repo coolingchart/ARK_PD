@@ -795,7 +795,6 @@ public class Dungeon {
 
         Actor.clear();
         Actor.restoreNextID(bundle);
-        Actor.restoreNextID(bundle);
 
         quickslot.reset();
         QuickSlotButton.reset();

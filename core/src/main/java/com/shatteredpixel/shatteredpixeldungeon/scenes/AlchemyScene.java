@@ -412,7 +412,7 @@ public class AlchemyScene extends PixelScene {
 			RectF insets = getCommonInsets();
 			int h = (int)(Camera.main.height - insets.top - insets.bottom);
 			energyLeft.setPos(
-					(Camera.main.width - energyLeft.width())/2,
+					centerW - energyLeft.width()/2,
 					insets.top + h - 8 - energyLeft.height()
 			);
 			

@@ -1,11 +1,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NervousImpairment;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Dario;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SanityPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.Sea_ReaperSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -21,8 +23,6 @@ public class SeaReaper extends Mob {
         EXP = 15;
         maxLvl = 31;
 
-        loot = new PotionOfHealing();
-        lootChance = 0.17f;
         loot = new SanityPotion();
         lootChance = 0.1f;
 
@@ -81,6 +81,15 @@ public class SeaReaper extends Mob {
         }
 
         return super.act();
+    }
+
+    @Override
+    public void rollToDropLoot() {
+        float healChance = 0.17f * RingOfWealth.dropChanceMultiplier(Dungeon.hero);
+        if (Dungeon.hero.lvl <= maxLvl + 2 && Random.Float() < healChance) {
+            Dungeon.level.drop(new PotionOfHealing(), pos).sprite.drop();
+        }
+        super.rollToDropLoot();
     }
 
     private static final String AWAKE = "awake";

@@ -69,7 +69,7 @@ public class SeaBoss1 extends Mob {
     @Override
     public int attackProc(Char enemy, int damage) {
 
-        if (enemy instanceof Hero || enemy instanceof DriedRose.GhostHero) {
+        if (enemy.alignment == Alignment.ALLY) {
             Buff.affect(enemy, NervousImpairment.class).sum(10);
         }
 
@@ -166,7 +166,7 @@ public class SeaBoss1 extends Mob {
                     if (ch instanceof SeaObject) damage = Random.IntRange(95, 110);
                     ch.damage(damage, SeaBoss_SkillAttack.class);
 
-                    if (ch instanceof Hero || ch instanceof DriedRose.GhostHero) {
+                    if (ch.alignment == Alignment.ALLY) {
                         Buff.affect(ch, NervousImpairment.class).sum(20);
                     }
 

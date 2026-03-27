@@ -293,7 +293,6 @@ public class AnnihilationGear extends Item {
 
         @Override
         protected void onThrow(int cell) {
-            Char enemy = Actor.findChar(cell);
             parent = null;
             Splash.at(cell, 0xCC99FFFF, 1);
             isHit(cell);

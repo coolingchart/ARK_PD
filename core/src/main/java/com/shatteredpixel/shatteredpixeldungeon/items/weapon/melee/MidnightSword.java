@@ -70,7 +70,7 @@ public class MidnightSword extends MeleeWeapon {
 
         super.execute(hero, action);
 
-        if (action.equals(AC_ZAP) && arts > 0) {
+        if (action.equals(AC_ZAP) && arts > 0 && isEquipped(hero)) {
             if (this.cursed != true) {
                 cursedKnown = true;
                 GameScene.selectCell(zapper);
