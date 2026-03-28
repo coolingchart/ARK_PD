@@ -20,6 +20,7 @@ public class Ots03 extends GunWeapon {
         hitSoundPitch = 0.9f;
 
         FIRE_DELAY_MULT = 2f;
+        RELOAD_DELAY = 3f;
         bulletMax = 16;
         MIN_RANGE = 3;
         MAX_RANGE = 999;

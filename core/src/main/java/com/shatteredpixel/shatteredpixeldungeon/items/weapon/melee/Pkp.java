@@ -15,6 +15,7 @@ public class Pkp extends GunWeapon {
         hitSoundPitch = 0.9f;
 
         FIRE_DELAY_MULT = 0.5f;
+        RELOAD_DELAY = 3f;
         bulletMax = 101;
         MIN_RANGE = 1;
         MAX_RANGE = 4;
