@@ -224,7 +224,7 @@ public class SeaBoss1 extends Mob {
         super.restoreFromBundle(bundle);
         phase = bundle.getInt(PHASE);
         SkillActive = bundle.getBoolean(SKILL_ACTIVE);
-        skillCD = bundle.getInt(SKILL_CD);
+        if (bundle.contains(SKILL_CD)) skillCD = bundle.getInt(SKILL_CD);
         skillAttackPoint1 = bundle.getInt(SKILL_POINT);
         skillProcVaule = bundle.getInt(SKILL_PROC);
         BossHealthBar.assignBoss(this);

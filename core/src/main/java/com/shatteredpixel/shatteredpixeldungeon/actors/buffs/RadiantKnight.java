@@ -47,8 +47,8 @@ public class RadiantKnight extends FlavourBuff {
 
         if (target instanceof Hero) {
             Hero hero = (Hero) target;
-            if (hero.heroClass == HeroClass.NEARL && hero.CharSkin == 0) {
-                ((HeroSprite) target.sprite).spearForm = on;
+            if (hero.heroClass == HeroClass.NEARL) {
+                ((HeroSprite) target.sprite).spearForm = on && hero.CharSkin == 0;
                 ((HeroSprite) target.sprite).updateArmor();
             }
         }
