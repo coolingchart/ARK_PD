@@ -58,7 +58,7 @@ public class GunWeapon extends MeleeWeapon {
     protected int bulletTier = 3;
 
     protected int bulletMax = 25;
-    protected int bullet = Random.Int(bulletMax / 2, bulletMax + 1);
+    protected int bullet = 0;
     protected int specialBullet = 0;
     protected boolean specialFire = false; // 특수 사격 여부
     protected boolean gamza = false; // 썬더볼트 장착 여부
@@ -238,7 +238,7 @@ public class GunWeapon extends MeleeWeapon {
 
         if (action.equals(AC_RELOAD)) {
             curUser = hero;
-            GameScene.selectItem(itemSelector, WndBag.Mode.MISSILEWEAPON, Messages.get(this, "prompt"));
+            GameScene.selectItem(itemSelector, WndBag.Mode.MISSILEWEAPON, Messages.get(this, "reload_prompt"));
             QuickSlotButton.cancel();
         }
 
