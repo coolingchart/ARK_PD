@@ -27,8 +27,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
-import com.shatteredpixel.shatteredpixeldungeon.TomorrowRogueNight;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.TomorrowRogueNight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Alchemy;
@@ -59,7 +59,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.IronSkin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.KnightSKILL;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldSlamCounter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LanceCharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
@@ -68,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RadiantKnight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SeethingBurst;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldSlamCounter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SpikesBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.StomeCharge;
@@ -104,6 +104,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.Fate;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.FierceGlare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.FoodPrep;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.Hikari;
+import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.HotBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.LiveStart;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.Panorama;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.PhantomMirror;
@@ -125,7 +126,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.DeepSeaPredators
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.Dreamland;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.EmergencyDefibrillator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.FlashShield;
-import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK1.HotBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.Genesis;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.Jackinthebox;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SK2.LandingStrike;
@@ -205,6 +205,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewHallsBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
@@ -348,7 +349,8 @@ public class Hero extends Char {
         if (boostHP) {
             HP += Math.max(HT - curHT, 0);
         }
-        if (Dungeon.isChallenged(Challenges.SPECIAL_BOSS) && Dungeon.mboss14 == 1 && Dungeon.depth == 25 && Dungeon.bossLevel() && Dungeon.talucount < 4) HT /= 2;
+        if (Dungeon.isChallenged(Challenges.SPECIAL_BOSS) && Dungeon.mboss14 == 1 && Dungeon.depth == 25 && Dungeon.bossLevel() && Dungeon.talucount < 4)
+            HT /= 2;
 
         if (hasTalent(Talent.KNIGHT_BODY)) {
             HT += pointsInTalent(Talent.KNIGHT_BODY) * 10;
@@ -607,7 +609,8 @@ public class Hero extends Char {
         if (Dungeon.hero.hasTalent(Talent.DRAGONS_SWORD)) {
             float bouns = 1f;
             ChenCombo combo = buff(ChenCombo.class);
-            if (combo != null) bouns += Math.min(combo.getComboCount() * 0.02f, pointsInTalent(Talent.DRAGONS_SWORD) * 0.10f);
+            if (combo != null)
+                bouns += Math.min(combo.getComboCount() * 0.02f, pointsInTalent(Talent.DRAGONS_SWORD) * 0.10f);
 
             accuracy *= bouns;
         }
@@ -694,30 +697,30 @@ public class Hero extends Char {
             dr += Random.NormalIntRange(0, 2 * pointsInTalent(Talent.HOLD_FAST));
         }
 
-        if (buff(IronSkin.class) != null) dr += Random.NormalIntRange(0,2);
+        if (buff(IronSkin.class) != null) dr += Random.NormalIntRange(0, 2);
 
         if (hasTalent(Talent.TACTICAL_SHIELD) && belongings.armor != null) {
             int drplus = belongings.armor.buffedLvl() * 2;
             drplus = Math.min(drplus, 1 + pointsInTalent(Talent.TACTICAL_SHIELD) * 3);
-            dr += Random.NormalIntRange(0,drplus);
+            dr += Random.NormalIntRange(0, drplus);
         }
 
         if (hasTalent(Talent.SHIELD_OF_LIGHT)) {
             int drplus_n = pointsInTalent(Talent.SHIELD_OF_LIGHT);
-            if (HP <= HT/2) drplus_n*=2;
-            dr += Random.NormalIntRange(0,drplus_n);
+            if (HP <= HT / 2) drplus_n *= 2;
+            dr += Random.NormalIntRange(0, drplus_n);
         }
 
         if (hasTalent(Talent.GUILT)) {
             int kill = (90 - pointsInTalent(Talent.GUILT) * 10);
             int bounsDR;
             bounsDR = Math.min(Statistics.enemiesSlain / kill, 15);
-            dr += Random.NormalIntRange(0,bounsDR);
+            dr += Random.NormalIntRange(0, bounsDR);
         }
 
         if (hasTalent(Talent.PARING)) {
             int drplus = pointsInTalent(Talent.PARING);
-            dr += Random.NormalIntRange(0,drplus);
+            dr += Random.NormalIntRange(0, drplus);
         }
 
         return dr;
@@ -779,7 +782,6 @@ public class Hero extends Char {
             spup = berserk.getPower() / 1.3f;
 
         spup = Math.min(spup, 0.3f + (float) Dungeon.hero.pointsInTalent(Talent.BERSERKING_STAMINA) / 5);
-
 
 
         // 쪽냥이 수호
@@ -882,8 +884,7 @@ public class Hero extends Char {
         WildMark mark = buff(WildMark.class);
         if (mark != null) {
             mark.Charged(time);
-        }
-        else if (subClass == HeroSubClass.WILD) Buff.affect(this, WildMark.class);
+        } else if (subClass == HeroSubClass.WILD) Buff.affect(this, WildMark.class);
 
         if (Dungeon.depth > 35 && Dungeon.extrastage_Sea && Dungeon.level.seaTerrors.get(pos) != null) {
             Dungeon.level.seaTerrors.get(pos).spendTime(this, time);
@@ -892,26 +893,32 @@ public class Hero extends Char {
         if (belongings.weapon instanceof PatriotSpear) {
             if (belongings.armor instanceof PlateArmor) {
                 if (belongings.getItem(RingOfMight.class) != null && belongings.getItem(RingOfTenacity.class) != null) {
-                    if (belongings.getItem(RingOfTenacity.class).isEquipped(this) && belongings.getItem(RingOfMight.class).isEquipped(this)){
+                    if (belongings.getItem(RingOfTenacity.class).isEquipped(this) && belongings.getItem(RingOfMight.class).isEquipped(this)) {
                         for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
                             if (Dungeon.level.adjacent(mob.pos, pos) && mob.alignment != Char.Alignment.ALLY && !mob.properties().contains(Property.NPC)
                                     && !(mob instanceof Shopkeeper) && !(mob instanceof ImpShopkeeper)) {
-                                mob.sprite.emitter().burst( ShadowParticle.CURSE, 15);
+                                mob.sprite.emitter().burst(ShadowParticle.CURSE, 15);
                                 Buff.affect(mob, Hex.class, 3f);
                                 int dmg = mob.HP / 8;
                                 dmg = Math.min(dmg, 30);
                                 dmg = Math.max(3, dmg);
-                                mob.damage( dmg, this );
+                                mob.damage(dmg, this);
                             }
                         }
-                        this.sprite.emitter().burst( ShadowParticle.UP, 2);
-                    }}}}
+                        this.sprite.emitter().burst(ShadowParticle.UP, 2);
+                    }
+                }
+            }
+        }
 
         if (belongings.weapon instanceof Gluttony) {
-            if (Random.Int(6) == 0) ((Gluttony) belongings.weapon).SPCharge(1); }
+            if (Random.Int(6) == 0) ((Gluttony) belongings.weapon).SPCharge(1);
+        }
 
-        if (belongings.weapon instanceof Echeveria && STR() >= ((Echeveria) belongings.weapon).STRReq()) ((Echeveria) belongings.weapon).SPCharge(time);
-        if (belongings.weapon instanceof Suffering && STR() >= ((Suffering) belongings.weapon).STRReq()) ((Suffering) belongings.weapon).SPCharge(2f*time);
+        if (belongings.weapon instanceof Echeveria && STR() >= ((Echeveria) belongings.weapon).STRReq())
+            ((Echeveria) belongings.weapon).SPCharge(time);
+        if (belongings.weapon instanceof Suffering && STR() >= ((Suffering) belongings.weapon).STRReq())
+            ((Suffering) belongings.weapon).SPCharge(2f * time);
 
         if (subClass == HeroSubClass.HEAT) {
             Heat heat = buff(Heat.class);
@@ -923,9 +930,11 @@ public class Hero extends Char {
         for (int cell = 0; cell < PathFinder.distance.length; cell++) {
             if (PathFinder.distance[cell] < Integer.MAX_VALUE) {
                 Char ch = Actor.findChar(cell);
-                if (ch != null&& !(ch instanceof Hero) && ch.alignment == Char.Alignment.ENEMY) {
-                    Buff.detach(Dungeon.hero, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Camouflage.class); }}}
-
+                if (ch != null && !(ch instanceof Hero) && ch.alignment == Char.Alignment.ENEMY) {
+                    Buff.detach(Dungeon.hero, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Camouflage.class);
+                }
+            }
+        }
 
 
         super.spend(time);
@@ -1101,8 +1110,7 @@ public class Hero extends Char {
                         GameScene.show(new WndTradeItem(heap));
                     }
                 });
-            }
-            else if (heap != null && heap.type == Type.FOR_SALE_28F && heap.size() == 1) {
+            } else if (heap != null && heap.type == Type.FOR_SALE_28F && heap.size() == 1) {
                 Game.runOnRenderThread(new Callback() {
                     @Override
                     public void call() {
@@ -1328,7 +1336,8 @@ public class Hero extends Char {
             buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
             if (buff != null) buff.detach();
 
-
+            LevelTransition transition = Dungeon.level.getTransition(pos);
+            InterlevelScene.curTransition = transition;
             InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
             Game.switchScene(InterlevelScene.class);
 
@@ -1355,34 +1364,29 @@ public class Hero extends Char {
             //TODO this is slightly brittle, it assumes there are no disjointed sets of entrance tiles
         } else if (Dungeon.level.locked) {
             ready();
-            return false;}
-        else if (Dungeon.level.map[pos] == Terrain.ENTRANCE) {
-            if (Dungeon.depth == 1) {
-                curAction = null;
+            return false;
+        } else if (Dungeon.level.map[pos] == Terrain.ENTRANCE) {
 
-                Buff buff = buff(TimekeepersHourglass.timeFreeze.class);
-                if (buff != null) buff.detach();
-                buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-                if (buff != null) buff.detach();
+            curAction = null;
 
-                else InterlevelScene.mode = InterlevelScene.Mode.DESCEND_27;
-                Game.switchScene(InterlevelScene.class);
+            Buff buff = buff(TimekeepersHourglass.timeFreeze.class);
+            if (buff != null) buff.detach();
+            buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+            if (buff != null) buff.detach();
 
-                return true;
+            LevelTransition transition = Dungeon.level.getTransition(pos);
+            InterlevelScene.curTransition = transition;
+
+            //use transition type to determine direction
+            if (transition != null && (transition.type == LevelTransition.Type.BRANCH_EXIT
+                    || transition.type == LevelTransition.Type.REGULAR_EXIT)) {
+                InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
             } else {
-                curAction = null;
-
-                Buff buff = buff(TimekeepersHourglass.timeFreeze.class);
-                if (buff != null) buff.detach();
-                buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-                if (buff != null) buff.detach();
-
-                if (Dungeon.depth != 27) InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
-                else InterlevelScene.mode = InterlevelScene.Mode.ASCEND_27;
-                Game.switchScene(InterlevelScene.class);
-
-                return true;
+                InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
             }
+            Game.switchScene(InterlevelScene.class);
+
+            return true;
         } else if (getCloser(stairs)) {
 
             return true;
@@ -1450,7 +1454,8 @@ public class Hero extends Char {
 
         if (enemy instanceof Mob) {
             if (((Mob) enemy).surprisedBy(this)) {
-                bonusDamage += damage * (RingOfAssassin.supriseattackbouns(this) - 1f);}
+                bonusDamage += damage * (RingOfAssassin.supriseattackbouns(this) - 1f);
+            }
         }
 
         AnnihilationGear Gear = this.belongings.getItem(AnnihilationGear.class);
@@ -1569,7 +1574,7 @@ public class Hero extends Char {
         if (buff(SoulAbsorption.SoulBuff.class) != null) {
             Buff.detach(this, SoulAbsorption.SoulBuff.class);
 
-            int barr = Math.min(5 + HT /6, 2 + (damage/3));
+            int barr = Math.min(5 + HT / 6, 2 + (damage / 3));
             Buff.affect(this, Barrier.class).incShield(barr);
         }
 
@@ -1681,11 +1686,13 @@ public class Hero extends Char {
                             CellEmitter.center(enemy.pos).burst(BlastParticle.FACTORY, 10);
                         }
                         Gear.discharge();
-                        }
+                    }
                 }
                 if (buff(Barrier.class) == null) {
-                if (2 + Dungeon.hero.pointsInTalent(Talent.BARRIER_REPAIR) > Random.Int(20) && Gear.charge < Gear.chargeCap) {
-                    Gear.SPCharge(1); }}
+                    if (2 + Dungeon.hero.pointsInTalent(Talent.BARRIER_REPAIR) > Random.Int(20) && Gear.charge < Gear.chargeCap) {
+                        Gear.SPCharge(1);
+                    }
+                }
             }
 
         }
@@ -1704,54 +1711,57 @@ public class Hero extends Char {
 
         // 니어 특성 관련
 
-        if (HP <= HT/2) {
-        if(hasTalent(Talent.RADIANTHERO)) {
-            if (buff(RadiantKnight.class) == null && buff(Talent.RadiantHeroCooldown.class) == null && hasTalent(Talent.RADIANTHERO)) {
-                Buff.affect(this, RadiantKnight.class, RadiantKnight.DURATION);
+        if (HP <= HT / 2) {
+            if (hasTalent(Talent.RADIANTHERO)) {
+                if (buff(RadiantKnight.class) == null && buff(Talent.RadiantHeroCooldown.class) == null && hasTalent(Talent.RADIANTHERO)) {
+                    Buff.affect(this, RadiantKnight.class, RadiantKnight.DURATION);
 
-                float CoolDown = 700 - (pointsInTalent(Talent.RADIANTHERO) * 100);
-                Buff.affect(this, Talent.RadiantHeroCooldown.class, CoolDown);
+                    float CoolDown = 700 - (pointsInTalent(Talent.RADIANTHERO) * 100);
+                    Buff.affect(this, Talent.RadiantHeroCooldown.class, CoolDown);
 
-                GameScene.flash( 0x80FFFFFF );
-                Sample.INSTANCE.play(Assets.Sounds.SKILL_BABYNIGHT);
+                    GameScene.flash(0x80FFFFFF);
+                    Sample.INSTANCE.play(Assets.Sounds.SKILL_BABYNIGHT);
+                }
             }
-        }}
+        }
 
         // 천마의 날개
         if (hasTalent(Talent.PEGASUS_WING)) {
             SealOfLight Seal = this.belongings.getItem(SealOfLight.class);
             if (Seal != null && Random.Int(3) < pointsInTalent(Talent.PEGASUS_WING)) {
                 Seal.charge(this, 2);
-            Seal.updateQuickslot();}
+                Seal.updateQuickslot();
+            }
         }
 
         // 혼돈 아미야 관련
 
         if (subClass == HeroSubClass.CHAOS) {
             float bounsdamage = 1.5f;
-                if (hasTalent(Talent.CHIMERA)) {
-                    bounsdamage += pointsInTalent(Talent.CHIMERA) * 0.1f;
-                }
+            if (hasTalent(Talent.CHIMERA)) {
+                bounsdamage += pointsInTalent(Talent.CHIMERA) * 0.1f;
+            }
 
             if (hasTalent(Talent.STABILIZE)) {
                 if (HP / HT <= 0.15f + pointsInTalent(Talent.STABILIZE) * 0.05f) {
                     bounsdamage = 1f;
-                }}
-
-                damage *= bounsdamage;
+                }
             }
+
+            damage *= bounsdamage;
+        }
 
 
         // 첸 특성
 
         if (hasTalent(Talent.SCOLDING) && buff(Talent.ScoldingCooldown.class) == null && HT / 2 >= HP) {
-            for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+            for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
                 if (mob.alignment != Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]) {
                     Buff.prolong(mob, Amok.class, pointsInTalent(Talent.SCOLDING));
                 }
             }
-            this.sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
-            Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
+            this.sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.3f, 3);
+            Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 
             Buff.affect(this, Talent.ScoldingCooldown.class, 300f);
         }
@@ -2012,8 +2022,8 @@ public class Hero extends Char {
             if (subClass == HeroSubClass.STOME && buff(WindEnergy.class) != null) {
                 boolean chack = true;
                 if (hasTalent(Talent.ENERGY_STORAGE)) {
-                    if (buff(WindEnergy.class).Eneray() <= 25+(pointsInTalent(Talent.ENERGY_STORAGE) * 15)) {
-                       chack = false;
+                    if (buff(WindEnergy.class).Eneray() <= 25 + (pointsInTalent(Talent.ENERGY_STORAGE) * 15)) {
+                        chack = false;
                     }
                 }
 
@@ -2076,7 +2086,8 @@ public class Hero extends Char {
                 case HEAP:
                     curAction = new HeroAction.PickUp(cell);
                     break;
-                case FOR_SALE: case FOR_SALE_28F:
+                case FOR_SALE:
+                case FOR_SALE_28F:
                     curAction = heap.size() == 1 && heap.peek().value() > 0 ?
                             new HeroAction.Buy(cell) :
                             new HeroAction.PickUp(cell);
@@ -2089,12 +2100,12 @@ public class Hero extends Char {
 
             curAction = new HeroAction.Unlock(cell);
 
-        } else if ((cell == Dungeon.level.exit || Dungeon.level.map[cell] == Terrain.EXIT || Dungeon.level.map[cell] == Terrain.UNLOCKED_EXIT)
+        } else if ((cell == Dungeon.level.exit() || Dungeon.level.map[cell] == Terrain.EXIT || Dungeon.level.map[cell] == Terrain.UNLOCKED_EXIT)
                 && Dungeon.depth < 41) {
 
             curAction = new HeroAction.Descend(cell);
 
-        } else if (cell == Dungeon.level.entrance || Dungeon.level.map[cell] == Terrain.ENTRANCE) {
+        } else if (cell == Dungeon.level.entrance() || Dungeon.level.map[cell] == Terrain.ENTRANCE) {
 
             curAction = new HeroAction.Ascend(cell);
 
@@ -2255,11 +2266,10 @@ public class Hero extends Char {
 
         if (heat != null && !(cause instanceof ChaliceOfBlood) && !(cause instanceof SanktaBet)) {
             if (heat.state() == Heat.State.OVERHEAT &&
-                    heat.power() >= (60-pointsInTalent(Talent.HEAT_OF_PROTECTION) * 5))
-            {
+                    heat.power() >= (60 - pointsInTalent(Talent.HEAT_OF_PROTECTION) * 5)) {
                 HP = 1;
                 heat.powerDown();
-                sprite.showStatus(CharSprite.WARNING, heat.power()+"%");
+                sprite.showStatus(CharSprite.WARNING, heat.power() + "%");
                 return;
             }
         }
@@ -2274,13 +2284,13 @@ public class Hero extends Char {
         }
 
         if (ankh != null && ankh.isBlessed()) {
-            int AnkhHP = HT/10;
-            int barrior = this.HT/2;
+            int AnkhHP = HT / 10;
+            int barrior = this.HT / 2;
             if (hasTalent(Talent.RESURGENCE)) {
                 AnkhHP *= 1 + pointsInTalent(Talent.RESURGENCE) * 3;
                 barrior *= 1f + (pointsInTalent(Talent.RESURGENCE) * 0.5f);
                 Buff.affect(this, RadiantKnight.class, RadiantKnight.DURATION);
-                GameScene.flash( 0x80FFFFFF );
+                GameScene.flash(0x80FFFFFF);
             }
 
             HP = AnkhHP;
@@ -2479,7 +2489,8 @@ public class Hero extends Char {
 
         if (hit && heroClass == HeroClass.CHEN && subClass != HeroSubClass.SPSHOOTER) {
             Buff.affect(this, ChenCombo.class).hit(enemy);
-            if (hasTalent(Talent.BLADE_ART) && Random.Int(20) < 1 + pointsInTalent(Talent.BLADE_ART)) Buff.affect(this, ChenCombo.class).hit(enemy);
+            if (hasTalent(Talent.BLADE_ART) && Random.Int(20) < 1 + pointsInTalent(Talent.BLADE_ART))
+                Buff.affect(this, ChenCombo.class).hit(enemy);
         }
 
         if (hit && subClass == HeroSubClass.KNIGHT) {
