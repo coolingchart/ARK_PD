@@ -81,6 +81,7 @@ import com.shatteredpixel.shatteredpixeldungeon.tiles.WallBlockingTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Banner;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BusyIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.CharHealthIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
@@ -1171,6 +1172,15 @@ public class GameScene extends PixelScene {
         } else {
             return false;
         }
+    }
+
+    public static WndBag selectItem(WndBag.ItemSelector listener) {
+        cancelCellSelector();
+
+        WndBag wnd = WndBag.getBag(listener);
+        if (scene != null) scene.addToFront(wnd);
+
+        return wnd;
     }
 
     public static WndBag selectItem(WndBag.Listener listener, WndBag.Mode mode, String title) {

@@ -30,13 +30,18 @@ import com.shatteredpixel.shatteredpixeldungeon.TomorrowRogueNight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.LostBackpack;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.miniboss.TheEndspeaker;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.updates.Updates;
+import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
@@ -56,6 +61,7 @@ import com.watabou.utils.DeviceCompat;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class InterlevelScene extends PixelScene {
 
@@ -523,15 +529,51 @@ public class InterlevelScene extends PixelScene {
 
         Mob.holdAllies(Dungeon.level);
 
+        Level level;
         if (Dungeon.level.locked) {
+            ArrayList<Item> preservedItems = Dungeon.level.getItemsToPreserveFromSealedResurrect();
+
             Dungeon.hero.resurrect(Dungeon.depth);
             //regenerates the current floor
-            Level level = Dungeon.newLevel();
-            Dungeon.switchLevel(level, level.entrance());
+            level = Dungeon.newLevel();
+            Dungeon.hero.pos = level.randomRespawnCell(Dungeon.hero);
+            if (Dungeon.hero.pos == -1) Dungeon.hero.pos = level.entrance();
+
+            for (Item i : preservedItems){
+                int pos = level.randomRespawnCell(null);
+                if (pos == -1) pos = level.entrance();
+                level.drop(i, pos);
+            }
+            int packPos = level.randomRespawnCell(null);
+            if (packPos == -1) packPos = level.entrance();
+            level.drop(new LostBackpack(), packPos);
+
         } else {
+            level = Dungeon.level;
+            BArray.setFalse(level.heroFOV);
+            BArray.setFalse(level.visited);
+            BArray.setFalse(level.mapped);
+            int invPos = Dungeon.hero.pos;
+            int tries = 0;
+            do {
+                Dungeon.hero.pos = level.randomRespawnCell(Dungeon.hero);
+                tries++;
+
+            //prevents spawning on traps or plants, prefers farther locations first
+            } while (level.traps.get(Dungeon.hero.pos) != null
+                    || (level.plants.get(Dungeon.hero.pos) != null && tries < 500)
+                    || level.trueDistance(invPos, Dungeon.hero.pos) <= 30 - (tries/10));
+
+            //directly trample grass
+            if (level.map[Dungeon.hero.pos] == Terrain.HIGH_GRASS || level.map[Dungeon.hero.pos] == Terrain.FURROWED_GRASS){
+                level.map[Dungeon.hero.pos] = Terrain.GRASS;
+            }
             Dungeon.hero.resurrect(-1);
-            Dungeon.resetLevel();
+            level.drop(new LostBackpack(), invPos);
         }
+
+        Notes.add(Notes.Landmark.LOST_PACK);
+        Dungeon.switchLevel(level, Dungeon.hero.pos);
     }
 
     private void reset() throws IOException {
