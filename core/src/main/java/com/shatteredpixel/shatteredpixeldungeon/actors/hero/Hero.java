@@ -55,12 +55,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Heat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.IronSkin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.KnightSKILL;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LanceCharge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
@@ -165,12 +165,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SealOfLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -186,8 +186,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfMudrock;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -811,7 +811,8 @@ public class Hero extends Char {
     }
 
     public boolean canSurpriseAttack() {
-        if (belongings.attackingWeapon() == null || !(belongings.attackingWeapon() instanceof Weapon)) return true;
+        if (belongings.attackingWeapon() == null || !(belongings.attackingWeapon() instanceof Weapon))
+            return true;
         if (STR() < ((Weapon) belongings.attackingWeapon()).STRReq()) return false;
         if (belongings.attackingWeapon() instanceof Decapitator) return false;
         if (belongings.attackingWeapon() instanceof SHISHIOH) return false;
@@ -2285,7 +2286,7 @@ public class Hero extends Char {
         }
 
         //look for ankhs in player inventory, prioritize ones which are blessed.
-        for (Ankh i : belongings.getAllItems(Ankh.class)){
+        for (Ankh i : belongings.getAllItems(Ankh.class)) {
             if (ankh == null || i.isBlessed()) {
                 ankh = i;
             }
@@ -2294,6 +2295,11 @@ public class Hero extends Char {
         if (ankh != null && ankh.isBlessed()) {
             int AnkhHP = HT / 10;
             int barrior = this.HT / 2;
+
+            //restore HP before any buff that triggers sprite updates (e.g. RadiantKnight),
+            //so that updateArmor() sees the hero as alive and plays idle() instead of die()
+            this.HP = HT / 4;
+
             if (hasTalent(Talent.RESURGENCE)) {
                 AnkhHP *= 1 + pointsInTalent(Talent.RESURGENCE) * 3;
                 barrior *= 1f + (pointsInTalent(Talent.RESURGENCE) * 0.5f);
@@ -2302,10 +2308,13 @@ public class Hero extends Char {
             }
 
             if (ankh.isBlessed()) {
-                this.HP = HT / 4;
 
                 PotionOfHealing.cure(this);
                 Buff.prolong(this, Invulnerability.class, Invulnerability.DURATION);
+
+                //safety: ensure sprite isn't stuck in death animation after resurrection
+
+                sprite.resetAfterDeath();
 
                 SpellSprite.show(this, SpellSprite.ANKH);
                 GameScene.flash(0x80FFFF40);
@@ -2333,12 +2342,12 @@ public class Hero extends Char {
                 Game.runOnRenderThread(new Callback() {
                     @Override
                     public void call() {
-                        GameScene.show( new WndResurrect(finalAnkh) );
+                        GameScene.show(new WndResurrect(finalAnkh));
                     }
                 });
 
                 if (cause instanceof Hero.Doom) {
-                    ((Hero.Doom)cause).onDeath();
+                    ((Hero.Doom) cause).onDeath();
                 }
 
                 //SacrificialFire.Marked sacMark = buff(SacrificialFire.Marked.class);
@@ -2351,8 +2360,8 @@ public class Hero extends Char {
         }
 
         Actor.fixTime();
-        super.die( cause );
-        reallyDie( cause );
+        super.die(cause);
+        reallyDie(cause);
     }
 
     public static void reallyDie(Object cause) {
@@ -2404,8 +2413,8 @@ public class Hero extends Char {
             items.remove(item);
         }
 
-        for (Char c : Actor.chars()){
-            if (c instanceof DriedRose.GhostHero){
+        for (Char c : Actor.chars()) {
+            if (c instanceof DriedRose.GhostHero) {
                 ((DriedRose.GhostHero) c).sayHeroKilled();
             }
         }
@@ -2414,7 +2423,7 @@ public class Hero extends Char {
             @Override
             public void call() {
                 GameScene.gameOver();
-                Sample.INSTANCE.play( Assets.Sounds.DEATH );
+                Sample.INSTANCE.play(Assets.Sounds.DEATH);
             }
         });
 
@@ -2742,13 +2751,13 @@ public class Hero extends Char {
         //lost inventory is dropped in InterlevelScene
 
         // Activate items that persist after lost inventory
-        for (Item i : belongings){
-            if (i instanceof EquipableItem && i.isEquipped(this)){
+        for (Item i : belongings) {
+            if (i instanceof EquipableItem && i.isEquipped(this)) {
                 ((EquipableItem) i).activate(this);
             } else if (i instanceof CloakOfShadows && i.keptThroughLostInventory() && hasTalent(Talent.LIGHT_CLOAK)) {
                 ((CloakOfShadows) i).activate(this);
-            } else if (i instanceof Wand && i.keptThroughLostInventory()){
-                if (holster != null && holster.contains(i)){
+            } else if (i instanceof Wand && i.keptThroughLostInventory()) {
+                if (holster != null && holster.contains(i)) {
                     ((Wand) i).charge(this, MagicalHolster.HOLSTER_SCALE_FACTOR);
                 } else {
                     ((Wand) i).charge(this);
