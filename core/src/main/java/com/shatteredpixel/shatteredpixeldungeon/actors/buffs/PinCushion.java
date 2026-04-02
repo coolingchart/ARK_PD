@@ -95,7 +95,7 @@ public class PinCushion extends Buff {
 	public String desc() {
 		String desc = Messages.get(this, "desc");
 		for (Item i : items){
-			desc += "\n" + i.toString();
+			desc += "\n" + i.title();
 		}
 		return desc;
 	}

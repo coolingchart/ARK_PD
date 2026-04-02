@@ -1257,7 +1257,7 @@ public class GameScene extends PixelScene {
         Heap heap = Dungeon.level.heaps.get(cell);
         if (heap != null && heap.seen) {
             objects.add(heap);
-            names.add(Messages.titleCase(heap.toString()));
+            names.add(Messages.titleCase(heap.title()));
         }
 
         Plant plant = Dungeon.level.plants.get(cell);
