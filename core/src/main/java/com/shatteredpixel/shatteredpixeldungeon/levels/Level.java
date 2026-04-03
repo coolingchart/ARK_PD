@@ -1087,6 +1087,10 @@ public abstract class Level implements Bundlable {
         return false;
     }
 
+    public float levelExplorePercent( int depth ){
+        return 0;
+    }
+
     public int fallCell(boolean fallIntoPit) {
         int result;
         do {
