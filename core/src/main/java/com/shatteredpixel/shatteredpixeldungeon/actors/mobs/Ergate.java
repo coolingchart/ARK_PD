@@ -94,8 +94,8 @@ public class Ergate extends Mob {
                         hero.belongings.weapon = null;
                         Dungeon.level.drop(weapon, hero.pos).sprite.drop();
                         GLog.w(Messages.get(this, "disarm", weapon.name()));
+                        Buff.affect(this, Terror.class, 20f);
                     }
-                    Buff.affect(this, Terror.class, 20f);
                 }
             }
         }
