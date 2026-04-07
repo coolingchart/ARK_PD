@@ -114,16 +114,21 @@ public class Bomb extends Item {
 
     @Override
     protected void onThrow(int cell) {
+        boolean isekaiInstant = false;
         if (!Dungeon.level.pit[cell] && lightingFuse) {
-            if (Dungeon.hero.belongings.getItem(IsekaiItem.class) != null) {
-                if (Dungeon.hero.belongings.getItem(IsekaiItem.class).isEquipped(Dungeon.hero)) {
-                    if (Dungeon.hero.belongings.getItem(IsekaiItem.class).cursed)
-                        Actor.addDelayed(fuse = new Fuse().ignite(this), 8);
-                    else Actor.addDelayed(fuse = new Fuse().ignite(this), 0);
-                } else Actor.addDelayed(fuse = new Fuse().ignite(this), 2);
-            } else Actor.addDelayed(fuse = new Fuse().ignite(this), 2);
+            IsekaiItem isekai = Dungeon.hero.belongings.getItem(IsekaiItem.class);
+            if (isekai != null && isekai.isEquipped(Dungeon.hero)) {
+                if (isekai.cursed) {
+                    Actor.addDelayed(fuse = new Fuse().ignite(this), 8);
+                } else {
+                    Actor.addDelayed(fuse = new Fuse().ignite(this), 0);
+                    isekaiInstant = true;
+                }
+            } else {
+                Actor.addDelayed(fuse = new Fuse().ignite(this), 2);
+            }
         }
-        if (Actor.findChar(cell) != null && !(Actor.findChar(cell) instanceof Hero)) {
+        if (!isekaiInstant && Actor.findChar(cell) != null && !(Actor.findChar(cell) instanceof Hero)) {
             ArrayList<Integer> candidates = new ArrayList<>();
             for (int i : PathFinder.NEIGHBOURS8)
                 if (Dungeon.level.passable[cell + i])
