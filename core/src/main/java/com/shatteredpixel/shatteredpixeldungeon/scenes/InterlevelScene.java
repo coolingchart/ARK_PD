@@ -513,6 +513,7 @@ public class InterlevelScene extends PixelScene {
         Dungeon.saveAll();
 
         Level level;
+        Dungeon.branch = 0;
         Dungeon.depth++;
         if (Dungeon.levelHasBeenGenerated(Dungeon.depth, Dungeon.branch)) {
             level = Dungeon.loadLevel(GamesInProgress.curSlot);

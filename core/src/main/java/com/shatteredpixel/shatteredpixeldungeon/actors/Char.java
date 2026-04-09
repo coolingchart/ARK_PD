@@ -511,7 +511,7 @@ public abstract class Char extends Actor {
 		float defRoll = Random.Float( defStat );
 		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
 		if (defender.buff(ExecutMode.class) != null) defRoll *= 1.3f;
-		if (defender instanceof Hero && Dungeon.hero.belongings.weapon instanceof AssassinsBlade && Dungeon.hero.belongings.armor instanceof LeatherArmor) defRoll *= 1.1f;
+		if (defender instanceof Hero && Dungeon.hero.belongings.weapon() instanceof AssassinsBlade && Dungeon.hero.belongings.armor() instanceof LeatherArmor) defRoll *= 1.1f;
 		if (defender.buff(  Hex.class) != null) defRoll *= 0.8f;
 		for (ChampionEnemy buff : defender.buffs(ChampionEnemy.class)){
 			defRoll *= buff.evasionAndAccuracyFactor();

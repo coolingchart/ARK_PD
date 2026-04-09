@@ -703,8 +703,8 @@ public class Hero extends Char {
 
         if (buff(IronSkin.class) != null) dr += Random.NormalIntRange(0, 2);
 
-        if (hasTalent(Talent.TACTICAL_SHIELD) && belongings.armor != null) {
-            int drplus = belongings.armor.buffedLvl() * 2;
+        if (hasTalent(Talent.TACTICAL_SHIELD) && belongings.armor() != null) {
+            int drplus = belongings.armor().buffedLvl() * 2;
             drplus = Math.min(drplus, 1 + pointsInTalent(Talent.TACTICAL_SHIELD) * 3);
             dr += Random.NormalIntRange(0, drplus);
         }
@@ -916,14 +916,14 @@ public class Hero extends Char {
             }
         }
 
-        if (belongings.weapon instanceof Gluttony) {
-            if (Random.Int(6) == 0) ((Gluttony) belongings.weapon).SPCharge(1);
+        if (belongings.weapon() instanceof Gluttony) {
+            if (Random.Int(6) == 0) ((Gluttony) belongings.weapon()).SPCharge(1);
         }
 
-        if (belongings.weapon instanceof Echeveria && STR() >= ((Echeveria) belongings.weapon).STRReq())
-            ((Echeveria) belongings.weapon).SPCharge(time);
-        if (belongings.weapon instanceof Suffering && STR() >= ((Suffering) belongings.weapon).STRReq())
-            ((Suffering) belongings.weapon).SPCharge(2f * time);
+        if (belongings.weapon() instanceof Echeveria && STR() >= ((Echeveria) belongings.weapon()).STRReq())
+            ((Echeveria) belongings.weapon()).SPCharge(time);
+        if (belongings.weapon() instanceof Suffering && STR() >= ((Suffering) belongings.weapon()).STRReq())
+            ((Suffering) belongings.weapon()).SPCharge(2f * time);
 
         if (subClass == HeroSubClass.HEAT) {
             Heat heat = buff(Heat.class);
