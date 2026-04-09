@@ -103,7 +103,7 @@ public class BuffIndicator extends Component {
     public static final int IMPAIRMENT = 55;
 
     public static final int INVULNERABILITY = 56;
-    public static final int LOST_BACKPACK = 57;
+    public static final int NOINV = 57;
 
     public static final int SIZE = 7;
 
