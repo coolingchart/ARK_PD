@@ -30,10 +30,10 @@ import com.shatteredpixel.shatteredpixeldungeon.TomorrowRogueNight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.miniboss.TheEndspeaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.LostBackpack;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.miniboss.TheEndspeaker;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -41,12 +41,12 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.updates.Updates;
-import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndError;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndStory;
 import com.watabou.gltextures.TextureCache;
@@ -75,7 +75,7 @@ public class InterlevelScene extends PixelScene {
     private static float fadeTime;
 
     public enum Mode {
-        DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, RESET, NONE, DESCEND_27,
+        DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, RESET, NONE, ENTER_RHODES, EXIT_RHODES
     }
 
     public static Mode mode;
@@ -121,24 +121,26 @@ public class InterlevelScene extends PixelScene {
                 scrollSpeed = 5;
                 break;
             case DESCEND:
-                if (Dungeon.hero == null) {
-                    loadingDepth = 1;
+                if (curTransition != null) loadingDepth = curTransition.destDepth;
+                else loadingDepth = Dungeon.depth + 1;
+                if (!(Statistics.deepestFloor < loadingDepth)) {
+                    fadeTime = FAST_FADE;
+                } else if (loadingDepth == 6 || loadingDepth == 11
+                        || loadingDepth == 16 || loadingDepth == 21) {
                     fadeTime = SLOW_FADE;
-                } else {
-                    if (curTransition != null) loadingDepth = curTransition.destDepth;
-                    else loadingDepth = Dungeon.depth + 1;
-                    if (!(Statistics.deepestFloor < loadingDepth)) {
-                        fadeTime = FAST_FADE;
-                    } else if (loadingDepth == 6 || loadingDepth == 11
-                            || loadingDepth == 16 || loadingDepth == 21) {
-                        fadeTime = SLOW_FADE;
-                    }
                 }
                 scrollSpeed = 5;
                 break;
-            case DESCEND_27:
-                //new game starting in Rhodes
+            case ENTER_RHODES:
+                //new game or returning to Rhodes from dungeon
                 loadingDepth = 0;
+                fadeTime = FAST_FADE;
+                scrollSpeed = -5;
+                break;
+            case EXIT_RHODES:
+                //leaving Rhodes to enter the dungeon
+                if (curTransition != null) loadingDepth = curTransition.destDepth;
+                else loadingDepth = 1;
                 scrollSpeed = 5;
                 break;
             case FALL:
@@ -264,8 +266,11 @@ public class InterlevelScene extends PixelScene {
                             case DESCEND:
                                 descend();
                                 break;
-                            case DESCEND_27:
-                                descend_27();
+                            case ENTER_RHODES:
+                                enterRhodes();
+                                break;
+                            case EXIT_RHODES:
+                                exitRhodes();
                                 break;
                             case ASCEND:
                                 ascend();
@@ -379,30 +384,73 @@ public class InterlevelScene extends PixelScene {
     private void descend() throws IOException {
         TheEndspeaker.Status.destroyAspects();
 
+        //safety: descend should never be called for a new game, redirect to enterRhodes
         if (Dungeon.hero == null) {
+            enterRhodes();
+            return;
+        }
+
+        Mob.holdAllies(Dungeon.level);
+        Dungeon.saveAll();
+
+        Level level;
+        if (curTransition != null) {
+            Dungeon.depth = curTransition.destDepth;
+            Dungeon.branch = curTransition.destBranch;
+        } else {
+            //fallback for cases without a transition
+            Dungeon.depth++;
+        }
+
+        if (Dungeon.levelHasBeenGenerated(Dungeon.depth, Dungeon.branch)) {
+            level = Dungeon.loadLevel(GamesInProgress.curSlot);
+        } else {
+            level = Dungeon.newLevel();
+        }
+
+        if (curTransition != null) {
+            LevelTransition destTransition = level.getTransition(curTransition.destType);
+            curTransition = null;
+            if (destTransition != null) {
+                Dungeon.switchLevel(level, destTransition.cell());
+            } else {
+                Dungeon.switchLevel(level, level.entrance());
+            }
+        } else {
+            Dungeon.switchLevel(level, level.entrance());
+        }
+    }
+
+    //new game start or returning to Rhodes from the dungeon
+    private void enterRhodes() throws IOException {
+        if (Dungeon.hero == null) {
+            //new game — init and generate first Rhodes level
             Mob.clearHeldAllies();
             Dungeon.init();
             if (noStory) {
                 Dungeon.chapters.add(WndStory.ID_SEWERS);
                 noStory = false;
             }
+            Statistics.deepestFloor = 0;
             GameLog.wipe();
-            //depth is already 1 from init()
+
+            //depth and branch are already set by init() (depth=0, branch=2)
             Level level = Dungeon.newLevel();
             Dungeon.switchLevel(level, level.entrance());
         } else {
+            //returning to Rhodes from the dungeon
             Mob.holdAllies(Dungeon.level);
             Dungeon.saveAll();
 
-            Level level;
             if (curTransition != null) {
                 Dungeon.depth = curTransition.destDepth;
                 Dungeon.branch = curTransition.destBranch;
             } else {
-                //fallback for cases without a transition
-                Dungeon.depth++;
+                Dungeon.depth = 0;
+                Dungeon.branch = 2;
             }
 
+            Level level;
             if (Dungeon.levelHasBeenGenerated(Dungeon.depth, Dungeon.branch)) {
                 level = Dungeon.loadLevel(GamesInProgress.curSlot);
             } else {
@@ -423,22 +471,37 @@ public class InterlevelScene extends PixelScene {
         }
     }
 
-    //used by HeroSelectScene to start a new game in Rhodes
-    private void descend_27() throws IOException {
-        Mob.clearHeldAllies();
-        Dungeon.init();
-        if (noStory) {
-            Dungeon.chapters.add(WndStory.ID_SEWERS);
-            noStory = false;
-        }
-        Statistics.deepestFloor = 0;
-        GameLog.wipe();
+    //leaving Rhodes to enter the dungeon
+    private void exitRhodes() throws IOException {
+        Mob.holdAllies(Dungeon.level);
+        Dungeon.saveAll();
 
-        //start in Rhodes 2 (depth 0, branch 2)
-        Dungeon.depth = 0;
-        Dungeon.branch = 2;
-        Level level = Dungeon.newLevel();
-        Dungeon.switchLevel(level, level.entrance());
+        if (curTransition != null) {
+            Dungeon.depth = curTransition.destDepth;
+            Dungeon.branch = curTransition.destBranch;
+        } else {
+            Dungeon.depth = 1;
+            Dungeon.branch = 0;
+        }
+
+        Level level;
+        if (Dungeon.levelHasBeenGenerated(Dungeon.depth, Dungeon.branch)) {
+            level = Dungeon.loadLevel(GamesInProgress.curSlot);
+        } else {
+            level = Dungeon.newLevel();
+        }
+
+        if (curTransition != null) {
+            LevelTransition destTransition = level.getTransition(curTransition.destType);
+            curTransition = null;
+            if (destTransition != null) {
+                Dungeon.switchLevel(level, destTransition.cell());
+            } else {
+                Dungeon.switchLevel(level, level.entrance());
+            }
+        } else {
+            Dungeon.switchLevel(level, level.entrance());
+        }
     }
 
     private void fall() throws IOException {
@@ -539,7 +602,7 @@ public class InterlevelScene extends PixelScene {
             Dungeon.hero.pos = level.randomRespawnCell(Dungeon.hero);
             if (Dungeon.hero.pos == -1) Dungeon.hero.pos = level.entrance();
 
-            for (Item i : preservedItems){
+            for (Item i : preservedItems) {
                 int pos = level.randomRespawnCell(null);
                 if (pos == -1) pos = level.entrance();
                 level.drop(i, pos);
@@ -559,13 +622,13 @@ public class InterlevelScene extends PixelScene {
                 Dungeon.hero.pos = level.randomRespawnCell(Dungeon.hero);
                 tries++;
 
-            //prevents spawning on traps or plants, prefers farther locations first
+                //prevents spawning on traps or plants, prefers farther locations first
             } while (level.traps.get(Dungeon.hero.pos) != null
                     || (level.plants.get(Dungeon.hero.pos) != null && tries < 500)
-                    || level.trueDistance(invPos, Dungeon.hero.pos) <= 30 - (tries/10));
+                    || level.trueDistance(invPos, Dungeon.hero.pos) <= 30 - (tries / 10));
 
             //directly trample grass
-            if (level.map[Dungeon.hero.pos] == Terrain.HIGH_GRASS || level.map[Dungeon.hero.pos] == Terrain.FURROWED_GRASS){
+            if (level.map[Dungeon.hero.pos] == Terrain.HIGH_GRASS || level.map[Dungeon.hero.pos] == Terrain.FURROWED_GRASS) {
                 level.map[Dungeon.hero.pos] = Terrain.GRASS;
             }
             Dungeon.hero.resurrect(-1);

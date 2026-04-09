@@ -26,7 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Skeleton;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Ergate;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -74,12 +74,12 @@ public class Heamyo extends MeleeWeapon {
             if (cell == null) return;
 
             Char existing = Actor.findChar(cell);
-            if (existing instanceof Skeleton) {
+            if (existing instanceof Ergate) {
                 existing.die(null);
             } else if (existing != null) {
                 GLog.w("Cell occupied by " + existing.getClass().getSimpleName());
             } else if (Dungeon.level.passable[cell] || Dungeon.level.avoid[cell]) {
-                Skeleton dummy = new Skeleton();
+                Ergate dummy = new Ergate();
                 dummy.pos = cell;
                 Dungeon.level.occupyCell(dummy);
                 GameScene.add(dummy);

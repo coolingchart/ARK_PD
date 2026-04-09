@@ -272,8 +272,13 @@ public class Dungeon {
         quickslot.reset();
         QuickSlotButton.reset();
 
-        depth = 1;
+        //game always starts in Rhodes (depth 0, branch 2)
+        depth = 0;
+        branch = 2;
         gold = 300;
+        energy = 0;
+
+        generatedLevels.clear();
         cautusquset = -1;
         guardquest = -1;
         acequest = -1;

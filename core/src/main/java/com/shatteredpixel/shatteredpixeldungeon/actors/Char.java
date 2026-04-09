@@ -323,22 +323,22 @@ public abstract class Char extends Actor {
 			
 			if (this instanceof Hero){
 				Hero h = (Hero)this;
-				if (h.belongings.weapon instanceof MissileWeapon
+				if (h.belongings.attackingWeapon() instanceof MissileWeapon
 						&& h.subClass == HeroSubClass.SNIPER
 						&& !Dungeon.level.adjacent(h.pos, enemy.pos)){
 					dr = 0; }
 
 				SpiritBow weapon = h.belongings.getItem(SpiritBow.class);
-					if (weapon != null && h.belongings.weapon instanceof SpiritBow.SpiritArrow
+					if (weapon != null && h.belongings.attackingWeapon() instanceof SpiritBow.SpiritArrow
 							&& h.subClass == HeroSubClass.WARDEN) {
 						if (weapon.EatSeed >= 15) dr/=2;
 					}
-				if (h.belongings.weapon instanceof ThermiteBlade) dr = 0;
-				if (h.belongings.weapon instanceof RhodesSword) dr = 0;
-				if (h.belongings.weapon instanceof KollamSword) dr = 0;
+				if (h.belongings.attackingWeapon() instanceof ThermiteBlade) dr = 0;
+				if (h.belongings.attackingWeapon() instanceof RhodesSword) dr = 0;
+				if (h.belongings.attackingWeapon() instanceof KollamSword) dr = 0;
 
 				if (h.belongings.getItem(RingOfTenacity.class) != null) {
-					if (h.belongings.getItem(RingOfTenacity.class).isEquipped(Dungeon.hero) && h.belongings.weapon instanceof FolkSong) {
+					if (h.belongings.getItem(RingOfTenacity.class).isEquipped(Dungeon.hero) && h.belongings.attackingWeapon() instanceof FolkSong) {
 						dr /= 2;
 					}
 				}
@@ -423,7 +423,7 @@ public abstract class Char extends Actor {
             if (!enemy.isAlive()) {
 				if (this instanceof Hero) {
 					Hero h = (Hero) this;
-					if ((h.belongings.weapon instanceof RhodesSword)) {
+					if ((h.belongings.attackingWeapon() instanceof RhodesSword)) {
 						new FlavourBuff(){
 							{actPriority = VFX_PRIO;}
 							public boolean act() {
@@ -450,7 +450,7 @@ public abstract class Char extends Actor {
 			}
 
             if (enemy.isAlive() && enemy.HP < enemy.HT * 0.15f &&
-                    enemy != Dungeon.hero && Dungeon.hero.belongings.weapon instanceof Naginata && this instanceof Hero &&
+                    enemy != Dungeon.hero && Dungeon.hero.belongings.attackingWeapon() instanceof Naginata && this instanceof Hero &&
                     !enemy.properties().contains(Char.Property.BOSS) && !enemy.properties().contains(Char.Property.MINIBOSS)) {
                 sprite.showStatus(CharSprite.NEUTRAL, Messages.get(Naginata.class, "skill"));
                 enemy.die(this);

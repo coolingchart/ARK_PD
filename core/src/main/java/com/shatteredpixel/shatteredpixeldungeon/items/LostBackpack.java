@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -69,6 +70,8 @@ public class LostBackpack extends Item {
         hero.updateHT(false);
 
         Item.updateQuickslot();
+        Notes.remove(Notes.Landmark.LOST_PACK);
+
         Sample.INSTANCE.play( Assets.Sounds.DEWDROP );
         hero.spendAndNext(pickupDelay());
         GameScene.pickUp( this, pos );

@@ -24,6 +24,7 @@ public class QuestScroll extends Item {
 		unique = true;
 		stackable = false;
 		defaultAction = AC_READ;
+		keptThoughLostInvent = true;
 	}
 
 	public enum QuestObjective {
