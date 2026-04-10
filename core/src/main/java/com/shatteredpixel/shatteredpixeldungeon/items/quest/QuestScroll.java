@@ -128,7 +128,10 @@ public class QuestScroll extends Item {
 		super.execute(hero, action);
 
 		if (action.equals(AC_READ)) {
-			if (objective == null) return;
+			if (objective == null) {
+				GLog.w(Messages.get(this, "invalid"));
+				return;
+			}
 
 			if (objective.checkComplete(this)) {
 				completed = true;
