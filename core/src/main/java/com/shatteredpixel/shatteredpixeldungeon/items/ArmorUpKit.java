@@ -63,7 +63,7 @@ public class ArmorUpKit extends Item {
                         armor.degrade(-level);
                     }
 
-                    armor.glyph = HeroArmor.glyph;
+                    armor.inscribe(HeroArmor.glyph);
                     armor.curseInfusionBonus = HeroArmor.curseInfusionBonus;
                     armor.levelKnown = HeroArmor.levelKnown;
                     armor.cursedKnown = HeroArmor.cursedKnown;
@@ -81,7 +81,7 @@ public class ArmorUpKit extends Item {
                         armor.degrade(-level);
                     }
 
-                    armor.glyph = HeroArmor.glyph;
+                    armor.inscribe(HeroArmor.glyph);
                     armor.curseInfusionBonus = HeroArmor.curseInfusionBonus;
                     armor.levelKnown = HeroArmor.levelKnown;
                     armor.cursedKnown = HeroArmor.cursedKnown;
@@ -93,9 +93,8 @@ public class ArmorUpKit extends Item {
                 curUser.sprite.operate(curUser.pos);
                 Sample.INSTANCE.play(Assets.Sounds.EVOKE);
             }
-        }
-        else{
-            if (!new ArmorUpKit().collect()){
+        } else {
+            if (!new ArmorUpKit().collect()) {
                 Dungeon.level.drop(new ArmorUpKit(), curUser.pos).sprite.drop();
             }
         }
