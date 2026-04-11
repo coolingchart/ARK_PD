@@ -453,11 +453,6 @@ public class Hero extends Char {
         STR = bundle.getInt(STRENGTH);
 
         belongings.restoreFromBundle(bundle);
-
-        if (belongings.getItem(ThrowingKnife.class) != null
-                && buff(ThrowingKnife.KnifeSafeguard.class) == null) {
-            Buff.affect(this, ThrowingKnife.KnifeSafeguard.class);
-        }
     }
 
     public static void preview(GamesInProgress.Info info, Bundle bundle) {

@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesi
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CityLevel;
@@ -575,6 +576,9 @@ public class Dungeon {
     }
 
     public static void dropToChasm(Item item) {
+        //knives don't survive a chasm fall; rogue gets a fresh one on next level entry
+        if (item instanceof ThrowingKnife) return;
+
         int depth = Dungeon.depth + 1;
         ArrayList<Item> dropped = Dungeon.droppedItems.get(depth);
         if (dropped == null) {
