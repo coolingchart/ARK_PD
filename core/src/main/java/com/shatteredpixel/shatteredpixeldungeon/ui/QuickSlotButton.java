@@ -98,7 +98,7 @@ public class QuickSlotButton extends Button implements WndBag.Listener {
 					if(Dungeon.quickslot.change == false) item = select(slotNum);
 					else item = select(slotNum +4);
 
-					if (!GameScene.cancel()) {
+					if (Dungeon.hero.belongings.contains(item) && !GameScene.cancel()) {
 						item.execute( Dungeon.hero );
 						if (item.usesTargeting) {
 							useTargeting();
@@ -209,8 +209,9 @@ public class QuickSlotButton extends Button implements WndBag.Listener {
 	}
 	
 	private void enableSlot() {
-		if (Dungeon.quickslot.change == false)slot.enable(Dungeon.quickslot.isNonePlaceholder( slotNum ));
-		else slot.enable(Dungeon.quickslot.isNonePlaceholder( slotNum+4 ));
+		int idx = Dungeon.quickslot.change == false ? slotNum : slotNum + 4;
+		slot.enable(Dungeon.quickslot.isNonePlaceholder( idx )
+				&& (!Dungeon.hero.belongings.lostInventory() || Dungeon.quickslot.getItem(idx).keptThroughLostInventory()));
 	}
 
     public void slotMargins( int left, int top, int right, int bottom){
