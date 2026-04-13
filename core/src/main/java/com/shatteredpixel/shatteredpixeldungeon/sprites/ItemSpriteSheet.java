@@ -979,6 +979,8 @@ public class ItemSpriteSheet {
     public static final int ICON_10 = BAGS + 14;
     public static final int ICE_BOX = BAGS + 15;
 
+    public static final int HEADHUNTING_BAG = BAGS + 16;
+
 
     static {
         assignItemRect(VIAL, 14, 14);
@@ -997,6 +999,7 @@ public class ItemSpriteSheet {
         assignItemRect(ICON_9, 16, 16);
         assignItemRect(ICON_10, 16, 16);
         assignItemRect(ICE_BOX, 16, 16);
+        assignItemRect(HEADHUNTING_BAG, 16, 16);
     }
 
     //for smaller 8x8 icons that often accompany an item sprite
