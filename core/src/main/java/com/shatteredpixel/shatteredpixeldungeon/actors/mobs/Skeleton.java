@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Silence;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -118,7 +119,19 @@ public class Skeleton extends Mob {
     private void triggerExplosionPrime() {
         hasPrimed = true;
         explodeNextTurn = true;
-        forcePostpone(TICK);
+        float delay = TICK;
+        // account for slow weapons properly
+        if (primeCause instanceof Hero) {
+            Hero hero = (Hero) primeCause;
+            float atkDelay = hero.belongings.attackingWeapon() != null
+                    ? hero.belongings.attackingWeapon().speedFactor(hero)
+                    : 1f;
+            int turnsCrossed = (int) (now() + atkDelay) - (int) (now());
+            if (turnsCrossed < 2) {
+                delay = Math.max(TICK, atkDelay);
+            }
+        }
+        forcePostpone(delay);
         if (sprite != null) {
             sprite.tint(0xFF0000, 0.5f);
         }
