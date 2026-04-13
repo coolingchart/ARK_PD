@@ -849,16 +849,24 @@ public class Hero extends Char {
             }
         }
 
+        float delay;
         if (belongings.attackingWeapon() != null) {
 
-            return belongings.attackingWeapon().speedFactor(this);
+            delay = belongings.attackingWeapon().speedFactor(this);
 
         } else {
             //Normally putting furor speed on unarmed attacks would be unnecessary
             //But there's going to be that one guy who gets a furor+force ring combo
             //This is for that one guy, you shall get your fists of fury!
-            return RingOfFuror.attackDelayMultiplier(this);
+            delay = RingOfFuror.attackDelayMultiplier(this);
         }
+
+        //KNIGHT subclass: Haste grants +20% attack speed
+        if (subClass == HeroSubClass.KNIGHT && buff(Haste.class) != null) {
+            delay /= 1.2f;
+        }
+
+        return delay;
     }
 
     @Override
