@@ -97,6 +97,8 @@ public class SealOfLight extends Artifact {
                         Buff.affect(hero, Barrier.class).setShield(Barrior);
                     }
 
+                    Talent.onArtifactUsed(hero);
+
                     if (hero.subClass == HeroSubClass.KNIGHT) hero.spendAndNext(0f);
                     else hero.spendAndNext(1f);
                     GameScene.flash(0x80FFFFFF);
