@@ -239,6 +239,7 @@ public enum Talent {
     ;
 
     public static class WandPreservationCounter extends CounterBuff {
+        {revivePersists = true;}
     }
 
     ;
@@ -492,11 +493,13 @@ public enum Talent {
     }
 
     public static class CachedRationsDropped extends CounterBuff {
+        {revivePersists = true;}
     }
 
     ;
 
     public static class NatureBerriesAvailable extends CounterBuff {
+        {revivePersists = true;}
     }
 
     ;

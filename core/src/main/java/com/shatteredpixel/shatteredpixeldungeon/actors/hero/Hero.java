@@ -543,6 +543,9 @@ public class Hero extends Char {
     }
 
     public void live() {
+        for (Buff b : buffs()){
+            if (!b.revivePersists) b.detach();
+        }
         Buff.affect(this, Regeneration.class);
         Buff.affect(this, Hunger.class);
     }
@@ -1926,7 +1929,7 @@ public class Hero extends Char {
 
         Char lastTarget = QuickSlotButton.lastTarget;
         if (target != null && (lastTarget == null ||
-                !lastTarget.isAlive() ||
+                !lastTarget.isAlive() || !lastTarget.isActive() ||
                 lastTarget.alignment == Alignment.ALLY ||
                 !fieldOfView[lastTarget.pos])) {
             QuickSlotButton.target(target);

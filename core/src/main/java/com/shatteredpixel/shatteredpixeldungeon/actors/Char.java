@@ -755,7 +755,11 @@ public abstract class Char extends Actor {
 	public boolean isAlive() {
 		return HP > 0;
 	}
-	
+
+	public boolean isActive() {
+		return isAlive();
+	}
+
 	@Override
 	protected void spend( float time ) {
 		
