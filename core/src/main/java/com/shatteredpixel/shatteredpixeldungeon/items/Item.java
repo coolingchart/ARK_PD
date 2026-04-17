@@ -157,8 +157,7 @@ public class Item implements Bundlable {
 
             GameScene.pickUp(this, pos);
             Sample.INSTANCE.play(Assets.Sounds.ITEM);
-            Talent.onItemCollected(hero, this);
-            hero.spendAndNext(TIME_TO_PICK_UP);
+            hero.spendAndNext(pickupDelay());
             return true;
 
         } else {

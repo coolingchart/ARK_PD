@@ -9,7 +9,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Tilemap;
-import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -86,10 +85,6 @@ public class NewRhodesLevel1 extends Level {
         Painter.fill(this, 13, 18, 4, 1, Terrain.CHASM);
 
         // 3.
-        Painter.fill(this, 1, 18, 4, 1, Terrain.CHASM);
-        Painter.fill(this, 13, 18, 4, 1, Terrain.CHASM);
-
-        // 4.
         Painter.fill(this, 1, 17, 3, 1, Terrain.CHASM);
         Painter.fill(this, 14, 17, 3, 1, Terrain.CHASM);
 
@@ -174,11 +169,6 @@ public class NewRhodesLevel1 extends Level {
         super.addVisuals();
         HallsLevel.addHallsVisuals(this, visuals);
         return visuals;
-    }
-
-    @Override
-    public void restoreFromBundle(Bundle bundle) {
-        super.restoreFromBundle(bundle);
     }
 
     public static class CustomeMap extends CustomTilemap {

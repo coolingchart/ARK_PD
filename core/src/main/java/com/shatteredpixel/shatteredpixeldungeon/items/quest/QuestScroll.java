@@ -32,6 +32,8 @@ public class QuestScroll extends Item {
         REACH_DEPTH,
         EXPLORE_FLOORS;
 
+        private static final int MAX_FLOOR_CAP = 40;
+
         public boolean checkComplete(QuestScroll scroll) {
             switch (this) {
                 case SLAY_ENEMIES:
@@ -68,10 +70,10 @@ public class QuestScroll extends Item {
                 case SLAY_ENEMIES:
                     return Random.IntRange(10, 20);
                 case REACH_DEPTH:
-                    int depthCap = Math.max(1, 40 - Statistics.deepestFloor);
+                    int depthCap = Math.max(1, MAX_FLOOR_CAP - Statistics.deepestFloor);
                     return Math.min(Random.IntRange(3, 8), depthCap);
                 case EXPLORE_FLOORS:
-                    int exploreCap = Math.max(1, 40 - countExplored());
+                    int exploreCap = Math.max(1, MAX_FLOOR_CAP - countExplored());
                     return Math.min(Random.IntRange(3, 8), exploreCap);
                 default:
                     return 10;
@@ -93,7 +95,7 @@ public class QuestScroll extends Item {
 
         private static int countExplored() {
             int count = 0;
-            for (int i = 1; i <= 40; i++) {
+            for (int i = 1; i <= MAX_FLOOR_CAP; i++) {
                 if (Statistics.floorsExplored.get(i, 0f) > 0) count++;
             }
             return count;

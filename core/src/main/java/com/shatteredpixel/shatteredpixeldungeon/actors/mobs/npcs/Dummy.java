@@ -22,6 +22,10 @@ public class Dummy extends Mob {
         immunities.add(Corruption.class);
         immunities.add(Doom.class);
         immunities.add(Charm.class);
+        immunities.add(Amok.class);
+        immunities.add(Sleep.class);
+        immunities.add(Terror.class);
+        immunities.add(Vertigo.class);
     }
 
     @Override
@@ -36,24 +40,18 @@ public class Dummy extends Mob {
         state = PASSIVE;
 
         if (Camouflage.CamoFlageEnemy(this)) Buff.affect(this, Camouflage.class, 10f);
-        if (buff(Corruption.class) != null) {
-            buff(Corruption.class).detach();
+        Corruption corruption = buff(Corruption.class);
+        if (corruption != null) {
+            corruption.detach();
         }
 
         HP = Math.min(HP + 50, HT);
         return super.act();
     }
 
-    public static void spawn(Level level, int poss) {
+    public static void spawn(Level level, int spawnPos) {
         Dummy dummy = new Dummy();
-        dummy.pos = poss;
+        dummy.pos = spawnPos;
         level.mobs.add(dummy);
-    }
-
-    {
-        immunities.add(Amok.class);
-        immunities.add(Sleep.class);
-        immunities.add(Terror.class);
-        immunities.add(Vertigo.class);
     }
 }

@@ -37,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.IsekaiItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SealOfLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.FoodBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -45,7 +44,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.bombs.WoollyBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatCutlet;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
@@ -59,14 +57,17 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfWarp;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDominate;
-import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfSilence;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cassidy;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ChenSword;
@@ -77,7 +78,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.GoldDogSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Heamyo;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.NEARL_AXE;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Naginata;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.R4C;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Spear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ForceCube;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.LightKnife;
@@ -174,29 +177,22 @@ public enum HeroClass {
             new ForceCube().quantity(40).collect();
             new TomeOfMastery().collect();
             Ankh ankh = new Ankh();
-            ankh.bless();
             ankh.collect();
 
             new GoldDogSword().identify().collect();
             new ScrollOfTransmutation().quantity(10).identify().collect();
             new ScrollOfDominate().quantity(10).identify().collect();
             new Bomb().quantity(10).collect();
-            new WoollyBomb().quantity(10).collect();
-            new IsekaiItem().identify().collect();
-            new CurseInfusion().quantity(5).collect();
 
+            new WandOfCorruption().identify().upgrade(10).collect();
+            new WandOfMagicMissile().identify().upgrade(5).collect();
+            new ScrollOfMirrorImage().identify().quantity(5).collect();
+            new WandOfSilence().identify().upgrade(5).collect();
+            new Spear().identify().collect();
+            new Naginata().identify().collect();
+            new StoneOfAugmentation().quantity(5).collect();
+            new PotionOfParalyticGas().quantity(5).collect();
 
-//            new StaffOfBreeze().identify().collect();
-//            new StaffOfCorrupting().identify().collect();
-//            new StaffOfGreyy().identify().collect();
-//            new StaffOfPodenco().identify().collect();
-//            new StaffOfPurgatory().identify().collect();
-//            new StaffOfShining().identify().collect();
-//            new StaffOfSnowsant().identify().collect();
-//            new StaffOfSuzuran().identify().collect();
-//            new StaffOfVigna().identify().collect();
-//            new StaffOfWeedy().identify().collect();
-//            new StaffKit().collect();
         }
 
         Dungeon.LimitedDrops.FOOD_BAG.drop();
@@ -336,7 +332,7 @@ public enum HeroClass {
         new DewVial().collect();
     }
 
-    private void initRosecat(Hero hero) {
+    private static void initRosecat(Hero hero) {
         (hero.belongings.weapon = new EX42()).identify();
 
         AnnihilationGear Gear = new AnnihilationGear();
@@ -364,7 +360,7 @@ public enum HeroClass {
         new MeatCutlet().quantity(2).collect();
     }
 
-    private void initNearl(Hero hero) {
+    private static void initNearl(Hero hero) {
         (hero.belongings.weapon = new NEARL_AXE()).identify();
 
         SealOfLight SEAL = new SealOfLight();
@@ -393,7 +389,7 @@ public enum HeroClass {
         new DewVial().collect();
     }
 
-    private void initChen(Hero hero) {
+    private static void initChen(Hero hero) {
         (hero.belongings.weapon = new ChenSword()).identify();
 
         new PotionBandolier().collect();

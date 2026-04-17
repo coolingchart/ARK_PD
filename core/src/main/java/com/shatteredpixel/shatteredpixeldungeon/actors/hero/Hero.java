@@ -321,6 +321,10 @@ public class Hero extends Char {
 
     public int CharSkin = 0; // 0은 디폴트 스킨.
 
+    //tracks hero's time at the start of each action, used by mobs (e.g. Skeleton)
+    //to anchor delayed effects to the hero's timeline regardless of action speed
+    private float previousActionTime;
+
     private ArrayList<Mob> visibleEnemies;
 
     //This list is maintained so that some logic checks can be skipped
@@ -387,6 +391,7 @@ public class Hero extends Char {
     private static final String SKL2 = "sk2num";
     private static final String SKL3 = "sk3num";
     private static final String SKIN = "charskin";
+    private static final String PREV_ACTION_TIME = "prev_action_time";
 
     @Override
     public void storeInBundle(Bundle bundle) {
@@ -415,6 +420,8 @@ public class Hero extends Char {
 
         // 스킨 코드 저장
         bundle.put(SKIN, CharSkin);
+
+        bundle.put(PREV_ACTION_TIME, previousActionTime);
 
         belongings.storeInBundle(bundle);
     }
@@ -451,6 +458,8 @@ public class Hero extends Char {
         CharSkin = bundle.getInt(SKIN);
 
         STR = bundle.getInt(STRENGTH);
+
+        previousActionTime = bundle.getFloat(PREV_ACTION_TIME);
 
         belongings.restoreFromBundle(bundle);
     }
@@ -543,7 +552,7 @@ public class Hero extends Char {
     }
 
     public void live() {
-        for (Buff b : buffs()){
+        for (Buff b : buffs()) {
             if (!b.revivePersists) b.detach();
         }
         Buff.affect(this, Regeneration.class);
@@ -957,8 +966,18 @@ public class Hero extends Char {
         next();
     }
 
+    public float getPreviousTime() {
+        return previousActionTime;
+    }
+
+    public float getNextTime() {
+        return this.time;
+    }
+
     @Override
     public boolean act() {
+
+        previousActionTime = Actor.now();
 
         //calls to dungeon.observe will also update hero's local FOV.
         fieldOfView = Dungeon.level.heroFOV;
@@ -1401,7 +1420,7 @@ public class Hero extends Char {
             }
             Game.switchScene(InterlevelScene.class);
 
-            return true;
+            return false;
         } else if (getCloser(stairs)) {
 
             return true;

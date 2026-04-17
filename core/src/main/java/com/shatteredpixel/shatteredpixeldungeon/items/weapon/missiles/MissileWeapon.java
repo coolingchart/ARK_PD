@@ -287,7 +287,7 @@ abstract public class MissileWeapon extends Weapon {
         decrementDurability();
         if (durability > 0) {
             //attempt to stick the missile weapon to the enemy, just drop it if we can't.
-            if (sticky && enemy != null && enemy.isAlive() && enemy.buff(Corruption.class) == null) {
+            if (sticky && enemy != null && enemy.isActive() && enemy.buff(Corruption.class) == null) {
                 PinCushion p = Buff.affect(enemy, PinCushion.class);
                 if (p.target == enemy) {
                     if (!redknife) p.stick(this);
@@ -375,6 +375,11 @@ abstract public class MissileWeapon extends Weapon {
     public void reset() {
         super.reset();
         durability = MAX_DURABILITY;
+    }
+
+    @Override
+    public boolean isSimilar(Item item) {
+        return super.isSimilar(item) && level() == item.level();
     }
 
     @Override
@@ -490,6 +495,6 @@ abstract public class MissileWeapon extends Weapon {
         bundleRestoring = true;
         super.restoreFromBundle(bundle);
         bundleRestoring = false;
-        durability = bundle.getInt(DURABILITY);
+        durability = bundle.getFloat(DURABILITY);
     }
 }

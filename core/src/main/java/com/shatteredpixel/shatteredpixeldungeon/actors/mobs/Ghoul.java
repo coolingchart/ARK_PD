@@ -178,9 +178,7 @@ public class Ghoul extends Mob {
 	protected synchronized void onRemove() {
 		if (beingLifeLinked) {
 			for (Buff buff : buffs()) {
-				if (buff.revivePersists) {
-					//don't remove
-				} else {
+				if (!buff.revivePersists) {
 					buff.detach();
 				}
 			}

@@ -96,7 +96,7 @@ public class KazemaruWeapon extends MeleeWeapon {
         KazemaruSummon summon = new KazemaruSummon();
         summon.setLevel(buffedLvl());
         summon.setTarget(target);
-        summon.alignment = alignment == Char.Alignment.ENEMY ? Char.Alignment.ENEMY : Char.Alignment.ALLY;
+        summon.alignment = alignment;
         summon.pos = pos;
         GameScene.add(summon);
     }

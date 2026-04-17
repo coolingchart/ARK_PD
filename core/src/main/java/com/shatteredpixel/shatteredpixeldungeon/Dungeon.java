@@ -435,7 +435,7 @@ public class Dungeon {
                     level = new DeadEndLevel();
                     Statistics.deepestFloor--;
             }
-        } else if (branch >= 1 && branch <= 4) {
+        } else if (isInRhodes()) {
             //Rhodes Island floors — depth 0, branches 1-4
             switch (branch) {
                 case 1:
@@ -862,23 +862,12 @@ public class Dungeon {
             SecretRoom.restoreRoomsFromBundle(bundle);
 
             generatedLevels.clear();
-            if (bundle.contains(GENERATED_LEVELS)) {
-                for (int i : bundle.getIntArray(GENERATED_LEVELS)) {
-                    generatedLevels.add(i);
-                }
-            } else {
-                for (int i = 1; i <= Statistics.deepestFloor; i++) {
-                    generatedLevels.add(i);
-                }
-            }
-
-            int maxDropFloor = 26;
-            for (int floor : generatedLevels) {
-                if (floor > maxDropFloor) maxDropFloor = floor;
+            for (int i : bundle.getIntArray(GENERATED_LEVELS)) {
+                generatedLevels.add(i);
             }
 
             droppedItems = new SparseArray<>();
-            for (int i = 1; i <= maxDropFloor; i++) {
+            for (int i = 1; i <= 40; i++) {
 
                 //dropped items
                 ArrayList<Item> items = new ArrayList<>();
