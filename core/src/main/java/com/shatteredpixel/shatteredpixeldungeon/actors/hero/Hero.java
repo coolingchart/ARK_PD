@@ -95,6 +95,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap.Type;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.QuestScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.NewGameItem.Certificate;
@@ -2615,7 +2616,13 @@ public class Hero extends Char {
 
                 if (hasKey) {
                     GameScene.updateKeyDisplay();
+                    Type opened = heap.type;
                     heap.open(this);
+                    if (opened == Type.CHEST
+                            || opened == Type.LOCKED_CHEST
+                            || opened == Type.CRYSTAL_CHEST) {
+                        QuestScroll.onChestOpened();
+                    }
                     spend(Key.TIME_TO_UNLOCK);
                 }
             }

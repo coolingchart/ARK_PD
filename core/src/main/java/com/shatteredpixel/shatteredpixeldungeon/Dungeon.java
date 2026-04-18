@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.QuestScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
@@ -346,6 +347,7 @@ public class Dungeon {
         //depth is now set by callers before calling newLevel()
         if (depth > Statistics.deepestFloor && branch == 0) {
             Statistics.deepestFloor = depth;
+            QuestScroll.onNewFloorReached();
 
             if (Statistics.qualifiedForNoKilling) {
                 Statistics.completedWithNoKilling = true;
