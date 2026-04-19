@@ -64,7 +64,8 @@ public class v0_5_X_Changes {
                 "_제국 포화 선조자_가 이제 모든 아군을 타겟으로 지정할 수 있습니다." + "\n\n" +
                         "가장 가까운 아군 유닛을 우선적으로 공격하며, _시야 밖_으로 나갈 경우 타겟이 되지 않습니다."));
         changes.addButton(new ChangeButton(Icons.get(Icons.NEARL), "니어 상향",
-                "_기사_ 직군이 _신속_ 보유 시 공격속도가 _20%_ 증가합니다."));
+                "_기사_ 직군이 _신속_ 보유 시 공격속도가 _20%_ 증가합니다." + "\n\n" +
+                        "_재림_ 특성이 이제 축복된 앙크의 무적시간을 1/2턴 증가시킵니다."));
         changes.addButton(new ChangeButton(Icons.get(Icons.WEP), "샷건 상향",
                 "_샷건_이 적중한 대상 방어도의 영향을 덜 받도록 수정되었습니다."));
         changeInfos.add(changes);
@@ -72,10 +73,11 @@ public class v0_5_X_Changes {
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
         changes.hardlight(CharSprite.NEGATIVE);
         changes.addButton(new ChangeButton(Icons.get(Icons.NEARL), "니어 하향",
-                "_빛의 기사_의 데미지 증가율이 너프되었습니다. (기본 +30% -> +25%, 구제자 +45% -> +35%, 섬광 +20% -> +15%)" + "\n\n" +
+                "_빛의 기사_의 데미지 증가율이 너프되었습니다. (기본 +30% -> +25%, 구제자 +45% -> +40%, 섬광 +20% -> +15%)" + "\n\n" +
                         "_빛의 기사_의 받는 피해 감소량이 너프되었습니다. (기본 2 ~ 피해량의 20% -> 1 ~ 피해량의 20%, 구제자 2 ~ 피해량의 40% -> 3 ~ 피해량의 30%)" + "\n\n" +
                         "_섬광_의 빛의 인장 광역딜 데미지가 1(+1) ~ 6(+2)에서 1(+1) ~ 4(+2)로 너프되었습니다." + "\n\n" +
-                        "_구제자_의 방패 밀기 스택 데미지 배율이 x0.25 ~ x2(+0.1)에서 x0.5 ~ x1.5(+0.05)로 너프되었습니다."));
+                        "_구제자_의 방패 밀기 스택 데미지 배율이 x0.25 ~ x2(+0.1)에서 x0.5 ~ x1.5(+0.05)로 너프되었습니다." + "\n\n" +
+                        "_구제자_의 방패 밀기의 밀치기와 마비가 피해 축적량 최대치의 절반 이상일 경우에만 발동됩니다."));
         changes.addButton(new ChangeButton(Icons.get(Icons.ENEMY_NERFS), "적 하향",
                 "_폭탄새_의 폭발 데미지가 21~29에서 _18~25_로 너프되었습니다." + "\n\n" +
                         "_위매니의 의지_의 돌진 능력 쿨다운이 증가되었습니다."));

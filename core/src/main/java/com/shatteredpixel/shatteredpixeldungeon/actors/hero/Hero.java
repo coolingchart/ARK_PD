@@ -95,7 +95,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap.Type;
-import com.shatteredpixel.shatteredpixeldungeon.items.quest.QuestScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.NewGameItem.Certificate;
@@ -176,6 +175,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.QuestScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAssassin;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfDominate;
@@ -1507,7 +1507,7 @@ public class Hero extends Char {
         }
 
         if (buff(RadiantKnight.class) != null) {
-            if (subClass == HeroSubClass.SAVIOR) damage *= 1.35f;
+            if (subClass == HeroSubClass.SAVIOR) damage *= 1.40f;
             else if (subClass == HeroSubClass.FLASH) damage *= 1.15f;
             else damage *= 1.25f;
 
