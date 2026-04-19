@@ -28,7 +28,6 @@ public class QuestScroll extends Item {
         unique = true;
         stackable = false;
         defaultAction = AC_READ;
-        keptThoughLostInvent = true;
     }
 
     public enum QuestObjective {
@@ -141,14 +140,9 @@ public class QuestScroll extends Item {
 
     private void grantRewards(Hero hero) {
         int goldAmount = objective.rewardGold(targetValue);
-        Gold gold = new Gold(goldAmount);
-        if (!gold.doPickUp(hero)) {
-            Dungeon.level.drop(gold, hero.pos).sprite.drop();
-        }
+        Dungeon.level.drop(new Gold(goldAmount), hero.pos).sprite.drop();
         if (bonusReward != null) {
-            if (!bonusReward.doPickUp(hero)) {
-                Dungeon.level.drop(bonusReward, hero.pos).sprite.drop();
-            }
+            Dungeon.level.drop(bonusReward, hero.pos).sprite.drop();
             bonusReward = null;
         }
     }
@@ -177,7 +171,12 @@ public class QuestScroll extends Item {
     // event hooks
     public static QuestScroll active() {
         if (Dungeon.hero == null || Dungeon.hero.belongings == null) return null;
-        return Dungeon.hero.belongings.getItem(QuestScroll.class);
+        //iterate belongings directly so progress keeps tracking even while LostInventory
+        //hides the scroll from getItem() after an unblessed ankh resurrect
+        for (Item item : Dungeon.hero.belongings) {
+            if (item instanceof QuestScroll) return (QuestScroll) item;
+        }
+        return null;
     }
 
     public static void onMobKilled(Object cause) {
