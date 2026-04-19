@@ -65,6 +65,8 @@ public class v0_5_X_Changes {
                         "가장 가까운 아군 유닛을 우선적으로 공격하며, _시야 밖_으로 나갈 경우 타겟이 되지 않습니다."));
         changes.addButton(new ChangeButton(Icons.get(Icons.NEARL), "니어 상향",
                 "_기사_ 직군이 _신속_ 보유 시 공격속도가 _20%_ 증가합니다."));
+        changes.addButton(new ChangeButton(Icons.get(Icons.WEP), "샷건 상향",
+                "_샷건_이 적중한 대상 방어도의 영향을 덜 받도록 수정되었습니다."));
         changeInfos.add(changes);
 
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);

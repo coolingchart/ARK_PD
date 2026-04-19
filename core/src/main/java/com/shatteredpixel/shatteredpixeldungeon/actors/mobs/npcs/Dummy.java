@@ -35,11 +35,12 @@ public class Dummy extends Mob {
 
     @Override
     protected boolean act() {
-        //fix corrupted saves: reset alignment and state if changed by external effects
+        // reset alignment and state if changed by external effects
         alignment = Alignment.ENEMY;
         state = PASSIVE;
 
         if (Camouflage.CamoFlageEnemy(this)) Buff.affect(this, Camouflage.class, 10f);
+        //retroactively strip Corruption from saves made before the immunity was added
         Corruption corruption = buff(Corruption.class);
         if (corruption != null) {
             corruption.detach();
