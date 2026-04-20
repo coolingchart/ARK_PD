@@ -37,9 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulMark;
@@ -1180,7 +1178,7 @@ public abstract class Mob extends Char {
 	@Override
 	protected void spend(float time) {
 		if (buff(Camouflage.class) != null) {
-			if (Dungeon.hero.buff(Light.class) != null || Dungeon.hero.buff(MindVision.class) != null) Buff.detach(this, Camouflage.class);
+			if (Camouflage.heroDetects(this)) Buff.detach(this, Camouflage.class);
 			else {
 				PathFinder.buildDistanceMap(this.pos, BArray.not(Dungeon.level.solid, null), 1);
 				for (int cell = 0; cell < PathFinder.distance.length; cell++) {
