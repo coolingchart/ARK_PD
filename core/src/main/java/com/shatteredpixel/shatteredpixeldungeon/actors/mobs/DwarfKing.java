@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ToxicImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
@@ -420,11 +421,13 @@ public class DwarfKing extends Mob {
 				for (Summoning s : buffs(Summoning.class)) {
 					s.detach();
 				}
+				Bestiary.skipCountingEncounters = true;
 				for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])) {
 					if (m instanceof Ghoul || m instanceof Monk || m instanceof Warlock) {
 						m.die(null);
 					}
 				}
+				Bestiary.skipCountingEncounters = false;
 			}
 		} else if (phase == 2 && shielding() == 0) {
 			properties.remove(Property.IMMOVABLE);
@@ -530,9 +533,11 @@ public class DwarfKing extends Mob {
 
 			Dungeon.level.unseal();
 
+			Bestiary.skipCountingEncounters = true;
 			for (Mob m : getSubjects()) {
 				m.die(null);
 			}
+			Bestiary.skipCountingEncounters = false;
 
 			LloydsBeacon beacon = Dungeon.hero.belongings.getItem(LloydsBeacon.class);
 			if (beacon != null) {

@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -146,6 +147,7 @@ public class SiestaBoss extends Mob {
 
     @Override
     public void die(Object cause) {
+        Bestiary.skipCountingEncounters = true;
         for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()) {
             if (mob instanceof BossAgent || mob instanceof Schwarz) {
                 mob.die( cause );
@@ -153,6 +155,7 @@ public class SiestaBoss extends Mob {
 
             Badges.validatesiesta1();
         }
+        Bestiary.skipCountingEncounters = false;
 
         yell(Messages.get(this, "defeated"));
 

@@ -47,7 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Shadows;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bestiary;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.MobRotation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GiantMushroom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -583,7 +583,7 @@ public abstract class Level implements Bundlable {
 
     public Mob createMob() {
         if (mobsToSpawn == null || mobsToSpawn.isEmpty()) {
-            mobsToSpawn = Bestiary.getMobRotation(Dungeon.depth);
+            mobsToSpawn = MobRotation.getMobRotation(Dungeon.depth);
         }
 
         Mob m = Reflection.newInstance(mobsToSpawn.remove(0));

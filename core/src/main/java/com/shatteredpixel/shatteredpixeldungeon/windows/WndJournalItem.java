@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2021 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,33 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
+package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.watabou.input.PointerEvent;
+import com.watabou.noosa.Image;
+import com.watabou.noosa.PointerArea;
 
-public abstract class NPC extends Mob {
+public class WndJournalItem extends WndTitledMessage {
 
-	{
-		HP = HT = 1;
-		EXP = 0;
+	public WndJournalItem(Image icon, String title, String message ) {
+		super( icon, title, message);
 
-		alignment = Alignment.NEUTRAL;
-		state = PASSIVE;
-	}
+		PointerArea blocker = new PointerArea( 0, 0, PixelScene.uiCamera.width, PixelScene.uiCamera.height ) {
+			@Override
+			protected void onClick( PointerEvent event ) {
+				onBackPressed();
+			}
+		};
+		blocker.camera = PixelScene.uiCamera;
+		add(blocker);
 
-	@Override
-	protected boolean act() {
-		if (Dungeon.level.heroFOV[pos] && !Bestiary.isSeen(getClass())){
-			Bestiary.setSeen(getClass());
-		}
-
-		return super.act();
-	}
-
-	@Override
-	public void beckon( int cell ) {
 	}
 
 }
