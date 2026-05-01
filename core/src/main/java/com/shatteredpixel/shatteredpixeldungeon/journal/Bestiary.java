@@ -155,6 +155,7 @@ public enum Bestiary {
     //should only be used when initializing
     private void addEntities(Class<?>... classes) {
         for (Class<?> cls : classes) {
+            if (cls == null) continue;
             seen.put(cls, false);
             encounterCount.put(cls, 0);
         }
@@ -433,11 +434,18 @@ public enum Bestiary {
             boolean[] seen = bundle.getBooleanArray(BESTIARY_SEEN);
             int[] encounters = bundle.getIntArray(BESTIARY_ENCOUNTERS);
 
-            for (int i = 0; i < classes.length; i++) {
-                for (Bestiary cat : values()) {
-                    if (cat.seen.containsKey(classes[i])) {
-                        cat.seen.put(classes[i], seen[i]);
-                        cat.encounterCount.put(classes[i], encounters[i]);
+            if (classes == null || seen == null || encounters == null
+                    || classes.length != seen.length
+                    || classes.length != encounters.length) {
+                Journal.saveNeeded = true;
+            } else {
+                for (int i = 0; i < classes.length; i++) {
+                    if (classes[i] == null) continue;
+                    for (Bestiary cat : values()) {
+                        if (cat.seen.containsKey(classes[i])) {
+                            cat.seen.put(classes[i], seen[i]);
+                            cat.encounterCount.put(classes[i], encounters[i]);
+                        }
                     }
                 }
             }

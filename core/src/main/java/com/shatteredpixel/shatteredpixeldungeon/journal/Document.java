@@ -30,7 +30,6 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.DeviceCompat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -262,28 +261,22 @@ public enum Document {
 
 	public static void store( Bundle bundle ){
 
-		Bundle docBundle = new Bundle();
+		Bundle docsBundle = new Bundle();
 
-		for ( Document doc : values()){
-			ArrayList<String> readPages = new ArrayList<>();
-			ArrayList<String> unreadPages = new ArrayList<>();
-			for (String page : doc.pagesStates.keySet()){
+		for (Document doc : values()) {
+			Bundle pagesBundle = new Bundle();
+			boolean empty = true;
+			for (String page : doc.pageNames()) {
 				int state = doc.pagesStates.get(page);
-				if (state == READ) {
-					readPages.add(page);
-				} else if (state == FOUND) {
-					unreadPages.add(page);
+				if (state != NOT_FOUND) {
+					pagesBundle.put(page, state);
+					empty = false;
 				}
 			}
-			if (!readPages.isEmpty()) {
-				docBundle.put(doc.name(), readPages.toArray(new String[0]));
-			}
-			if (!unreadPages.isEmpty()) {
-				docBundle.put(doc.name() + UNREAD_SUFFIX, unreadPages.toArray(new String[0]));
-			}
+			if (!empty) docsBundle.put(doc.name(), pagesBundle);
 		}
 
-		bundle.put( DOCUMENTS, docBundle );
+		bundle.put( DOCUMENTS, docsBundle );
 
 	}
 
@@ -293,25 +286,44 @@ public enum Document {
 			return;
 		}
 
-		Bundle docBundle = bundle.getBundle( DOCUMENTS );
+		Bundle docsBundle = bundle.getBundle( DOCUMENTS );
 
-		for ( Document doc : values()){
-			// Load FOUND-but-not-READ pages first (new format)
-			String unreadKey = doc.name() + UNREAD_SUFFIX;
-			if (docBundle.contains(unreadKey)){
-				List<String> pages = Arrays.asList(docBundle.getStringArray(unreadKey));
-				for (String page : pages){
-					if (doc.pagesStates.containsKey(page)) {
-						doc.pagesStates.put(page, FOUND);
+		if (docsBundle.isNull()) {
+			Journal.saveNeeded = true;
+			return;
+		}
+
+		for (Document doc : values()) {
+			if (docsBundle.contains(doc.name())) {
+				Bundle pagesBundle = docsBundle.getBundle(doc.name());
+
+				if (pagesBundle.isNull()) {
+					// Legacy ARK_PD format: <name> = read pages array, <name>_unread = found pages array
+					String[] readArr = docsBundle.getStringArray(doc.name());
+					if (readArr != null) {
+						for (String page : readArr) {
+							if (doc.pagesStates.containsKey(page)) {
+								doc.pagesStates.put(page, READ);
+							}
+						}
 					}
-				}
-			}
-			// Load READ pages second (also handles old 2-state saves where true → READ)
-			if (docBundle.contains(doc.name())){
-				List<String> pages = Arrays.asList(docBundle.getStringArray(doc.name()));
-				for (String page : pages){
-					if (doc.pagesStates.containsKey(page)) {
-						doc.pagesStates.put(page, READ);
+					String unreadKey = doc.name() + UNREAD_SUFFIX;
+					if (docsBundle.contains(unreadKey)) {
+						String[] unreadArr = docsBundle.getStringArray(unreadKey);
+						if (unreadArr != null) {
+							for (String page : unreadArr) {
+								if (doc.pagesStates.containsKey(page)) {
+									doc.pagesStates.put(page, FOUND);
+								}
+							}
+						}
+					}
+					Journal.saveNeeded = true; // rewrite to nested-bundle format
+				} else {
+					for (String page : doc.pageNames()) {
+						if (pagesBundle.contains(page)) {
+							doc.pagesStates.put(page, pagesBundle.getInt(page));
+						}
 					}
 				}
 			}

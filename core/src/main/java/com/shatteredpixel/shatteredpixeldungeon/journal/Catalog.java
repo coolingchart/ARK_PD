@@ -503,10 +503,14 @@ public enum Catalog {
 		//legacy CATALOG_ITEMS migration (mod's old format)
 		if (bundle.contains(CATALOG_ITEMS)) {
 			Journal.saveNeeded = true; //rewrite to new format
-			for (Class<?> cls : Arrays.asList(bundle.getClassArray(CATALOG_ITEMS))){
-				for (Catalog cat : values()) {
-					if (cat.seen.containsKey(cls)) {
-						cat.seen.put(cls, true);
+			Class<?>[] legacy = bundle.getClassArray(CATALOG_ITEMS);
+			if (legacy != null) {
+				for (Class<?> cls : legacy) {
+					if (cls == null) continue;
+					for (Catalog cat : values()) {
+						if (cat.seen.containsKey(cls)) {
+							cat.seen.put(cls, true);
+						}
 					}
 				}
 			}
@@ -515,11 +519,14 @@ public enum Catalog {
 		//pre-0.8.2 string-array format — match by simple class name
 		if (bundle.contains(CATALOG_LEGACY_ITEMS)) {
 			Journal.saveNeeded = true; //rewrite to new format
-			List<String> seenNames = Arrays.asList(bundle.getStringArray(CATALOG_LEGACY_ITEMS));
-			for (Catalog cat : values()) {
-				for (Class<?> item : cat.items()) {
-					if (seenNames.contains(item.getSimpleName())) {
-						cat.seen.put(item, true);
+			String[] legacyNames = bundle.getStringArray(CATALOG_LEGACY_ITEMS);
+			if (legacyNames != null) {
+				List<String> seenNames = Arrays.asList(legacyNames);
+				for (Catalog cat : values()) {
+					for (Class<?> item : cat.items()) {
+						if (seenNames.contains(item.getSimpleName())) {
+							cat.seen.put(item, true);
+						}
 					}
 				}
 			}
@@ -528,14 +535,21 @@ public enum Catalog {
 		//new format
 		if (bundle.contains(CATALOG_CLASSES)){
 			Class<?>[] classes = bundle.getClassArray(CATALOG_CLASSES);
-			boolean[] seen = bundle.getBooleanArray(CATALOG_SEEN);
-			int[] uses = bundle.getIntArray(CATALOG_USES);
+			boolean[] seen = bundle.contains(CATALOG_SEEN) ? bundle.getBooleanArray(CATALOG_SEEN) : null;
+			int[] uses = bundle.contains(CATALOG_USES) ? bundle.getIntArray(CATALOG_USES) : null;
 
-			for (int i = 0; i < classes.length; i++){
-				for (Catalog cat : values()) {
-					if (cat.seen.containsKey(classes[i])) {
-						cat.seen.put(classes[i], seen[i]);
-						cat.useCount.put(classes[i], uses[i]);
+			if (classes == null || seen == null || uses == null
+					|| classes.length != seen.length
+					|| classes.length != uses.length) {
+				Journal.saveNeeded = true;
+			} else {
+				for (int i = 0; i < classes.length; i++){
+					if (classes[i] == null) continue;
+					for (Catalog cat : values()) {
+						if (cat.seen.containsKey(classes[i])) {
+							cat.seen.put(classes[i], seen[i]);
+							cat.useCount.put(classes[i], uses[i]);
+						}
 					}
 				}
 			}
