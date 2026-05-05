@@ -15,6 +15,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.SP.StaffOfSuzuran;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.BambooSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.EX42;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Enfild;
@@ -22,6 +23,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Enfild2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gamzashield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.GoldDogSword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Hinagiku;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MinosFury;
@@ -142,6 +144,29 @@ public class Nullshield extends Item {
                         detach(curUser.belongings.backpack);
                     }
                     else GLog.h(Messages.get(Nullshield.class, "fail_weapon"));
+                }
+                else if (item instanceof BambooSword)
+                {
+                    if (curUser.belongings.weapon != item) {
+                        GLog.h(Messages.get(Nullshield.class, "suc"));
+
+                        Hinagiku nya = new Hinagiku();
+                        nya.identify();
+
+                        int level = item.level();
+                        if (((MeleeWeapon) item).curseInfusionBonus) level--;
+                        if (level > 0) {
+                            nya.upgrade(level);
+                        } else if (level < 0) {
+                            nya.degrade(-level);
+                        }
+                        Dungeon.level.drop(nya, Dungeon.hero.pos).sprite.drop(Dungeon.hero.pos);
+                        item.detach(curUser.belongings.backpack);
+                        detach(curUser.belongings.backpack);
+                    }
+                    else {
+                        GLog.h(Messages.get(Nullshield.class, "fail_weapon"));
+                    }
                 }
                 else if (item instanceof Firebomb)
                 {

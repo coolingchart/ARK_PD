@@ -911,6 +911,14 @@ public class Hero extends Char {
             Dungeon.level.seaTerrors.get(pos).spendTime(this, time);
         }
 
+        com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia =
+                (com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia) belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
+
+        // 유물을 가지고 있고, 현재 장착 중(isEquipped)일 때만 턴이 올라갑니다.
+        if (camellia != null && camellia.isEquipped(this)) {
+            camellia.addTurn();
+        }
+
         if (belongings.weapon() instanceof PatriotSpear) {
             if (belongings.armor() instanceof PlateArmor) {
                 if (belongings.getItem(RingOfMight.class) != null && belongings.getItem(RingOfTenacity.class) != null) {

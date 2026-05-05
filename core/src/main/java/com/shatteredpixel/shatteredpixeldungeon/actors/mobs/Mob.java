@@ -862,15 +862,25 @@ public abstract class Mob extends Char {
 				Dungeon.level.drop(loot, pos).sprite.drop();
 			}
 		}
-		
-		//ring of wealth logic
-		if (Ring.getBuffedBonus(Dungeon.hero, RingOfWealth.Wealth.class) > 0) {
+
+		int wealthBonus = Ring.getBuffedBonus(Dungeon.hero, RingOfWealth.Wealth.class);
+
+		com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia =
+				Dungeon.hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
+
+		if (camellia != null && camellia.isEquipped(Dungeon.hero) && camellia.isAwakened) {
+			wealthBonus += 20; //+10
+		}
+
+		if (wealthBonus > 0) {
 			int rolls = 1;
 			if (properties.contains(Property.BOSS)) rolls = 15;
 			else if (properties.contains(Property.MINIBOSS)) rolls = 5;
+
 			ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(Dungeon.hero, rolls);
 			if (bonus != null && !bonus.isEmpty()) {
 				for (Item b : bonus) Dungeon.level.drop(b, pos).sprite.drop();
+
 				RingOfWealth.showFlareForBonusDrop(sprite);
 			}
 		}

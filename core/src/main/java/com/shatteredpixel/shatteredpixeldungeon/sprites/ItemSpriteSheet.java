@@ -196,6 +196,8 @@ public class ItemSpriteSheet {
     public static final int SHRAPNEL_BOMB = BOMBS + 11;
     public static final int LENS_BOMB = BOMBS + 12;
 
+    public static final int SPIDER_BOMB   = BOMBS+17;
+
     static {
         assignItemRect(BOMB, 16, 16);
         assignItemRect(DBL_BOMB, 16, 16);
@@ -210,6 +212,7 @@ public class ItemSpriteSheet {
         assignItemRect(ARCANE_BOMB, 16, 16);
         assignItemRect(SHRAPNEL_BOMB, 16, 16);
         assignItemRect(LENS_BOMB, 16, 16);
+        assignItemRect(SPIDER_BOMB,   16,  16);
     }
 
 
@@ -255,6 +258,8 @@ public class ItemSpriteSheet {
 
     public static final int CASSIDY = WEP_TIER2 + 10;
 
+    public static final int BAMBOOSWORD           = WEP_TIER2+11;
+
     static {
         assignItemRect(SHORTSWORD, 16, 16);
         assignItemRect(HAND_AXE, 16, 16);
@@ -267,6 +272,7 @@ public class ItemSpriteSheet {
         assignItemRect(FIRE_KATANA, 16, 16);
         assignItemRect(USG, 16, 16);
         assignItemRect(CASSIDY, 16, 16);
+        assignItemRect(BAMBOOSWORD,            16, 16);
 
     }
 
@@ -286,6 +292,16 @@ public class ItemSpriteSheet {
     public static final int C1 = WEP_TIER3 + 12;
     public static final int M870 = WEP_TIER3 + 13;
 
+    public static final int C10GUN     = WEP_TIER3+16;
+    public static final int GaussRifle     = WEP_TIER3+17;
+    public static final int Zealotknife     = WEP_TIER3+18;
+    public static final int DarktemplerSword     = WEP_TIER3+19;
+
+    public static final int BlackCamelliaSword     = WEP_TIER3+21;
+
+    public static final int Hinagiku     = WEP_TIER3+22;
+
+
     static {
         assignItemRect(SWORD, 16, 16);
         assignItemRect(MACE, 16, 16);
@@ -301,6 +317,12 @@ public class ItemSpriteSheet {
         assignItemRect(DP27, 16, 16);
         assignItemRect(C1, 16, 16);
         assignItemRect(M870, 16, 16);
+        assignItemRect(C10GUN,            16, 16);
+        assignItemRect(GaussRifle,            16, 16);
+        assignItemRect(Zealotknife,            16, 16);
+        assignItemRect(DarktemplerSword,            16, 16);
+        assignItemRect(BlackCamelliaSword,            16, 16);
+        assignItemRect(Hinagiku,            16, 16);
 
 
     }
@@ -379,6 +401,8 @@ public class ItemSpriteSheet {
     public static final int FLAMMETTA = WEP_TIER5 + 21;
     public static final int PKP = WEP_TIER5 + 22;
 
+    public static final int AKM       = WEP_TIER5+23;
+
     static {
         assignItemRect(GREATSWORD, 16, 16);
         assignItemRect(WAR_HAMMER, 16, 16);
@@ -403,7 +427,7 @@ public class ItemSpriteSheet {
         assignItemRect(DONKEY_SWORD, 16, 16);
         assignItemRect(FLAMMETTA, 16, 16);
         assignItemRect(PKP, 16, 16);
-
+        assignItemRect(AKM,   16, 16);
 
     }
 
@@ -601,6 +625,8 @@ public class ItemSpriteSheet {
     public static final int ARTIFACT_CAMERA = ARTIFACTS + 42;
     public static final int ARTIFACT_WALLET = ARTIFACTS + 43;
 
+    public static final int ARTIFACT_BlackCamellia      = WEP_TIER3+20;
+
     static {
         assignItemRect(ARTIFACT_CLOAK, 16, 16);
         assignItemRect(ARTIFACT_ARMBAND, 16, 16);
@@ -630,6 +656,7 @@ public class ItemSpriteSheet {
         assignItemRect(ARTIFACT_NEARL, 16, 16);
         assignItemRect(ARTIFACT_CAMERA, 16, 16);
         assignItemRect(ARTIFACT_WALLET, 16, 16);
+        assignItemRect(ARTIFACT_BlackCamellia, 16, 16);
     }
 
     //16 free slots

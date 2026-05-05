@@ -82,10 +82,11 @@ public class Artifact extends KindofMisc {
 		}
 
 	}
-
 	public void activate( Char ch ) {
 		passiveBuff = passiveBuff();
-		passiveBuff.attachTo(ch);
+		if (passiveBuff != null) {
+			passiveBuff.attachTo(ch);
+		}
 	}
 
 	@Override

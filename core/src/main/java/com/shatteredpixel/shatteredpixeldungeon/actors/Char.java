@@ -125,6 +125,7 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stimpack;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -571,6 +572,7 @@ public abstract class Char extends Actor {
 		if ( buff( Cripple.class ) != null ) speed /= 2f;
 		if ( buff( Stamina.class ) != null) speed *= 1.5f;
 		if ( buff( Adrenaline.class ) != null) speed *= 2f;
+		if ( buff( Stimpack.class ) != null) speed *= 3f;
 		if ( buff( Haste.class ) != null) speed *= 3f;
 		if ( buff (LanceCharge.class) != null) speed *= 5f;
 		if ( this instanceof Hero && Dungeon.hero.hasTalent(Talent.GALLOP) ) speed *= 1.05f;

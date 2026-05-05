@@ -139,7 +139,7 @@ public abstract class EquipableItem extends Item {
         return true;
 	}
 
-	final public boolean doUnequip( Hero hero, boolean collect ) {
+	public boolean doUnequip(Hero hero, boolean collect) {
 		return doUnequip( hero, collect, true );
 	}
 

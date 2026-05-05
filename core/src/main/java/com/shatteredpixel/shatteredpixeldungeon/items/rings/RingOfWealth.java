@@ -88,21 +88,43 @@ public class RingOfWealth extends Ring {
 	protected RingBuff buff( ) {
 		return new Wealth();
 	}
-	
+
+	// --- 1. 일반 템 드롭 확률 계산 (동백나무 반영) ---
 	public static float dropChanceMultiplier( Char target ){
-		return (float)Math.pow(1.20, getBuffedBonus(target, Wealth.class));
-	}
-	
-	public static ArrayList<Item> tryForBonusDrop(Char target, int tries ){
 		int bonus = getBuffedBonus(target, Wealth.class);
 
+		if (target instanceof com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) {
+			com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero hero = (com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) target;
+			com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia =
+					hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
+
+			if (camellia != null && camellia.isEquipped(hero)) {
+				bonus += camellia.isAwakened ? 20 : -10;
+			}
+		}
+		return (float)Math.pow(1.20, bonus);
+	}
+
+	// --- 2. 보너스 장비 드롭 계산 (동백나무 반영 & 게이지 저장) ---
+	public static ArrayList<Item> tryForBonusDrop(Char target, int tries ){
+		int bonus = getBuffedBonus(target, Wealth.class);
+		com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia = null;
+
+		if (target instanceof com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) {
+			com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero hero = (com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) target;
+			camellia = hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
+
+			if (camellia != null && camellia.isEquipped(hero)) {
+				bonus += camellia.isAwakened ? 20 : -10;
+			}
+		}
+
 		if (bonus <= 0) return null;
-		
+
 		HashSet<Wealth> buffs = target.buffs(Wealth.class);
 		float triesToDrop = Float.MIN_VALUE;
 		int dropsToEquip = Integer.MIN_VALUE;
-		
-		//find the largest count (if they aren't synced yet)
+
 		for (Wealth w : buffs){
 			if (w.triesToDrop() > triesToDrop){
 				triesToDrop = w.triesToDrop();
@@ -110,13 +132,17 @@ public class RingOfWealth extends Ring {
 			}
 		}
 
-		//reset (if needed), decrement, and store counts
+		// 유물(동백나무)에서 게이지 불러오기
+		if (camellia != null && camellia.triesToDrop > triesToDrop) {
+			triesToDrop = camellia.triesToDrop;
+			dropsToEquip = camellia.dropsToRare;
+		}
+
 		if (triesToDrop == Float.MIN_VALUE) {
 			triesToDrop = Random.NormalIntRange(0, 25);
 			dropsToEquip = Random.NormalIntRange(4, 8);
 		}
 
-		//now handle reward logic
 		ArrayList<Item> drops = new ArrayList<>();
 
 		triesToDrop -= tries;
@@ -139,12 +165,17 @@ public class RingOfWealth extends Ring {
 			triesToDrop += Random.NormalIntRange(0, 25);
 		}
 
-		//store values back into rings
 		for (Wealth w : buffs){
 			w.triesToDrop(triesToDrop);
 			w.dropsToRare(dropsToEquip);
 		}
-		
+
+		// 깎인 게이지를 유물(동백나무)에 저장하기
+		if (camellia != null) {
+			camellia.triesToDrop = triesToDrop;
+			camellia.dropsToRare = dropsToEquip;
+		}
+
 		return drops;
 	}
 

@@ -295,6 +295,27 @@ public class Assets {
 		public static final String SKILL_SILVERSLASH   = "sounds/skill_silverslash.mp3";
 		public static final String SKILL_SORA   = "sounds/skill_sora.mp3";
 
+		public static final String LOCKDOWN   = "sounds/lockdown.mp3";
+		public static final String GHOSTSHOOT   = "sounds/ghostshoot.mp3";
+
+		public static final String STIMPACK   = "sounds/stimpack.mp3";
+
+		public static final String MARINGUN   = "sounds/maringun.mp3";
+
+		public static final String ZEALOTHIT   = "sounds/zealothit.mp3";
+
+		public static final String DARKTEMPLERHIT   = "sounds/darktempler.mp3";
+
+		public static final String BAMBOOSWORDHIT   = "sounds/BambooSword.mp3";
+
+		public static final String AKMHIT   = "sounds/akmhit.mp3";
+
+		public static final String AWPHIT   = "sounds/hit_awp.mp3";
+
+		public static final String SPMINESET   = "sounds/spidermineset.mp3";
+
+		public static final String SPMINEACT   = "sounds/spidermineactive.mp3";
+
 
 		public static final String[] all = new String[]{
 				CLICK, BADGE, GOLD,
@@ -315,7 +336,7 @@ public class Assets {
 				HIT_SNIPER, HIT_GUN, HIT_GUN2, HIT_GUN3, HIT_PISTOL, HIT_SNIPER2, HIT_AR, FROST, SHINNING, AJIMU, HIT_STRIKE,
 				SKILL_BASIC, SKILL_BEEP, SKILL_CROSSBOW, SKILL_WOLFPACK, SKILL_CHAINSAW, SKILL_SILVERSLASH, SKILL_YOUWISH,
 				SKILL_MON1, SKILL_MON2, SKILL_TEXAS , SKILL_SURTR, SKILL_BABYNIGHT, SKILL_SORA, SPLASH,
-				CHAINS2,
+				CHAINS2, LOCKDOWN, GHOSTSHOOT, STIMPACK, MARINGUN, ZEALOTHIT, DARKTEMPLERHIT, BAMBOOSWORDHIT, AKMHIT, AWPHIT, SPMINESET, SPMINEACT
 		};
 	}
 
@@ -577,5 +598,7 @@ public class Assets {
 		public static final String FRK	= "sprites/franka.png";
 		public static final String WED	= "sprites/weedy_skin.png";
 		public static final String GLD	= "sprites/gladiia.png";
+
+		public static final String SPIDERMINE	= "sprites/spidermine.png";
 	}
 }

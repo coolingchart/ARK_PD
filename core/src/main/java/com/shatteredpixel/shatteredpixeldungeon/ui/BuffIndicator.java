@@ -105,6 +105,16 @@ public class BuffIndicator extends Component {
     public static final int INVULNERABILITY = 56;
     public static final int NOINV = 57;
 
+    public static final int LOCKDOWN    = 65;
+
+    public static final int STIMPACK    = 66;
+
+    public static final int BADLUCKBC    = 67;
+
+    public static final int GOODLUCKBC    = 68;
+
+    public static final int SOULCHANGE    = 69;
+
     public static final int SIZE = 7;
 
     private static BuffIndicator heroInstance;

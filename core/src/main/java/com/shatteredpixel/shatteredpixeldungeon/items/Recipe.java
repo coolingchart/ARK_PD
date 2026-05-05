@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.TomorrowRogueNight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.SpiderMineItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Sandvich;
@@ -254,7 +255,8 @@ public abstract class Recipe {
             new Glassate.Recipe(),
             new ElixirsOfSoulProtection.Recipe(),
             new ElixirsOfIronSkin.Recipe(),
-            new KollamSword.Recipe()
+            new KollamSword.Recipe(),
+            new SpiderMineItem.Recipe()
     };
 
     public static Recipe findRecipe(ArrayList<Item> ingredients) {

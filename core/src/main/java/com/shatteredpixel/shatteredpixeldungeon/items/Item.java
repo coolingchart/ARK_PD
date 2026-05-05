@@ -141,16 +141,18 @@ public class Item implements Bundlable {
     }
 
     public boolean doPickUp(Hero hero, int pos) {
-        if (collect(hero.belongings.backpack)) {
+        if (collect( hero.belongings.backpack )) {
+            com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia =
+                    hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
 
-            if (hero.hasTalent(Talent.SMARTMEALS)) {
-                if (this.isIdentified() == false && Dungeon.hero.buff(Talent.foodIdentify.class) != null) {
-                    if (Dungeon.hero.buff(Talent.foodIdentify.class).count() > 9 - (hero.pointsInTalent(Talent.SMARTMEALS) * 2)) {
-                        if (this instanceof MeleeWeapon || this instanceof Wand || this instanceof Ring || this instanceof Armor) {
-                            this.identify();
-                            GLog.i(Messages.get(Hero.class, "identify"));
-                            Buff.detach(Dungeon.hero, Talent.foodIdentify.class);
-                        }
+            if (camellia != null && camellia.isEquipped(hero) && !camellia.isAwakened) {
+
+                if (this.isUpgradable()) {
+
+                    //저주 확률 조절
+                    if (com.watabou.utils.Random.Int(100) < 85) {
+                        this.cursed = true;
+                        this.cursedKnown = false;
                     }
                 }
             }
