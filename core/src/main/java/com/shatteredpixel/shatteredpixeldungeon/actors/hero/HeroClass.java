@@ -34,8 +34,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Skill.SkillBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SealOfLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.FoodBag;
@@ -46,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatCutlet;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
@@ -54,6 +57,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -65,10 +70,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfWarp;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDominate;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfSilence;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cassidy;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ChenSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
@@ -86,11 +93,15 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ForceCube;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.LightKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.DeviceCompat;
+import com.watabou.utils.Reflection;
+
+import java.util.Collection;
 
 public enum HeroClass {
 
@@ -193,9 +204,64 @@ public enum HeroClass {
             new StoneOfAugmentation().quantity(5).collect();
             new PotionOfParalyticGas().quantity(5).collect();
 
+            // Catalog collection test fixtures. Uncomment one section at a time to avoid flooding inventory.
+            // collectCatalogItems(Catalog.MELEE_WEAPONS.items());
+            // collectCatalogItems(Catalog.ARMOR.items());
+            // collectCatalogItems(Catalog.THROWN_WEAPONS.items());
+            // collectCatalogItems(Catalog.WANDS.items());
+            // collectCatalogItems(Catalog.RINGS.items());
+            // collectCatalogItems(Catalog.ARTIFACTS.items());
+            // collectCatalogItems(Catalog.MISC_EQUIPMENT.items());
+            // collectCatalogItems(Catalog.SKILLBOOK.items());
+
+            // collectCatalogItems(Catalog.POTIONS.items());
+            // collectCatalogItems(Catalog.SCROLLS.items());
+            // collectCatalogItems(Catalog.SEEDS.items());
+            // collectCatalogItems(Catalog.STONES.items());
+            // collectCatalogItems(Catalog.FOOD.items());
+            // collectCatalogItems(Catalog.EXOTIC_POTIONS.items());
+            // collectCatalogItems(Catalog.EXOTIC_SCROLLS.items());
+            // collectCatalogItems(Catalog.BOMBS.items());
+            // collectCatalogItems(Catalog.TIPPED_DARTS.items());
+            // collectCatalogItems(Catalog.BREWS_ELIXIRS.items());
+            // collectCatalogItems(Catalog.SPELLS.items());
+            // collectCatalogItems(Catalog.MISC_CONSUMABLES.items());
+
+            // These catalog sections are effects rather than inventory items.
+            // markCatalogSeen(Catalog.ENCHANTMENTS.items());
+            // markCatalogSeen(Catalog.GLYPHS.items());
         }
 
         Dungeon.LimitedDrops.FOOD_BAG.drop();
+    }
+
+    private static void collectCatalogItems(Collection<Class<?>> itemClasses) {
+        for (Class<?> itemClass : itemClasses) {
+            if (!Item.class.isAssignableFrom(itemClass)) {
+                continue;
+            }
+
+            Item item = (Item) Reflection.newInstance(itemClass);
+            setupCatalogTestItem(item).collect();
+        }
+    }
+
+    private static Item setupCatalogTestItem(Item item) {
+        if (item instanceof Weapon || item instanceof Armor || item instanceof Wand || item instanceof Ring || item instanceof Artifact) {
+            item.identify();
+        } else if (item instanceof Potion || item instanceof Scroll) {
+            item.identify().quantity(5);
+        } else {
+            item.quantity(5);
+        }
+
+        return item;
+    }
+
+    private static void markCatalogSeen(Collection<Class<?>> classes) {
+        for (Class<?> cls : classes) {
+            Catalog.setSeen(cls);
+        }
     }
 
     public Badges.Badge masteryBadge() {
