@@ -33,6 +33,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RhodesSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.SanktaBet;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scythe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.AKM;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DP27;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.GaussRifle;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KRISSVector;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Pkp;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.R4C;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sig553;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.K6;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.PurgatoryKnife;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -168,6 +176,38 @@ public class Nullshield extends Item {
                         GLog.h(Messages.get(Nullshield.class, "fail_weapon"));
                     }
                 }
+
+                else if (item instanceof AKM || item instanceof DP27 || item instanceof GaussRifle
+                        || item instanceof KRISSVector || item instanceof Pkp
+                        || item instanceof R4C || item instanceof Sig553)
+                {
+                    if (curUser.belongings.weapon != item) {
+                        GLog.h(Messages.get(Nullshield.class, "suc"));
+                        K6 nya = new K6();
+                        nya.identify();
+
+                        int level = item.level();
+                        if (((MeleeWeapon) item).curseInfusionBonus) level--;
+                        if (level > 0) {
+                            nya.upgrade(level);
+                        } else if (level < 0) {
+                            nya.degrade(-level);
+                        }
+
+                        nya.enchantment = ((MeleeWeapon) item).enchantment;
+                        nya.curseInfusionBonus = ((MeleeWeapon) item).curseInfusionBonus;
+                        nya.levelKnown = ((MeleeWeapon) item).levelKnown;
+                        nya.cursedKnown = ((MeleeWeapon) item).cursedKnown;
+                        nya.cursed = ((MeleeWeapon) item).cursed;
+                        nya.augment = ((MeleeWeapon) item).augment;
+
+                        Dungeon.level.drop(nya, Dungeon.hero.pos).sprite.drop(Dungeon.hero.pos);
+                        item.detach(curUser.belongings.backpack);
+                        detach(curUser.belongings.backpack);
+                    }
+                    else GLog.h(Messages.get(Nullshield.class, "fail_weapon"));
+                }
+
                 else if (item instanceof Firebomb)
                 {
                     GLog.h(Messages.get(Nullshield.class, "suc"));

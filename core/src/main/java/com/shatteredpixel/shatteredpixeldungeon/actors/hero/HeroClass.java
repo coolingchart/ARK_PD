@@ -80,6 +80,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.BlackCamellia
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.C10gun;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cassidy;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ChenSword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DP27;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.DarktemplerSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.EX42;
@@ -89,10 +90,16 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.GoldDogSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Heamyo;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Hinagiku;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.K6;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.KRISSVector;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.M870;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.NEARL_AXE;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Naginata;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Pkp;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.R4C;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Saiga12;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sig553;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Spear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Zealotknife;
@@ -176,9 +183,20 @@ public enum HeroClass {
 
         if (DeviceCompat.isDebug()) {
 
-            new PlateArmor().identify().upgrade(99).collect();
+            new K6().identify().upgrade(0).collect();
+            new Saiga12().identify().upgrade(0).collect();
 
-            new AKM().identify().upgrade(99).collect();
+            /*new PotionOfStrength().identify().quantity(40).collect();
+            new PotionOfExperience().identify().quantity(40).collect();
+            new PotionOfHealing().identify().quantity(40).collect();
+            new ScrollOfUpgrade().identify().quantity(40).collect();
+            new Nullshield().identify().quantity(40).collect();
+            new VelvetPouch().collect();
+            new MagicalHolster().collect();
+            new Heamyo().collect();*/
+
+
+            /*new AKM().identify().upgrade(99).collect();
             new C10gun().identify().upgrade(99).collect();
             new GaussRifle().identify().upgrade(99).collect();
             new Zealotknife().identify().upgrade(99).collect();
@@ -187,45 +205,11 @@ public enum HeroClass {
             new BlackCamellia().identify().collect();
             new BambooSword().identify().upgrade(99).collect();
             new Hinagiku().identify().upgrade(99).collect();
-            new SpiderMineItem().identify().collect();
             new Blindweed.Seed().quantity(40).collect();
             new Nullshield().quantity(40).collect();
             new Alchemize().identify().quantity(40).collect();
             new StoneOfEnchantment().quantity(40).collect();
-            new Enfild2().identify().upgrade(99).collect();
-
-            /*new VelvetPouch().collect();
-            new MagicalHolster().collect();
-
-            new PotionOfStrength().identify().quantity(40).collect();
-            new PotionOfExperience().identify().quantity(40).collect();
-            new PotionOfHealing().identify().quantity(40).collect();
-            new ScrollOfUpgrade().identify().quantity(40).collect();
-            new ScrollOfMagicMapping().identify().quantity(40).collect();
-
-            new Amulet().collect();
-            new Heamyo().collect();
-            new PlateArmor().identify().upgrade(10).collect();
-            new R4C().identify().upgrade(10).collect();
-            new Cassidy().identify().collect();
-            new ForceCube().quantity(40).collect();
-            new TomeOfMastery().collect();
-            Ankh ankh = new Ankh();
-            ankh.collect();
-
-            new GoldDogSword().identify().collect();
-            new ScrollOfTransmutation().quantity(10).identify().collect();
-            new ScrollOfDominate().quantity(10).identify().collect();
-            new Bomb().quantity(10).collect();
-
-            new WandOfCorruption().identify().upgrade(10).collect();
-            new WandOfMagicMissile().identify().upgrade(5).collect();
-            new ScrollOfMirrorImage().identify().quantity(5).collect();
-            new WandOfSilence().identify().upgrade(5).collect();
-            new Spear().identify().collect();
-            new Naginata().identify().collect();
-            new StoneOfAugmentation().quantity(5).collect();
-            new PotionOfParalyticGas().quantity(5).collect();*/
+            new Enfild2().identify().upgrade(99).collect();*/
 
         }
 

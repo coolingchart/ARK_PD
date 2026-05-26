@@ -24,13 +24,12 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-// 클래스 이름이 C10gun으로 변경되었습니다.
 public class C10gun extends MeleeWeapon {
     public static final String AC_ZAP = "ZAP";
 
     {
         image = ItemSpriteSheet.C10GUN;
-        hitSound = Assets.Sounds.GHOSTSHOOT; // 고스트 총소리로 변경
+        hitSound = Assets.Sounds.GHOSTSHOOT;
         hitSoundPitch = 1f;
 
         tier = 5;
@@ -47,7 +46,6 @@ public class C10gun extends MeleeWeapon {
     private int arts = 3;
     private int artschargeCap = 3;
 
-    // 추가됨: 3번의 평타를 세기 위한 카운터
     private int hitCount = 0;
 
     @Override
@@ -63,11 +61,9 @@ public class C10gun extends MeleeWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        // 추가됨: SP가 꽉 차지 않았을 때만 평타 횟수를 누적합니다.
+
         if (arts < artschargeCap) {
             hitCount++;
-
-            // 3번을 때렸다면 SP 1칸 충전 후 카운터 초기화
             if (hitCount >= 6) {
                 SPCharge(1);
                 hitCount = 0;
@@ -114,14 +110,12 @@ public class C10gun extends MeleeWeapon {
     }
 
     private static final String CHARGE = "arts";
-    // 추가됨: 세이브 파일에 횟수를 저장하기 위한 키값
     private static final String HIT_COUNT = "hitCount";
 
     @Override
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
         bundle.put(CHARGE, arts);
-        // 추가됨: 맞춘 횟수 저장
         bundle.put(HIT_COUNT, hitCount);
     }
 
@@ -130,8 +124,6 @@ public class C10gun extends MeleeWeapon {
         super.restoreFromBundle(bundle);
         if (artschargeCap > 0) arts = Math.min(artschargeCap, bundle.getInt(CHARGE));
         else arts = bundle.getInt(CHARGE);
-
-        // 추가됨: 맞춘 횟수 불러오기
         hitCount = bundle.getInt(HIT_COUNT);
     }
 
@@ -139,7 +131,6 @@ public class C10gun extends MeleeWeapon {
         @Override
         public void onSelect(Integer target) {
             if (target != null) {
-                // 이 내부에서도 C10gun으로 모두 변경되었습니다.
                 final C10gun ss;
                 if (curItem instanceof C10gun) {
                     ss = (C10gun) C10gun.curItem;
@@ -203,13 +194,10 @@ public class C10gun extends MeleeWeapon {
         Char ch = Actor.findChar(bolt.collisionPos);
         if (ch != null) {
 
-            float duration = 4f; // 기본은 4턴
+            float duration = 4f;
 
-            //코드 상에 보스 꼬리표가 달렸는지 확인
             boolean isBoss = ch.properties().contains(Char.Property.BOSS);
-            //몬스터가 소속된 패키지(폴더) 이름에 "miniboss"가 포함되어 있는지 확인
             boolean isMiniBoss = ch.getClass().getName().contains("miniboss");
-            //보스 꼬리표가 있거나, 미니보스 폴더 출신 턴 정하기
             if (isBoss || isMiniBoss) {
                 duration = 1f;
             }

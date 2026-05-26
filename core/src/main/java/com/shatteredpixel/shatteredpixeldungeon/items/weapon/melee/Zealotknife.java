@@ -99,14 +99,8 @@ public class Zealotknife extends MeleeWeapon {
             } else {
                 finalMin = Math.min(baseMin, finalMax);
             }
-
-            // ==========================================
-            // 💡 [추가된 부분] 소수점 배율을 직관적인 퍼센트(%) 정수로 바꿉니다! (예: 1.2 -> 120)
             int percent = Math.round(multiplier * 100);
-
-            // 배율과 최종 데미지를 깔끔하게 두 줄로 띄워줍니다!
             return originalDesc + "\n\n현재 데미지 배율: +" + percent + "%\n현재 데미지: " + finalMin + " ~ " + finalMax;
-            // ==========================================
         }
         return originalDesc;
     }

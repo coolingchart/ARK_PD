@@ -4,97 +4,84 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CloserangeShot;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
 import com.watabou.utils.Random;
 
-public class AKM extends GunWeapon {
-    {
-        image = ItemSpriteSheet.AKM;
-        hitSound = Assets.Sounds.AKMHIT;
-        hitSoundPitch = 1f;
+public class K6 extends GunWeapon {
 
-        FIRE_DELAY_MULT = 0.85f;
-        bulletMax = 31;
-        bullet = Random.Int(bulletMax / 2, bulletMax + 1);
-        MIN_RANGE = 2;
-        MAX_RANGE = 6;
+    {
+        image = ItemSpriteSheet.K6;
+
+        hitSound      = Assets.Sounds.M2MG;
+        hitSoundPitch = 1.0f;
+
+        FIRE_DELAY_MULT = 0.9f;
+        bulletMax       = 101;
+        bullet          = Random.Int(bulletMax / 2, bulletMax + 1);
+
+        MIN_RANGE = 3;
+        MAX_RANGE = 10;
 
         usesTargeting = true;
         defaultAction = AC_ZAP;
+
         tier = 5;
+    }
+
+    @Override
+    public int STRReq(int lvl) {
+        return STRReq(tier + 2, lvl);
     }
 
     @Override
     public int fireMax() {
         return (int) 4
-                + tier * 6
+                + tier * 10
                 + bulletTier * 3
                 + level() * (tier + 1)
                 + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) * 2;
     }
-
     @Override
     public float getFireAcc(int from, int to) {
         int distance = getDistance(from, to);
 
-        if (distance >= 2 && distance <= 4) {
-            return 1.3f;
-        } else if (distance == 5 || distance == 6) {
-            return 1.0f;
-        } else if (distance >= 7) {
-            return Math.max(0f, 1f - 0.2f * (distance - 6));
-        } else if (distance < 2) {
-            return 0.67f;
+        if (isWithinRange(distance)) {
+            return 1.5f;
+        } else if (distance > getMaxRange()) {
+            return Math.max(0f, 1f - 0.2f * (distance - getMaxRange()));
+        } else if (distance < getMinRange()) {
+            return 0.6f;
         }
-
         return 1f;
     }
 
     @Override
     protected void specialFire(Char ch) {
-
-        if (ch.isAlive()) {
-            Buff.affect(ch, Bleeding.class).set(7);
-            Buff.affect(ch, Cripple.class, 1f);
-        }
-
-        if (ch.sprite != null) {
-            ch.sprite.emitter().burst(BloodParticle.FACTORY, 5);
+        if (!ch.properties().contains(Char.Property.BOSS)
+                && !ch.properties().contains(Char.Property.MINIBOSS)) {
+            Buff.affect(ch, Terror.class, Terror.DURATION);
         }
     }
 
+
+
     @Override
     protected void onZap(Ballistica bolt) {
-        CloserangeShot closerRange = Dungeon.hero.buff(CloserangeShot.class);
         float oldacc = ACC;
-        boolean anyKill = false;
         try {
             Char ch = Actor.findChar(bolt.collisionPos);
             if (ch != null) {
                 Buff.affect(Dungeon.hero, RangedAttackTracker.class);
-
-                int oldHp = ch.HP;
-
                 processGunHit(ch, 1f, true);
-
-                //확률조정
-                if (ch.HP < oldHp && Random.Int(100) < 10) {
-                    specialFire(ch);
-                }
-
-                if (!ch.isAlive()) anyKill = true;
             } else {
                 Dungeon.level.pressCell(bolt.collisionPos);
             }
-            postShotCleanup(closerRange, false, anyKill);
+            postShotCleanup(null, false, false);
         } finally {
             ACC = oldacc;
         }
