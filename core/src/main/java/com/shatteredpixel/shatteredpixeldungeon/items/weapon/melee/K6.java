@@ -35,7 +35,7 @@ public class K6 extends GunWeapon {
 
     @Override
     public int STRReq(int lvl) {
-        return STRReq(tier + 2, lvl);
+        return STRReq(tier + 1, lvl);
     }
 
     @Override

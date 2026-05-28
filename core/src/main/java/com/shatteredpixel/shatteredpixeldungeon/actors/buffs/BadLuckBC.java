@@ -7,7 +7,7 @@ public class BadLuckBC extends Buff {
 
     @Override
     public int icon() {
-        return BuffIndicator.BADLUCKBC; // 아이콘 유지용
+        return BuffIndicator.BADLUCKBC;
     }
 
     @Override

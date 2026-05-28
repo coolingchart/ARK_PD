@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
@@ -561,7 +563,7 @@ public class Hero extends Char {
     }
 
     public int tier() {
-        if (Dungeon.hero.SK3 != null) {
+        if (hero.SK3 != null) {
             return 6;
         } else return belongings.armor() == null ? 0 : belongings.armor().tier;
     }
@@ -618,7 +620,7 @@ public class Hero extends Char {
             Buff.detach(this, ChenCombo.DoubleSwordBuff.class);
         }
 
-        if (Dungeon.hero.hasTalent(Talent.DRAGONS_SWORD)) {
+        if (hero.hasTalent(Talent.DRAGONS_SWORD)) {
             float bouns = 1f;
             ChenCombo combo = buff(ChenCombo.class);
             if (combo != null)
@@ -793,7 +795,7 @@ public class Hero extends Char {
         if (berserk != null)
             spup = berserk.getPower() / 1.3f;
 
-        spup = Math.min(spup, 0.3f + (float) Dungeon.hero.pointsInTalent(Talent.BERSERKING_STAMINA) / 5);
+        spup = Math.min(spup, 0.3f + (float) hero.pointsInTalent(Talent.BERSERKING_STAMINA) / 5);
 
 
         // 쪽냥이 수호
@@ -841,7 +843,7 @@ public class Hero extends Char {
             return true;
         }
 
-        KindOfWeapon wep = Dungeon.hero.belongings.attackingWeapon();
+        KindOfWeapon wep = hero.belongings.attackingWeapon();
 
         if (wep != null) {
             return wep.canReach(this, enemy.pos);
@@ -914,9 +916,8 @@ public class Hero extends Char {
         com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia =
                 (com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia) belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
 
-        // 유물을 가지고 있고, 현재 장착 중(isEquipped)일 때만 턴이 올라갑니다.
         if (camellia != null && camellia.isEquipped(this)) {
-            camellia.addTurn();
+            camellia.addTurn(hero);
         }
 
         if (belongings.weapon() instanceof PatriotSpear) {
@@ -955,12 +956,12 @@ public class Hero extends Char {
                 Buff.affect(this, Heat.class);
             } else heat.Timeproc(time);
         }
-        PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.not(Dungeon.level.solid, null), 2);
+        PathFinder.buildDistanceMap(hero.pos, BArray.not(Dungeon.level.solid, null), 2);
         for (int cell = 0; cell < PathFinder.distance.length; cell++) {
             if (PathFinder.distance[cell] < Integer.MAX_VALUE) {
                 Char ch = Actor.findChar(cell);
                 if (ch != null && !(ch instanceof Hero) && ch.alignment == Char.Alignment.ENEMY) {
-                    Buff.detach(Dungeon.hero, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Camouflage.class);
+                    Buff.detach(hero, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Camouflage.class);
                 }
             }
         }
@@ -1372,7 +1373,7 @@ public class Hero extends Char {
 
             Buff buff = buff(TimekeepersHourglass.timeFreeze.class);
             if (buff != null) buff.detach();
-            buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+            buff = hero.buff(Swiftthistle.TimeBubble.class);
             if (buff != null) buff.detach();
 
             LevelTransition transition = Dungeon.level.getTransition(pos);
@@ -1410,7 +1411,7 @@ public class Hero extends Char {
 
             Buff buff = buff(TimekeepersHourglass.timeFreeze.class);
             if (buff != null) buff.detach();
-            buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+            buff = hero.buff(Swiftthistle.TimeBubble.class);
             if (buff != null) buff.detach();
 
             LevelTransition transition = Dungeon.level.getTransition(pos);
@@ -1529,8 +1530,8 @@ public class Hero extends Char {
             }
             // 카시미어의 기사
             if (hasTalent(Talent.KNIGHT_OF_KAZIMIERZ) && Random.Int(5) == 0) {
-                if (Dungeon.hero.belongings.getItem(SkillBook.class) != null) {
-                    SkillBook Item = Dungeon.hero.belongings.getItem(SkillBook.class);
+                if (hero.belongings.getItem(SkillBook.class) != null) {
+                    SkillBook Item = hero.belongings.getItem(SkillBook.class);
                     Item.SetCharge(pointsInTalent(Talent.KNIGHT_OF_KAZIMIERZ));
                     Item.updateQuickslot();
                 }
@@ -1592,7 +1593,7 @@ public class Hero extends Char {
             bonusDamage += damage * (pointsInTalent(Talent.SAVIOR_BELIEF) * 0.15f);
         }
 
-        if (Dungeon.hero.hasTalent(Talent.SAVIOR_BELIEF)) {
+        if (hero.hasTalent(Talent.SAVIOR_BELIEF)) {
             int grassCells = 0;
             for (int i : PathFinder.NEIGHBOURS9) {
                 if (Dungeon.level.map[pos + i] == Terrain.FURROWED_GRASS
@@ -1661,9 +1662,9 @@ public class Hero extends Char {
         if (RingOfDominate.Dominate_curse(this) == true) {
             if (Random.Int(HT) > HP * 3) {
                 Buff.affect(this, Corruption.class);
-                Dungeon.hero.die(RingOfDominate.class);
+                hero.die(RingOfDominate.class);
 
-                if (Dungeon.hero.isAlive()) {
+                if (hero.isAlive()) {
                     Buff.detach(this, Corruption.class);
                 } else GLog.w(Messages.get(RingOfDominate.class, "soulless"));
             }
@@ -1681,7 +1682,7 @@ public class Hero extends Char {
             berserk.damage(damage);
 
             if (this.hasTalent(Talent.ENRAGED_CATALYST)) {
-                Talent.BlazeBurstBuff counter = Buff.affect(Dungeon.hero, Talent.BlazeBurstBuff.class);
+                Talent.BlazeBurstBuff counter = Buff.affect(hero, Talent.BlazeBurstBuff.class);
                 if (counter.count() < 10) {
                     counter.countUp(1);
                 }
@@ -1714,9 +1715,9 @@ public class Hero extends Char {
             damage = rockArmor.absorb(damage);
         }
 
-        AnnihilationGear Gear = Dungeon.hero.belongings.getItem(AnnihilationGear.class);
+        AnnihilationGear Gear = hero.belongings.getItem(AnnihilationGear.class);
         if (Gear != null) {
-            if (Dungeon.hero.subClass == HeroSubClass.GUARDIAN) {
+            if (hero.subClass == HeroSubClass.GUARDIAN) {
                 if (Gear.charge > 0) {
                     if (buff(Barrier.class) == null) {
                         Buff.affect(this, Barrier.class).setShield(HT / 8);
@@ -1724,7 +1725,7 @@ public class Hero extends Char {
                         damage *= 0.5f - (float) this.pointsInTalent(Talent.BARRIER_OPERATION) * 0.1f;
                         int redamage = 0;
                         redamage += damageRoll() * (float) pointsInTalent(Talent.BARRIER_OPERATION) * 0.3f;
-                        if (Dungeon.hero.hasTalent(Talent.BARRIER_OPERATION)) {
+                        if (hero.hasTalent(Talent.BARRIER_OPERATION)) {
                             enemy.damage(redamage, this);
                             CellEmitter.center(enemy.pos).burst(BlastParticle.FACTORY, 10);
                         }
@@ -1732,7 +1733,7 @@ public class Hero extends Char {
                     }
                 }
                 if (buff(Barrier.class) == null) {
-                    if (2 + Dungeon.hero.pointsInTalent(Talent.BARRIER_REPAIR) > Random.Int(20) && Gear.charge < Gear.chargeCap) {
+                    if (2 + hero.pointsInTalent(Talent.BARRIER_REPAIR) > Random.Int(20) && Gear.charge < Gear.chargeCap) {
                         Gear.SPCharge(1);
                     }
                 }
@@ -1850,18 +1851,18 @@ public class Hero extends Char {
             else if (pointsInTalent(Talent.IRON_STOMACH) == 2) dmg = Math.round(dmg * 0.25f);
         }
 
-        if (Dungeon.hero.hasTalent(Talent.INFINITE_RAGE)) {
+        if (hero.hasTalent(Talent.INFINITE_RAGE)) {
             Berserk berserk = buff(Berserk.class);
             float ber;
             if (berserk != null) {
-                ber = 1.2f - (Dungeon.hero.pointsInTalent(Talent.INFINITE_RAGE) * 0.2f);
+                ber = 1.2f - (hero.pointsInTalent(Talent.INFINITE_RAGE) * 0.2f);
                 if (berserk.getPower() >= ber) {
                     dmg = Math.round(dmg * 0.8f);
                 }
             }
         }
 
-        if (Dungeon.hero.hasTalent(Talent.BARKSKIN) && !(src instanceof Hunger)) {
+        if (hero.hasTalent(Talent.BARKSKIN) && !(src instanceof Hunger)) {
             int grassCells = 0;
             for (int i : PathFinder.NEIGHBOURS9) {
                 if (Dungeon.level.map[pos + i] == Terrain.FURROWED_GRASS
@@ -2426,9 +2427,9 @@ public class Hero extends Char {
         Dungeon.observe();
         GameScene.updateFog();
 
-        Dungeon.hero.belongings.identify();
+        hero.belongings.identify();
 
-        int pos = Dungeon.hero.pos;
+        int pos = hero.pos;
 
         ArrayList<Integer> passable = new ArrayList<>();
         for (Integer ofs : PathFinder.NEIGHBOURS8) {
@@ -2439,7 +2440,7 @@ public class Hero extends Char {
         }
         Collections.shuffle(passable);
 
-        ArrayList<Item> items = new ArrayList<>(Dungeon.hero.belongings.backpack.items);
+        ArrayList<Item> items = new ArrayList<>(hero.belongings.backpack.items);
         for (Integer cell : passable) {
             if (items.isEmpty()) {
                 break;
@@ -2548,8 +2549,8 @@ public class Hero extends Char {
             spend(attackDelay() * 0.5f);
         }
 
-        if (Dungeon.hero.hasTalent(Talent.SPARKOFLIFE)) {
-            if (1 + Dungeon.hero.pointsInTalent(Talent.SPARKOFLIFE) > Random.Int(33)) {
+        if (hero.hasTalent(Talent.SPARKOFLIFE)) {
+            if (1 + hero.pointsInTalent(Talent.SPARKOFLIFE) > Random.Int(33)) {
                 HP = Math.min(HP + HT / 20, HT);
             }
         }

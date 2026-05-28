@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
@@ -58,7 +59,7 @@ public class RingOfWealth extends Ring {
 
 	private float triesToDrop = Float.MIN_VALUE;
 	private int dropsToRare = Integer.MIN_VALUE;
-	
+
 	public String statsInfo() {
 		if (isIdentified()){
 			return Messages.get(this, "stats", new DecimalFormat("#.##").format(100f * (Math.pow(1.20f, soloBuffedBonus()) - 1f)));
@@ -85,37 +86,47 @@ public class RingOfWealth extends Ring {
 	}
 
 	@Override
-	protected RingBuff buff( ) {
+	protected RingBuff buff() {
 		return new Wealth();
 	}
-
-	// --- 1. 일반 템 드롭 확률 계산 (동백나무 반영) ---
-	public static float dropChanceMultiplier( Char target ){
+	private static int camelliaLevel(BlackCamellia camellia) {
+		return camellia.camelliaLevel();
+	}
+	public static float dropChanceMultiplier(Char target) {
 		int bonus = getBuffedBonus(target, Wealth.class);
 
 		if (target instanceof com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) {
-			com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero hero = (com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) target;
+			com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero hero =
+					(com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) target;
 			com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia =
-					hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
+					hero.belongings.getItem(
+							com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
 
 			if (camellia != null && camellia.isEquipped(hero)) {
-				bonus += camellia.isAwakened ? 20 : -10;
+				if (camellia.isAwakened) {
+					bonus += camelliaLevel(camellia) * 2;
+				} else {
+					bonus += -10; // 각성 전
+				}
 			}
 		}
-		return (float)Math.pow(1.20, bonus);
+		return (float) Math.pow(1.20, bonus);
 	}
 
-	// --- 2. 보너스 장비 드롭 계산 (동백나무 반영 & 게이지 저장) ---
-	public static ArrayList<Item> tryForBonusDrop(Char target, int tries ){
+	public static ArrayList<Item> tryForBonusDrop(Char target, int tries) {
 		int bonus = getBuffedBonus(target, Wealth.class);
 		com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia = null;
 
 		if (target instanceof com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) {
-			com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero hero = (com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) target;
-			camellia = hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
+			com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero hero =
+					(com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero) target;
+			camellia = hero.belongings.getItem(
+					com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
 
 			if (camellia != null && camellia.isEquipped(hero)) {
-				bonus += camellia.isAwakened ? 20 : -10;
+				if (camellia.isAwakened) {
+					bonus += camelliaLevel(camellia) * 2;
+				}
 			}
 		}
 
@@ -125,14 +136,13 @@ public class RingOfWealth extends Ring {
 		float triesToDrop = Float.MIN_VALUE;
 		int dropsToEquip = Integer.MIN_VALUE;
 
-		for (Wealth w : buffs){
-			if (w.triesToDrop() > triesToDrop){
+		for (Wealth w : buffs) {
+			if (w.triesToDrop() > triesToDrop) {
 				triesToDrop = w.triesToDrop();
 				dropsToEquip = w.dropsToRare();
 			}
 		}
 
-		// 유물(동백나무)에서 게이지 불러오기
 		if (camellia != null && camellia.triesToDrop > triesToDrop) {
 			triesToDrop = camellia.triesToDrop;
 			dropsToEquip = camellia.dropsToRare;
@@ -146,8 +156,8 @@ public class RingOfWealth extends Ring {
 		ArrayList<Item> drops = new ArrayList<>();
 
 		triesToDrop -= tries;
-		while ( triesToDrop <= 0 ){
-			if (dropsToEquip <= 0){
+		while (triesToDrop <= 0) {
+			if (dropsToEquip <= 0) {
 				Item i;
 				do {
 					i = genEquipmentDrop(bonus - 1);
@@ -165,12 +175,11 @@ public class RingOfWealth extends Ring {
 			triesToDrop += Random.NormalIntRange(0, 25);
 		}
 
-		for (Wealth w : buffs){
+		for (Wealth w : buffs) {
 			w.triesToDrop(triesToDrop);
 			w.dropsToRare(dropsToEquip);
 		}
 
-		// 깎인 게이지를 유물(동백나무)에 저장하기
 		if (camellia != null) {
 			camellia.triesToDrop = triesToDrop;
 			camellia.dropsToRare = dropsToEquip;
@@ -179,16 +188,16 @@ public class RingOfWealth extends Ring {
 		return drops;
 	}
 
-	//used for visuals
+	// used for visuals
 	// 1/2/3 used for low/mid/high tier consumables
 	// 3 used for +0-1 equips, 4 used for +2 or higher equips
 	private static int latestDropTier = 0;
 
-	public static void showFlareForBonusDrop( Visual vis ){
+	public static void showFlareForBonusDrop(Visual vis) {
 		if (vis == null || vis.parent == null) return;
-		switch (latestDropTier){
+		switch (latestDropTier) {
 			default:
-				break; //do nothing
+				break;
 			case 1:
 				new Flare(6, 20).color(0x00FF00, true).show(vis, 3f);
 				break;
@@ -204,29 +213,26 @@ public class RingOfWealth extends Ring {
 		}
 		latestDropTier = 0;
 	}
-	
+
 	public static Item genConsumableDrop(int level) {
 		float roll = Random.Float();
-		//60% chance - 4% per level. Starting from +15: 0%
 		if (roll < (0.6f - 0.04f * level)) {
 			latestDropTier = 1;
 			return genLowValueConsumable();
-		//30% chance + 2% per level. Starting from +15: 60%-2%*(lvl-15)
 		} else if (roll < (0.9f - 0.02f * level)) {
 			latestDropTier = 2;
 			return genMidValueConsumable();
-		//10% chance + 2% per level. Starting from +15: 40%+2%*(lvl-15)
 		} else {
 			latestDropTier = 3;
 			return genHighValueConsumable();
 		}
 	}
 
-	private static Item genLowValueConsumable(){
-		switch (Random.Int(4)){
+	private static Item genLowValueConsumable() {
+		switch (Random.Int(4)) {
 			case 0: default:
 				Item i = new Gold().random();
-				return i.quantity(i.quantity()/2);
+				return i.quantity(i.quantity() / 2);
 			case 1:
 				return Generator.random(Generator.Category.STONE);
 			case 2:
@@ -236,11 +242,11 @@ public class RingOfWealth extends Ring {
 		}
 	}
 
-	private static Item genMidValueConsumable(){
-		switch (Random.Int(6)){
+	private static Item genMidValueConsumable() {
+		switch (Random.Int(6)) {
 			case 0: default:
 				Item i = genLowValueConsumable();
-				return i.quantity(i.quantity()*2);
+				return i.quantity(i.quantity() * 2);
 			case 1:
 				i = Generator.randomUsingDefaults(Generator.Category.POTION);
 				return Reflection.newInstance(ExoticPotion.regToExo.get(i.getClass()));
@@ -256,14 +262,14 @@ public class RingOfWealth extends Ring {
 		}
 	}
 
-	private static Item genHighValueConsumable(){
-		switch (Random.Int(4)){
+	private static Item genHighValueConsumable() {
+		switch (Random.Int(4)) {
 			case 0: default:
 				Item i = genMidValueConsumable();
-				if (i instanceof Bomb){
+				if (i instanceof Bomb) {
 					return new Bomb.DoubleBomb();
 				} else {
-					return i.quantity(i.quantity()*2);
+					return i.quantity(i.quantity() * 2);
 				}
 			case 1:
 				return new StoneOfEnchantment();
@@ -274,21 +280,20 @@ public class RingOfWealth extends Ring {
 		}
 	}
 
-	private static Item genEquipmentDrop( int level ){
+	private static Item genEquipmentDrop(int level) {
 		Item result;
-		//each upgrade increases depth used for calculating drops by 1
-		int floorset = (Dungeon.depth + level)/5;
-		switch (Random.Int(5)){
+		int floorset = (Dungeon.depth + level) / 5;
+		switch (Random.Int(5)) {
 			default: case 0: case 1:
 				Weapon w = Generator.randomWeapon(floorset);
-				if (!w.hasGoodEnchant() && Random.Int(10) < level)      w.enchant();
-				else if (w.hasCurseEnchant())                           w.enchant(null);
+				if (!w.hasGoodEnchant() && Random.Int(10) < level)  w.enchant();
+				else if (w.hasCurseEnchant())                       w.enchant(null);
 				result = w;
 				break;
 			case 2:
 				Armor a = Generator.randomArmor(floorset);
-				if (!a.hasGoodGlyph() && Random.Int(10) < level)        a.inscribe();
-				else if (a.hasCurseGlyph())                             a.inscribe(null);
+				if (!a.hasGoodGlyph() && Random.Int(10) < level)    a.inscribe();
+				else if (a.hasCurseGlyph())                         a.inscribe(null);
 				result = a;
 				break;
 			case 3:
@@ -298,10 +303,9 @@ public class RingOfWealth extends Ring {
 				result = Generator.random(Generator.Category.ARTIFACT);
 				break;
 		}
-		//minimum level is 1/2/3/4/5/6 when ring level is 1/3/6/10/15/21
-		if (result.isUpgradable()){
-			int minLevel = (int)Math.floor((Math.sqrt(8*level + 1)-1)/2f);
-			if (result.level() < minLevel){
+		if (result.isUpgradable()) {
+			int minLevel = (int) Math.floor((Math.sqrt(8 * level + 1) - 1) / 2f);
+			if (result.level() < minLevel) {
 				result.level(minLevel);
 			}
 		}
@@ -312,28 +316,26 @@ public class RingOfWealth extends Ring {
 		} else {
 			latestDropTier = 3;
 		}
-
 		if (result.level() > 7) result.level(7);
 		return result;
 	}
 
 	public class Wealth extends RingBuff {
-		
-		private void triesToDrop( float val ){
+
+		private void triesToDrop(float val) {
 			triesToDrop = val;
 		}
-		
-		private float triesToDrop(){
+
+		private float triesToDrop() {
 			return triesToDrop;
 		}
 
-		private void dropsToRare( int val ) {
+		private void dropsToRare(int val) {
 			dropsToRare = val;
 		}
 
-		private int dropsToRare(){
+		private int dropsToRare() {
 			return dropsToRare;
 		}
-		
 	}
 }

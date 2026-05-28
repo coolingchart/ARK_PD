@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Nullshield;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -68,6 +69,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfWarp;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDominate;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
@@ -185,15 +187,19 @@ public enum HeroClass {
 
             new K6().identify().upgrade(0).collect();
             new Saiga12().identify().upgrade(0).collect();
+            new BlackCamellia().collect();
+            new RingOfWealth().upgrade(10).collect();
+            new CurseInfusion().collect();
 
-            /*new PotionOfStrength().identify().quantity(40).collect();
+            new PotionOfStrength().identify().quantity(40).collect();
             new PotionOfExperience().identify().quantity(40).collect();
             new PotionOfHealing().identify().quantity(40).collect();
             new ScrollOfUpgrade().identify().quantity(40).collect();
+            new ScrollOfIdentify().identify().quantity(40).collect();
             new Nullshield().identify().quantity(40).collect();
             new VelvetPouch().collect();
             new MagicalHolster().collect();
-            new Heamyo().collect();*/
+            new Heamyo().collect();
 
 
             /*new AKM().identify().upgrade(99).collect();

@@ -9,6 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.Random;
 
 public class Saiga12 extends ShotgunWeapon {
 
@@ -19,7 +20,7 @@ public class Saiga12 extends ShotgunWeapon {
 
         FIRE_DELAY_MULT = 0.5f;
         bulletMax = 11;
-        bullet = bulletMax;
+        bullet = Random.Int(bulletMax / 2, bulletMax + 1);
         MAX_RANGE = 5;
 
         PELLET_COUNT = 5;

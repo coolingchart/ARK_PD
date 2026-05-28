@@ -868,8 +868,10 @@ public abstract class Mob extends Char {
 		com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia camellia =
 				Dungeon.hero.belongings.getItem(com.shatteredpixel.shatteredpixeldungeon.items.artifacts.BlackCamellia.class);
 
-		if (camellia != null && camellia.isEquipped(Dungeon.hero) && camellia.isAwakened) {
-			wealthBonus += 20; //+10
+		if (camellia != null && camellia.isEquipped(Dungeon.hero)) {
+			if (camellia.isAwakened) {
+				wealthBonus += camellia.camelliaLevel() * 2;
+			}
 		}
 
 		if (wealthBonus > 0) {
